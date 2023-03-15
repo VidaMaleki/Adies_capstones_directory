@@ -1,21 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
 .navbar-container {
     display: flex;
     flex-direction: row;
     justify-content: center;
     height: 80px;
-    background-color: pink;
-    font-size: 2rem;
+    font-size: 1.5rem;
     column-gap: 30px;
     text-decoration: none;
     align-items: center;
     color: #000;
+    position: sticky;
+    top: 0;
 }
 
-.nav-link:link {
+#nav-img {
+    width: 100px;
+    height: 90px;
+    position: absolute;
+    left: 0px;
+}
+
+#nav-link {
+    border: 1px solid #A0E4D8;
+    /* border-radius: 10px; */
+    background-color: #A0E4D8;
+    padding: 10px;
+    color: black;
+    font-family: sans-serif;
+}
+
+#nav-link:link {
     text-decoration: none;
 }
 
+
 /* not working  */
+
 .nav-link:hover {
     color: #fff;
 }
