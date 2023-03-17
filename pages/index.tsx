@@ -29,24 +29,30 @@ export default function Home() {
             <p>View all apps here</p>
           </div>
           <div>
-            <h2>Mobile apps</h2>
-            <button>
-              <Link href="/web-apps" className="">See more</Link>
-            </button>
+          <div className={styles.appsHeader}>
+              <h2>Mobile apps</h2>
+              <button className={styles.seeMoreButton}>
+                <Link href="/mobile-apps" className={styles.seeMoreText}>See more</Link>
+              </button>
+            </div>
             <p>View all apps here</p>
           </div>
           <div>
-            <h2>Gaming apps</h2>
-            <button>
-              <Link href="/web-apps" className="">See more</Link>
-            </button>
+          <div className={styles.appsHeader}>
+              <h2>Gaming apps</h2>
+              <button className={styles.seeMoreButton}>
+                <Link href="/game-apps" className={styles.seeMoreText}>See more</Link>
+              </button>
+            </div>
             <p>View all apps here</p>
           </div>
           <div>
-            <h2>Social media app</h2>
-            <button>
-              <Link href="/web-apps" className="">See more</Link>
-            </button>
+          <div className={styles.appsHeader}>
+              <h2>Social Media apps</h2>
+              <button className={styles.seeMoreButton}>
+                <Link href="/social-apps" className={styles.seeMoreText}>See more</Link>
+              </button>
+            </div>
             <p>View all apps here</p>
           </div>
         </section>

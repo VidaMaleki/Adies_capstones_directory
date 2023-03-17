@@ -1,12 +1,12 @@
 import Navbar from "@/components/Navbar";
 
-const MobileApps = () => {
+const SocialMedia = () => {
     return (
         <div>
             <Navbar/>
-            <h1>All Mobile Apps</h1>
+            <h1>All Social Media Apps</h1>
         </div>
     )
 }
 
-export default MobileApps;
+export default SocialMedia;
