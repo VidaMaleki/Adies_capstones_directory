@@ -22,6 +22,39 @@
     background-position: center center;
 }
 
+.appsWrapper {
+    text-align: center;
+    height: 92vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.appsHeader {
+    display: flex;
+    justify-content: center;
+    border-bottom: 2px solid red;
+    width: 80%;
+    margin: 20px auto;
+    padding-bottom: 10px;
+}
+
+.seeMoreButton {
+    position: fixed;
+    right: ;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.seeMoreText:link {
+    text-decoration: none;
+    color: black;
+}
+
+.seeMoreText:visited {
+    color: black;
+}
+
 
 /* hr {
     border: none;

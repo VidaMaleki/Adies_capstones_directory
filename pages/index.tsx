@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { Inter } from 'next/font/google'
 import Navbar from '@/components/Navbar'
 import styles from '@/styles/Home.module.css'
+import Link from "next/link";
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -17,25 +18,35 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <Navbar/>
-        <section className="apps-wrapper">
+        <section className={styles.appsWrapper}>
           <div>
-            <h2>Web apps</h2>
-            <hr style={{ width: '80%', borderColor: 'grey', margin: '20px auto', textAlign: 'center' }} />
+            <div className={styles.appsHeader}>
+              <h2>Web apps</h2>
+              <button className={styles.seeMoreButton}>
+                <Link href="/web-apps" className={styles.seeMoreText}>See more</Link>
+              </button>
+            </div>
             <p>View all apps here</p>
           </div>
           <div>
             <h2>Mobile apps</h2>
-            <hr style={{ width: '80%', borderColor: 'grey', margin: '20px auto', textAlign: 'center' }} />
+            <button>
+              <Link href="/web-apps" className="">See more</Link>
+            </button>
             <p>View all apps here</p>
           </div>
           <div>
             <h2>Gaming apps</h2>
-            <hr style={{ width: '80%', borderColor: 'grey', margin: '20px auto', textAlign: 'center' }} />
+            <button>
+              <Link href="/web-apps" className="">See more</Link>
+            </button>
             <p>View all apps here</p>
           </div>
           <div>
             <h2>Social media app</h2>
-            <hr style={{ width: '80%', borderColor: 'grey', margin: '20px auto', textAlign: 'center' }} />
+            <button>
+              <Link href="/web-apps" className="">See more</Link>
+            </button>
             <p>View all apps here</p>
           </div>
         </section>
