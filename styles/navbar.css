@@ -2,34 +2,39 @@
 .navbar-container {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     height: 80px;
     font-size: 1.5rem;
-    column-gap: 30px;
+    /* column-gap: 30px; */
     text-decoration: none;
     align-items: center;
     color: #000;
-    position: sticky;
+    /* position: sticky; */
     top: 0;
 }
 
 #nav-img {
-    width: 100px;
+    width: 90px;
     height: 90px;
-    position: absolute;
-    left: 0px;
 }
 
-#nav-link {
+.button-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    column-gap: 30px;
+}
+
+.nav-link {
     border: 1px solid #A0E4D8;
     /* border-radius: 10px; */
     background-color: #A0E4D8;
     padding: 10px;
     color: black;
-    font-family: sans-serif;
+    font-family: Lato, sans-serif;
 }
 
-#nav-link:link {
+.nav-link:link {
     text-decoration: none;
 }
 

@@ -6,13 +6,21 @@ import { FaSearch } from "react-icons/fa";
 const Navbar = () => {
     return (
         <div className="navbar-container">
-            <Image id="nav-img" src={LOGO} alt="Image" />
             <div>
-                <Link href="/" id="nav-link">Home</Link>
+                <Image id="nav-img" src={LOGO} alt="Image" />
             </div>
-            <div>
-                <Link href="/sign-in" id="nav-link">Sign In</Link>
+            <div className="button-wrapper">
+                <div >
+                    <Link href="/" className="nav-link">Home</Link>
+                </div>
+                <div>
+                    <Link href="/about" className="nav-link">About</Link>
+                </div>
+                <div>
+                    <Link href="/sign-in" className="nav-link">Sign In</Link>
+                </div>
             </div>
+            
             <div className="search-container">
                 <form action="/action_page.php">
                     <input type="text" placeholder="Search.." name="search"/>

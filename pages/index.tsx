@@ -16,10 +16,29 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <Navbar />
-        
-        <h1>Adies Capstones Hub Main Page</h1>
-        <p>View all apps here</p>
+        <Navbar/>
+        <section className="apps-wrapper">
+          <div>
+            <h2>Web apps</h2>
+            <hr style={{ width: '80%', borderColor: 'grey', margin: '20px auto', textAlign: 'center' }} />
+            <p>View all apps here</p>
+          </div>
+          <div>
+            <h2>Mobile apps</h2>
+            <hr style={{ width: '80%', borderColor: 'grey', margin: '20px auto', textAlign: 'center' }} />
+            <p>View all apps here</p>
+          </div>
+          <div>
+            <h2>Gaming apps</h2>
+            <hr style={{ width: '80%', borderColor: 'grey', margin: '20px auto', textAlign: 'center' }} />
+            <p>View all apps here</p>
+          </div>
+          <div>
+            <h2>Social media app</h2>
+            <hr style={{ width: '80%', borderColor: 'grey', margin: '20px auto', textAlign: 'center' }} />
+            <p>View all apps here</p>
+          </div>
+        </section>
       </main>
     </>
   )
