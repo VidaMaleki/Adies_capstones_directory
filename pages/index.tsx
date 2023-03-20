@@ -3,11 +3,17 @@ import { Inter } from 'next/font/google'
 import Navbar from '@/components/Navbar'
 import styles from '@/styles/Home.module.css'
 import Link from "next/link";
-
+import apps from "../app-data/app-data.json"
+import AppCard from '@/components/appCard';
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+  
+  apps.forEach(app => {
+    
+    
+  });
   return (
     <>
       <Head>
@@ -26,6 +32,7 @@ export default function Home() {
                 <Link href="/web-apps" className={styles.seeMoreText}>See more</Link>
               </button>
             </div>
+            <AppCard/>
             <p>View all apps here</p>
           </div>
           <div>
