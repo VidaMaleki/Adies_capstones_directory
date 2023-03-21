@@ -1,12 +1,35 @@
 [{
-    "id": "",
-    "appName": "",
+    "id": "1",
+    "appName": "Example",
     "developerFirstName": "",
     "developerLastName": "",
-    "description": "",
-    "appLink": "",
+    "description": "description here",
+    "appLink": "https://google.com",
     "videoLink": "",
-    "linkedin": ""
+    "linkedin": "",
+    "type": "web"
+}, 
+{
+    "id": "2",
+    "appName": "Example",
+    "developerFirstName": "",
+    "developerLastName": "",
+    "description": "description here",
+    "appLink": "https://google.com",
+    "videoLink": "",
+    "linkedin": "",
+    "type": "web"
+}, 
+{
+    "id": "3",
+    "appName": "Example",
+    "developerFirstName": "",
+    "developerLastName": "",
+    "description": "description here",
+    "appLink": "https://google.com",
+    "videoLink": "",
+    "linkedin": "",
+    "type": "web"
 }, {
     "id": "",
     "appName": "",
@@ -15,7 +38,8 @@
     "description": "",
     "appLink": "",
     "videoLink": "",
-    "linkedin": ""
+    "linkedin": "",
+    "type": "game"
 }, {
     "id": "",
     "appName": "",
@@ -24,7 +48,8 @@
     "description": "",
     "appLink": "",
     "videoLink": "",
-    "linkedin": ""
+    "linkedin": "",
+    "type": "social"
 }, {
     "id": "",
     "appName": "",
@@ -33,5 +58,6 @@
     "description": "",
     "appLink": "",
     "videoLink": "",
-    "linkedin": ""
+    "linkedin": "",
+    "type": "mobile"
 }]
