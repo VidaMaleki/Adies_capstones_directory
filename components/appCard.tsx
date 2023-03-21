@@ -13,6 +13,7 @@ const AppCard = ({name, description, appLink} : {
 
     return (
         <div className={styles.card}>
+            <div className={styles.appMiniScreen}></div>
             <div className={styles.content}>
                 <h3>{name}</h3>
                 <p>{description}</p>

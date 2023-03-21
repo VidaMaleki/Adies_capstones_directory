@@ -40,7 +40,7 @@
 }
 
 .appsHeader h2 {
-  align-content: center;
+    align-content: center;
 }
 
 .seeMoreButton {
@@ -57,6 +57,12 @@
 
 .seeMoreText:visited {
     color: black;
+}
+
+.appsCardGrid {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
 }
 
 

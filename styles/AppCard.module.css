@@ -1,7 +1,19 @@
 .card {
-    background-color: aliceblue;
+    width: 220px;
+    height: 260px;
+    z-index: 0;
+}
+
+.appMiniScreen {
+    width: 221px;
+    height: 175px;
+    border: 1.5px solid black;
+    border-radius: 20px;
+    background-color: white;
 }
 
 .content {
-background-color: aqua;
+    text-align: left;
+    margin-left: 10px;
+    margin-top: 10px;
 }
