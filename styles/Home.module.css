@@ -1,7 +1,7 @@
 .main {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 200vh;
 }
 
 .main::before {
@@ -24,7 +24,7 @@
 
 .appsWrapper {
     text-align: center;
-    height: 92vh;
+    height: 180vh;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
