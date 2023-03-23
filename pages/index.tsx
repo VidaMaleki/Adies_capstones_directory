@@ -6,12 +6,45 @@ import apps from "../app-data/app-data.json"
 import AppCard from '@/components/appCard';
 
 export default function Home() {
+  // const webApps: any[] = [];
+  // apps.forEach(app => {
+  //   if (app.type === "web") {
+  //     webApps.push(app)
+  //   }
+  // });
+   // Separate the apps by type
   const webApps: any[] = [];
+  const mobileApps: any[] = [];
+  const gamingApps: any[] = [];
+  const socialApps: any[] = [];
+
   apps.forEach(app => {
     if (app.type === "web") {
-      webApps.push(app)
+      webApps.push(app);
+    } else if (app.type === "mobile") {
+      mobileApps.push(app);
+    } else if (app.type === "game") {
+      gamingApps.push(app);
+    } else if (app.type === "social") {
+      socialApps.push(app);
     }
   });
+
+  // Randomly select 5 apps for each category
+  const webAppsRandom: any[] = [];
+  const mobileAppsRandom: any[] = [];
+  const gamingAppsRandom: any[] = [];
+  const socialAppsRandom: any[] = [];
+
+  const getRandomApps = (appsList: any[], randomList: any[]) => {
+    const shuffled = appsList.sort(() => 0.5 - Math.random());
+    randomList.push(...shuffled.slice(0, 5));
+  }
+
+  getRandomApps(webApps, webAppsRandom);
+  getRandomApps(mobileApps, mobileAppsRandom);
+  getRandomApps(gamingApps, gamingAppsRandom);
+  getRandomApps(socialApps, socialAppsRandom);
 
   return (
     <>
@@ -32,7 +65,7 @@ export default function Home() {
               </button>
             </div>
             <div className={styles.appsCardGrid}>
-            {webApps.map((app)=> (
+            {webAppsRandom.map((app)=> (
               <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id}/>
             ))}
             </div>
@@ -45,7 +78,7 @@ export default function Home() {
               </button>
             </div>
             <div className={styles.appsCardGrid}>
-            {webApps.map((app)=> (
+            {mobileAppsRandom.map((app)=> (
               <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id}/>
             ))}
             </div>
@@ -58,7 +91,7 @@ export default function Home() {
               </button>
             </div>
             <div className={styles.appsCardGrid}>
-            {webApps.map((app)=> (
+            {gamingAppsRandom.map((app)=> (
               <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id}/>
             ))}
             </div>
@@ -71,7 +104,7 @@ export default function Home() {
               </button>
             </div>
             <div className={styles.appsCardGrid}>
-            {webApps.map((app)=> (
+            {socialAppsRandom.map((app)=> (
               <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id}/>
             ))}
             </div>
