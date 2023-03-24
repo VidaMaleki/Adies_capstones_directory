@@ -1,5 +1,5 @@
 import Link from "next/link";
-import LOGO from '../images/LOGO.png';
+import LOGO from '../images/appLogo.png';
 import Image from 'next/image'
 import { FaSearch } from "react-icons/fa";
 

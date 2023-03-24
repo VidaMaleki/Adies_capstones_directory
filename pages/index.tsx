@@ -6,13 +6,6 @@ import apps from "../app-data/app-data.json"
 import AppCard from '@/components/appCard';
 
 export default function Home() {
-  // const webApps: any[] = [];
-  // apps.forEach(app => {
-  //   if (app.type === "web") {
-  //     webApps.push(app)
-  //   }
-  // });
-   // Separate the apps by type
   const webApps: any[] = [];
   const mobileApps: any[] = [];
   const gamingApps: any[] = [];
@@ -66,7 +59,7 @@ export default function Home() {
             </div>
             <div className={styles.appsCardGrid}>
             {webAppsRandom.map((app)=> (
-              <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id}/>
+              <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id} linkedin={app.linkedin}/>
             ))}
             </div>
           </div>
@@ -79,7 +72,7 @@ export default function Home() {
             </div>
             <div className={styles.appsCardGrid}>
             {mobileAppsRandom.map((app)=> (
-              <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id}/>
+              <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id} linkedin={app.linkedin}/>
             ))}
             </div>
           </div>
@@ -92,7 +85,7 @@ export default function Home() {
             </div>
             <div className={styles.appsCardGrid}>
             {gamingAppsRandom.map((app)=> (
-              <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id}/>
+              <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id} linkedin={app.linkedin}/>
             ))}
             </div>
           </div>
@@ -105,7 +98,7 @@ export default function Home() {
             </div>
             <div className={styles.appsCardGrid}>
             {socialAppsRandom.map((app)=> (
-              <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id}/>
+              <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id} linkedin={app.linkedin}/>
             ))}
             </div>
           </div>
