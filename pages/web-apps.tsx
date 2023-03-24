@@ -20,7 +20,7 @@ const WebApps = () => {
                 {/* loop through web apps to create AppCards */}
                 <div className={styles.appsContainer}>
                     {webApps.map((app)=> (
-                        <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id}/>
+                        <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id} linkedin={app.linkedin}/>
                     ))}
                 </div>
             </div>

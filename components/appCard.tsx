@@ -19,16 +19,17 @@ const AppCard = ({name, description, appLink, linkedin} : {
                 <div className={styles.appCardHeader}>
                     <h3>{name}</h3>
                     <a className={styles.cardLinkedin} href={linkedin} target="_blank" >
-                    <div className={styles.iconContainer}>
-                        <FaIcons.FaLinkedin />
-                    </div>
+                        <div className={styles.iconContainer}>
+                            <FaIcons.FaLinkedin />
+                        </div>
                     </a>
                 </div>
                 <p>{description}</p>
-                <Link href={appLink} target="_blank">View App</Link>
             </div>
             <div className={styles.cardFooterButtons}>
-                <button className={styles.cardView}>View</button>
+                <Link href={appLink} className={styles.cardView}>
+                    View
+                </Link>
                 <button className={styles.cardDetails}>Details</button>
             </div>
         </div>
