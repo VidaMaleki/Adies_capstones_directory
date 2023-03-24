@@ -27,7 +27,7 @@ const AppCard = ({name, description, appLink, linkedin} : {
                 <p>{description}</p>
             </div>
             <div className={styles.cardFooterButtons}>
-                <Link href={appLink} className={styles.cardView}>
+                <Link href={appLink} className={styles.cardView} target="_blank">
                     View
                 </Link>
                 <button className={styles.cardDetails}>Details</button>
