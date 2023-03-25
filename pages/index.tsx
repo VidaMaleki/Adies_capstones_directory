@@ -1,9 +1,11 @@
 import Head from 'next/head'
+import { useState } from 'react'
 import Navbar from '@/components/Navbar'
 import styles from '@/styles/Home.module.css'
 import Link from "next/link";
 import apps from "../app-data/app-data.json"
 import AppCard from '@/components/appCard';
+import AppDetailsPopup from '@/components/appDetailsPopup';
 
 export default function Home() {
   const webApps: any[] = [];
@@ -39,6 +41,14 @@ export default function Home() {
   getRandomApps(gamingApps, gamingAppsRandom);
   getRandomApps(socialApps, socialAppsRandom);
 
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedApp, setSelectedApp] = useState(null);
+
+  const handlePopup = (app) => {
+    setShowPopup(true);
+  setSelectedApp(app);
+  };
+
   return (
     <>
       <Head>
@@ -58,24 +68,38 @@ export default function Home() {
               </button>
             </div>
             <div className={styles.appsCardGrid}>
-            {webAppsRandom.map((app)=> (
-              <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id} linkedin={app.linkedin}/>
-            ))}
+              {webAppsRandom.map((app)=> (
+                <AppCard
+                  name={app.appName}
+                  description={app.description}
+                  appLink={app.appLink}
+                  key={app.id}
+                  linkedin={app.linkedin}
+                  onClick={() => handlePopup(app)}
+                />
+              ))}
             </div>
           </div>
           <div>
-          <div className={styles.appsHeader}>
+            <div className={styles.appsHeader}>
               <h2>Mobile apps</h2>
               <button className={styles.seeMoreButton}>
                 <Link href="/mobile-apps" className={styles.seeMoreText}>See more</Link>
               </button>
             </div>
             <div className={styles.appsCardGrid}>
-            {mobileAppsRandom.map((app)=> (
-              <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id} linkedin={app.linkedin}/>
-            ))}
+              {mobileAppsRandom.map((app)=> (
+                <AppCard
+                  name={app.appName}
+                  description={app.description}
+                  appLink={app.appLink}
+                  key={app.id}
+                  linkedin={app.linkedin}
+                  onClick={() => handlePopup(app)}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
           <div>
           <div className={styles.appsHeader}>
               <h2>Gaming apps</h2>
@@ -85,7 +109,14 @@ export default function Home() {
             </div>
             <div className={styles.appsCardGrid}>
             {gamingAppsRandom.map((app)=> (
-              <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id} linkedin={app.linkedin}/>
+              <AppCard
+              name={app.appName}
+              description={app.description}
+              appLink={app.appLink}
+              key={app.id}
+              linkedin={app.linkedin}
+              onClick={() => handlePopup(app)}
+              />
             ))}
             </div>
           </div>
@@ -98,7 +129,14 @@ export default function Home() {
             </div>
             <div className={styles.appsCardGrid}>
             {socialAppsRandom.map((app)=> (
-              <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id} linkedin={app.linkedin}/>
+              <AppCard
+              name={app.appName}
+              description={app.description}
+              appLink={app.appLink}
+              key={app.id}
+              linkedin={app.linkedin}
+              onClick={() => handlePopup(app)}
+              />
             ))}
             </div>
           </div>
