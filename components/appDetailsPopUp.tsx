@@ -15,15 +15,15 @@ interface Props {
 const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
     return (
         <div className={styles.overlay}>
-        <div className={styles.popup}>
-            <button className={styles.closeButton} onClick={onClose}>
-            X
-            </button>
-            <h2>{app.appName}</h2>
-            <p>{app.description}</p>
-            <a href={app.appLink}>View App</a>
-            <a href={app.linkedin}>View LinkedIn</a>
-        </div>
+            <div className={styles.popup}>
+                <button className={styles.closeButton} onClick={onClose}>
+                X
+                </button>
+                <h2>{app.appName}</h2>
+                <p>{app.description}</p>
+                <a href={app.appLink}>View App</a>
+                <a href={app.linkedin}>View LinkedIn</a>
+            </div>
         </div>
     );
 };
