@@ -46,8 +46,10 @@
 .seeMoreButton {
     position: absolute;
     right: 10%;
-    padding: 5px;
+    padding: 8px;
     margin-bottom: 10px;
+    background-color: #A0E4D8;
+    border: none;
 }
 
 .seeMoreText:link {

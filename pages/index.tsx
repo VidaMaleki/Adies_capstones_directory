@@ -5,7 +5,7 @@ import styles from '@/styles/Home.module.css'
 import Link from "next/link";
 import apps from "../app-data/app-data.json"
 import AppCard from '@/components/appCard';
-import AppDetailsPopup from '@/components/appDetailsPopup';
+// import AppDetailsPopup from '@/components/appDetailsPopup';
 
 export default function Home() {
   const webApps: any[] = [];

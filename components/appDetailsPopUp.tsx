@@ -7,7 +7,7 @@ interface Props {
         appLink: string;
         id: string;
         linkedin: string;
-        type: string;
+        // type: string;
     };
     onClose: () => void;
 }
