@@ -44,9 +44,9 @@ export default function Home() {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedApp, setSelectedApp] = useState(null);
 
-  const handlePopup = (app) => {
+  const handlePopup = (app: any) => {
     setShowPopup(true);
-  setSelectedApp(app);
+    setSelectedApp(app);
   };
 
   return (
@@ -75,7 +75,9 @@ export default function Home() {
                   appLink={app.appLink}
                   key={app.id}
                   linkedin={app.linkedin}
-                  onClick={() => handlePopup(app)}
+                  app={app}
+                  onClose={() => handlePopup(app)}
+                  id={app.id}
                 />
               ))}
             </div>
@@ -95,7 +97,9 @@ export default function Home() {
                   appLink={app.appLink}
                   key={app.id}
                   linkedin={app.linkedin}
-                  onClick={() => handlePopup(app)}
+                  app={app}
+                  onClose={() => handlePopup(app)}
+                  id={app.id}
                   />
                 ))}
               </div>
@@ -115,7 +119,9 @@ export default function Home() {
               appLink={app.appLink}
               key={app.id}
               linkedin={app.linkedin}
-              onClick={() => handlePopup(app)}
+              app={app}
+              onClose={() => handlePopup(app)}
+              id={app.id}
               />
             ))}
             </div>
@@ -135,7 +141,9 @@ export default function Home() {
               appLink={app.appLink}
               key={app.id}
               linkedin={app.linkedin}
-              onClick={() => handlePopup(app)}
+              app={app}
+              onClose={() => handlePopup(app)}
+              id={app.id}
               />
             ))}
             </div>
