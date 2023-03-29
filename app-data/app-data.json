@@ -1,151 +1,150 @@
 [{
         "id": "1",
         "appName": "Example 1",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "description here",
         "appLink": "https://google.com",
         "videoLink": "",
         "linkedin": "",
-        "type": "web"
+        "type": "web",
+        "technologies": ""
     },
     {
         "id": "2",
         "appName": "Example 2",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "description here",
         "appLink": "https://google.com",
         "videoLink": "",
         "linkedin": "",
-        "type": "web"
+        "type": "web",
+        "technologies": ""
     },
     {
         "id": "3",
         "appName": "Example 3",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "description here",
         "appLink": "https://google.com",
         "videoLink": "",
         "linkedin": "",
-        "type": "web"
+        "type": "web",
+        "technologies": ""
     },
     {
         "id": "4",
         "appName": "Example 4",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "description here",
         "appLink": "https://google.com",
         "videoLink": "",
         "linkedin": "",
-        "type": "web"
+        "type": "web",
+        "technologies": ""
     },
     {
         "id": "5",
         "appName": "Example 5",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "description here",
         "appLink": "https://google.com",
         "videoLink": "",
         "linkedin": "",
-        "type": "web"
+        "type": "web",
+        "technologies": ""
     },
     {
         "id": "6",
         "appName": "Example 6",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "description here",
         "appLink": "https://google.com",
         "videoLink": "",
         "linkedin": "",
-        "type": "web"
+        "type": "web",
+        "technologies": ""
     },
     {
         "id": "7",
         "appName": "Example 7",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "description here",
         "appLink": "https://google.com",
         "videoLink": "",
         "linkedin": "",
-        "type": "web"
+        "type": "web",
+        "technologies": ""
     },
     {
         "id": "8",
         "appName": "Example 8",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "description here",
         "appLink": "https://google.com",
         "videoLink": "",
         "linkedin": "",
-        "type": "web"
+        "type": "web",
+        "technologies": ""
     },
     {
         "id": "9",
         "appName": "Example 9",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "description here",
         "appLink": "https://google.com",
         "videoLink": "",
         "linkedin": "",
-        "type": "web"
+        "type": "web",
+        "technologies": ""
     },
     {
         "id": "10",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
         "linkedin": "",
-        "type": "game"
+        "type": "game",
+        "technologies": ""
     },
     {
         "id": "11",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
         "linkedin": "",
-        "type": "game"
+        "type": "game",
+        "technologies": ""
     },
     {
         "id": "12",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
         "linkedin": "",
-        "type": "game"
+        "type": "game",
+        "technologies": ""
     },
     {
         "id": "13",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
         "linkedin": "",
-        "type": "game"
+        "type": "game",
+        "technologies": ""
     },
     {
         "id": "14",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -155,8 +154,7 @@
     {
         "id": "15",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -166,8 +164,7 @@
     {
         "id": "16",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -177,8 +174,7 @@
     {
         "id": "17",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -188,8 +184,7 @@
     {
         "id": "18",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -198,8 +193,7 @@
     }, {
         "id": "19",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -209,8 +203,7 @@
     {
         "id": "20",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -220,8 +213,7 @@
     {
         "id": "21",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -231,8 +223,7 @@
     {
         "id": "22",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -242,8 +233,7 @@
     {
         "id": "23",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -252,8 +242,7 @@
     }, {
         "id": "24",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -263,8 +252,7 @@
     {
         "id": "25",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -274,8 +262,7 @@
     {
         "id": "26",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -285,8 +272,7 @@
     {
         "id": "27",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -295,8 +281,7 @@
     }, {
         "id": "28",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -305,8 +290,7 @@
     }, {
         "id": "29",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -315,8 +299,7 @@
     }, {
         "id": "30",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -325,8 +308,7 @@
     }, {
         "id": "31",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -335,8 +317,7 @@
     }, {
         "id": "32",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -345,8 +326,7 @@
     }, {
         "id": "33",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -355,8 +335,7 @@
     }, {
         "id": "34",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -365,8 +344,7 @@
     }, {
         "id": "35",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",
@@ -375,8 +353,7 @@
     }, {
         "id": "36",
         "appName": "",
-        "developerFirstName": "",
-        "developerLastName": "",
+        "developerName": "",
         "description": "",
         "appLink": "",
         "videoLink": "",

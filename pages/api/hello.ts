@@ -5,6 +5,11 @@ type Data = {
   name: string
 }
 
+interface App {
+  id: number;
+  appName:
+}
+
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
