@@ -7,7 +7,8 @@ type Data = {
 
 interface App {
   id: number;
-  appName:
+  appName: string;
+  
 }
 
 export default function handler(
