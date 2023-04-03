@@ -1,26 +1,22 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { Developers, Apps} from '@prisma/client'
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { Developers, Apps } from '@prisma/client';
 import { db } from '@/lib/db';
 
-type Data = {
-  name: string
-}
-
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   if (req.method === 'POST') {
-    const { name } = req.body;
-    res.status(200).json({ message: `Hello, ${name}!` });
+    await createApp(req, res);
+    // const { name } = req.body;
+    res.status(201).json({ data: { message: `App: ${req.body.appName} successfully created` } });
   } else {
     res.status(400).json({ message: 'Method not allowed.' });
   }
 }
 
 const createApp = async ( req: NextApiRequest, res: NextApiResponse) => {
-  
   const id: number = req.body.id;
   const appName : string = req.body.appName;
   const description: string = req.body.description;
@@ -31,7 +27,7 @@ const createApp = async ( req: NextApiRequest, res: NextApiResponse) => {
   const type: string = req.body.type;
   const technologies: string = req.body.technologies;
 
-  await db.apps.create({data: {id ,  appName, description, developer, appLink, videoLink,github,type, technologies}})
+  await db.apps.create({data: {id, appName, description, developer, appLink, videoLink, github, type, technologies}})
 }
 
 
