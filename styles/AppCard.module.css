@@ -18,26 +18,7 @@
     justify-content: space-between;
 }
 
-
-/* .cardLinkedin {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 10px;
-    color: #FEFDFE;
-    font-size: 25px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-} */
-
-.cardLinkedin {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    border-radius: 5px;
-    font-size: 24px;
-    color: white;
+.cardGitHub {
     margin-right: 20px;
 }
 
@@ -45,11 +26,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.25);
     width: 100%;
     height: 100%;
     border-radius: 5px;
-    background-color: #0cafce;
+    color: #000302;
 }
 
 .content {

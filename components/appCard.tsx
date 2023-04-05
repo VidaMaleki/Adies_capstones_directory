@@ -40,9 +40,9 @@ const AppCard: React.FC<Props> = ({ app, onClose }) => {
             <div className={styles.content}>
                 <div className={styles.appCardHeader}>
                     <h3>{name}</h3>
-                    <a className={styles.cardLinkedin} href={linkedin} target="_blank" >
+                    <a className={styles.cardGitHub} href={linkedin} target="_blank" >
                         <div className={styles.iconContainer}>
-                            <FaIcons.FaLinkedin />
+                            <FaIcons.FaGithub />
                         </div>
                     </a>
                 </div>
