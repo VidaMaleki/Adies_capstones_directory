@@ -18,28 +18,6 @@ const names = [
 ]
 
 async function main() {
-    // try to convert this to create one user first??
-    // const user = await db.user.upsert({
-    //     where: { email: "user@email.com" },
-    //     update: {},
-    //     create: {
-    //     email: "user@email.com",
-    //     firstName: "User",
-    //     lastName: "Person",
-    //     password: await hashPassword("password"),
-    //     projects: {
-    //         create: new Array(5).fill(1).map((_, i) => ({
-    //         name: `Project ${i}`,
-    //         due: new Date(2022, 11, 25),
-    //         })),
-    //     },
-    //     },
-    //     include: {
-    //     projects: true,
-    //     },
-    // });
-
-    // convert this to developer??
     const developers = await Promise.all(
         names.map((name) => 
             db.developer.upsert({
@@ -66,22 +44,6 @@ async function main() {
                 }
         }))
     )
-    // const tasks = await Promise.all(
-    //     user.projects.map((project) =>
-    //     db.task.createMany({
-    //         data: new Array(10).fill(1).map((_, i) => {
-    //         return {
-    //             name: `Task ${i}`,
-    //             ownerId: user.id,
-    //             projectId: project.id,
-    //             description: `Everything that describes Task ${i}`,
-    //             status: getRandomTaskStatus(),
-    //         };
-    //         }),
-    //     })
-    //     )
-    // );
-
     console.log({ developers });
 }
 main()

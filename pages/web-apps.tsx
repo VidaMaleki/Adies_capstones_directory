@@ -1,16 +1,25 @@
 import Navbar from "@/components/Navbar";
 import styles from "@/styles/AppPage.module.css"
-import apps from "../app-data/app-data.json"
 import AppCard from "@/components/appCard";
+import { db } from "@/lib/db";
+import { App } from "@prisma/client";
 
-const WebApps = () => {
-    // fetch all the web apps from db
-    const webApps: any[] = [];
-    apps.forEach(app => {
-        if (app.type === "web") {
-        webApps.push(app)
+export async function getStaticProps() {
+    const webApps: App[] = await db.app.findMany({
+        where: {
+            type: "web"
         }
     });
+    return {
+        props: {
+            webApps,
+        },
+    }
+}
+
+const WebApps = ({ webApps } : {
+    webApps: App[];
+}) => {
 
     return (
         <div className={styles.pageWrapper}>
@@ -19,8 +28,8 @@ const WebApps = () => {
                 <h1 className={styles.appHeader}>Web Apps</h1>
                 {/* loop through web apps to create AppCards */}
                 <div className={styles.appsContainer}>
-                    {webApps.map((app)=> (
-                        <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id} linkedin={app.linkedin}/>
+                    {webApps.map((app) => (
+                        <AppCard key={app.id}  app={app} appName={app.appName} description={app.description} appLink={app.appLink} linkedin={""} id={app.id}></AppCard>
                     ))}
                 </div>
             </div>

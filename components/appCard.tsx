@@ -10,7 +10,7 @@ interface Props {
 }
 
 interface Props {
-    name: string;
+    appName: string;
     description: string;
     appLink: string;
     linkedin: string;
@@ -19,7 +19,7 @@ interface Props {
 }
 
 const AppCard: React.FC<Props> = ({ app, onClose }) => {
-    const name = app?.name ?? 'No name available';
+    const name = app?.appName ?? 'No name available';
     const description = app?.description ?? 'No description available';
     const appLink = app?.appLink ?? '#';
     const linkedin = app?.linkedin ?? '#';

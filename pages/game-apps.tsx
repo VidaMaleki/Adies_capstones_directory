@@ -1,15 +1,26 @@
 import Navbar from "@/components/Navbar";
 import styles from "@/styles/AppPage.module.css"
-import apps from "../app-data/app-data.json"
 import AppCard from "@/components/appCard";
+import { db } from "@/lib/db";
+import { App } from "@prisma/client";
 
-const Games = () => {
-    const gameApps: any[] = [];
-    apps.forEach(app => {
-        if (app.type === "game") {
-        gameApps.push(app)
+export async function getStaticProps() {
+    const gameApps: App[] = await db.app.findMany({
+        where: {
+            type: "game"
         }
     });
+    return {
+        props: {
+            gameApps: gameApps,
+        },
+    }
+}
+
+const Games = ({ gameApps }: {
+    gameApps: App[]
+}) => {
+
     return (
         <div className={styles.pageWrapper}>
             <Navbar />
@@ -18,7 +29,7 @@ const Games = () => {
                 {/* loop through web apps to create AppCards */}
                 <div className={styles.appsContainer}>
                     {gameApps.map((app)=> (
-                        <AppCard  name={app.appName} description={app.description} appLink={app.appLink} key={app.id} linkedin={app.linkedin}/>
+                        <AppCard key={app.id}  app={app} appName={app.appName} description={app.description} appLink={app.appLink} linkedin={""} id={app.id}></AppCard>
                     ))}
                 </div>
             </div>
