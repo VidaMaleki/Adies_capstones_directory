@@ -1,19 +1,32 @@
 import Head from 'next/head'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Navbar from '@/components/Navbar'
 import styles from '@/styles/Home.module.css'
 import Link from "next/link";
-import apps from "../app-data/app-data.json"
 import AppCard from '@/components/appCard';
+import { db } from '@/lib/db';
+import { App } from '@prisma/client';
+import { all } from 'axios';
 // import AppDetailsPopup from '@/components/appDetailsPopup';
 
-export default function Home() {
-  const webApps: any[] = [];
-  const mobileApps: any[] = [];
-  const gamingApps: any[] = [];
-  const socialApps: any[] = [];
+export async function getServerSideProps() {
+    const allApps: App[] = await db.app.findMany();
+    return {
+        props: {
+            allApps: allApps,
+        },
+    }
+}
 
-  apps.forEach(app => {
+export default function Home({ allApps } : {
+  allApps: App[]
+}) {
+  const webApps: App[] = [];
+  const mobileApps: App[] = [];
+  const gamingApps: App[] = [];
+  const socialApps: App[] = [];
+
+  allApps.forEach(app => {
     if (app.type === "web") {
       webApps.push(app);
     } else if (app.type === "mobile") {
@@ -25,21 +38,23 @@ export default function Home() {
     }
   });
 
-  // Randomly select 5 apps for each category
-  const webAppsRandom: any[] = [];
-  const mobileAppsRandom: any[] = [];
-  const gamingAppsRandom: any[] = [];
-  const socialAppsRandom: any[] = [];
+  const [webAppsRandom, setWebAppsRandom] = useState([])
+  const [mobileAppsRandom, setMobileAppsRandom] = useState([])
+  const [gamingAppsRandom, setGamingAppsRandom] = useState([])
+  const [socialAppsRandom, setSocialAppsRandom] = useState([])
 
-  const getRandomApps = (appsList: any[], randomList: any[]) => {
+  const getRandomApps = (appsList: any) => {
     const shuffled = appsList.sort(() => 0.5 - Math.random());
-    randomList.push(...shuffled.slice(0, 5));
+    return shuffled.slice(0, 5);
   }
 
-  getRandomApps(webApps, webAppsRandom);
-  getRandomApps(mobileApps, mobileAppsRandom);
-  getRandomApps(gamingApps, gamingAppsRandom);
-  getRandomApps(socialApps, socialAppsRandom);
+  // Populate 5 random apps with useEffect and useState gets rid of hydration error
+  useEffect(() => {
+    setWebAppsRandom(getRandomApps(webApps));
+    setGamingAppsRandom(getRandomApps(gamingApps));
+    setSocialAppsRandom(getRandomApps(socialApps));
+    setMobileAppsRandom(getRandomApps(mobileApps));
+  }, []);
 
   const [showPopup, setShowPopup] = useState(false);
   const [selectedApp, setSelectedApp] = useState(null);
@@ -71,11 +86,11 @@ export default function Home() {
             <div className={styles.appsCardGrid}>
               {webAppsRandom.map((app)=> (
                 <AppCard
-                  name={app.appName}
+                  appName={app.appName}
                   description={app.description}
                   appLink={app.appLink}
                   key={app.id}
-                  linkedin={app.linkedin}
+                  linkedin={app.appLink}
                   app={app}
                   onClose={() => handlePopup(app)}
                   id={app.id}
@@ -93,11 +108,11 @@ export default function Home() {
             <div className={styles.appsCardGrid}>
               {mobileAppsRandom.map((app)=> (
                 <AppCard
-                  name={app.appName}
+                  appName={app.appName}
                   description={app.description}
                   appLink={app.appLink}
                   key={app.id}
-                  linkedin={app.linkedin}
+                  linkedin={app.appLink}
                   app={app}
                   onClose={() => handlePopup(app)}
                   id={app.id}
@@ -115,11 +130,11 @@ export default function Home() {
             <div className={styles.appsCardGrid}>
             {gamingAppsRandom.map((app)=> (
               <AppCard
-              name={app.appName}
+              appName={app.appName}
               description={app.description}
               appLink={app.appLink}
               key={app.id}
-              linkedin={app.linkedin}
+              linkedin={app.appLink}
               app={app}
               onClose={() => handlePopup(app)}
               id={app.id}
@@ -137,11 +152,11 @@ export default function Home() {
             <div className={styles.appsCardGrid}>
             {socialAppsRandom.map((app)=> (
               <AppCard
-              name={app.appName}
+              appName={app.appName}
               description={app.description}
               appLink={app.appLink}
               key={app.id}
-              linkedin={app.linkedin}
+              linkedin={app.appLink}
               app={app}
               onClose={() => handlePopup(app)}
               id={app.id}
