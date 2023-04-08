@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Developers, Apps } from '@prisma/client';
+import { Developer, App } from '@prisma/client';
 import { db } from '@/lib/db';
 
 export default async function handler(
@@ -8,7 +8,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === 'POST') {
-    await createApp(req, res);
+    // await createApp(req, res);
     // const { name } = req.body;
     res.status(201).json({ data: { message: `App: ${req.body.appName} successfully created` } });
   } else {
@@ -16,19 +16,19 @@ export default async function handler(
   }
 }
 
-const createApp = async ( req: NextApiRequest, res: NextApiResponse) => {
-  const id: number = req.body.id;
-  const appName : string = req.body.appName;
-  const description: string = req.body.description;
-  const developer: Developers[] = req.body.developer;
-  const appLink: string = req.body.appLink;
-  const videoLink: string = req.body.videoLink;
-  const github: string = req.body.github;
-  const type: string = req.body.type;
-  const technologies: string = req.body.technologies;
+// const createApp = async ( req: NextApiRequest, res: NextApiResponse) => {
+//   const id: number = req.body.id;
+//   const appName : string = req.body.appName;
+//   const description: string = req.body.description;
+//   const developer: Developer = req.body.developer;
+//   const appLink: string = req.body.appLink;
+//   const videoLink: string = req.body.videoLink;
+//   const github: string = req.body.github;
+//   const type: string = req.body.type;
+//   const technologies: string = req.body.technologies;
 
-  await db.apps.create({data: {id, appName, description, developer, appLink, videoLink, github, type, technologies}})
-}
+//   await db.app.create({data: {id, appName, description, developer, appLink, videoLink, github, type, technologies}})
+// }
 
 
 

@@ -9,22 +9,22 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-// Each developer has their own information stored in db
-// but if it's group project, there is one log in
-// Many developers <-> one app
-model Developers {
+
+model Developer {
   id      Int      @id @default(autoincrement())
   name    String
   email   String   @unique
   linkedin String?
-  app       Apps[]     @relation("AppDevelopers")
+  app       App?     
 }
 
-model Apps {
+model App {
   id      Int      @id @default(autoincrement())
   appName   String
   description String
-  developer  Developers[] @relation("AppDevelopers")
+  ownerId Int @unique
+  ownder  Developer @relation(fields: [ownerId], references: [id])
+  developers String[]
   appLink String?
   videoLink String?
   github String?
