@@ -23,7 +23,7 @@ model App {
   appName   String
   description String
   ownerId Int @unique
-  ownder  Developer @relation(fields: [ownerId], references: [id])
+  owner  Developer @relation(fields: [ownerId], references: [id])
   developers String[]
   appLink String?
   videoLink String?

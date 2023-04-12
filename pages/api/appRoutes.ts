@@ -1,57 +1,132 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Developer, App } from '@prisma/client';
 import { db } from '@/lib/db';
 
-export default async function handler(
+
+
+interface AppInput {
+  appName: string;
+  description: string;
+  ownerId: number;
+  developers: string[];
+  appLink?: string;
+  videoLink?: string;
+  github?: string;
+  type: string;
+  technologies: string[];
+}
+
+export default async function createAppHandler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
-  if (req.method === 'POST') {
-    // await createApp(req, res);
-    // const { name } = req.body;
-    res.status(201).json({ data: { message: `App: ${req.body.appName} successfully created` } });
-  } else {
-    res.status(400).json({ message: 'Method not allowed.' });
+  switch (req.method) {
+    case 'POST':
+      return createApp(req, res);
+    case 'GET':
+      const appId = Number(req.query.id);
+      if (!isNaN(appId)) {
+        return getApp(req, res);
+      }
+      return getAllApps(req, res);
+    case 'PUT':
+      return updateApp(req, res);
+    case 'DELETE':
+      return deleteApp(req, res);
+    default:
+      return res.status(405).json({ message: 'Method not allowed' });
   }
 }
 
-// const createApp = async ( req: NextApiRequest, res: NextApiResponse) => {
-//   const id: number = req.body.id;
-//   const appName : string = req.body.appName;
-//   const description: string = req.body.description;
-//   const developer: Developer = req.body.developer;
-//   const appLink: string = req.body.appLink;
-//   const videoLink: string = req.body.videoLink;
-//   const github: string = req.body.github;
-//   const type: string = req.body.type;
-//   const technologies: string = req.body.technologies;
+// http://localhost:3000/api/appRoutes and write details of app
+async function createApp(req: NextApiRequest, res: NextApiResponse) {
+  const input: AppInput = req.body;
+  // Validate the input data here
 
-//   await db.app.create({data: {id, appName, description, developer, appLink, videoLink, github, type, technologies}})
-// }
+  try {
+    const app = await db.app.create({
+      data: {
+        appName: input.appName,
+        description: input.description,
+        ownerId: input.ownerId,
+        developers: input.developers,
+        appLink: input.appLink,
+        videoLink: input.videoLink,
+        github: input.github,
+        type: input.type,
+        technologies: input.technologies,
+      },
+    });
+    return res.status(201).json({ app });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
 
+// http://localhost:3000/api/appRoutes?id=1
+async function getApp(req: NextApiRequest, res: NextApiResponse) {
+  const appId = Number(req.query.id);
+  try {
+    const app = await db.app.findUnique({
+      where: { id: appId },
+    });
+    return res.status(200).json({ app });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
 
+// http://localhost:3000/api/appRoutes?id=1
+async function updateApp(req: NextApiRequest, res: NextApiResponse) {
+  const appId = Number(req.query.id);
+  const input: AppInput = req.body;
+  // Validate the input data here
 
+  try {
+    const app = await db.app.update({
+      where: { id: appId },
+      data: {
+        appName: input.appName,
+        description: input.description,
+        ownerId: input.ownerId,
+        developers: input.developers,
+        appLink: input.appLink,
+        videoLink: input.videoLink,
+        github: input.github,
+        type: input.type,
+        technologies: input.technologies,
+      },
+    });
+    return res.status(200).json({ app });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
 
+// http://localhost:3000/api/appRoutes?id=1
+async function deleteApp(req: NextApiRequest, res: NextApiResponse) {
+  const appId = Number(req.query.id);
+  try {
+    await db.app.delete({
+      where: { id: appId },
+    });
+    return res.status(204).end();
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
 
-
-// model Developers {
-//   id      Int      @id @default(autoincrement())
-//   name    String
-//   email   String   @unique
-//   linkedin String?
-//   app       Apps     @relation(fields: [app_id], references: [id])
-//   app_id    Int      @unique
-// }
-
-// model Apps {
-//   id      Int      @id @default(autoincrement())
-//   appName   String
-//   description String
-//   developer  Developers[]
-//   appLink String?
-//   videoLink String?
-//   github String?
-//   type String
-//   technologies String[]
-// }
+// http://localhost:3000/api/appRoutes
+async function getAllApps(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const apps = await db.app.findMany();
+    return res.status(200).json({ apps });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
