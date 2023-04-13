@@ -12,19 +12,58 @@
 }
 
 .popup {
+    /* height: 55%; */
     width: 60%;
-    height: 70%;
+    height: fit-content;
     background-color: #fff;
     padding: 2rem;
     border-radius: 0.5rem;
+    text-align: left;
 }
 
 .popup .closeButton {
     position: relative;
-    top: 0.5rem;
-    right: 0.5rem;
+    /* top: 0.5rem;
+    right: 0.5rem; */
     background-color: transparent;
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
+}
+
+.imageContainer img {
+    width: 300px;
+}
+
+.appContentContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 3em;
+}
+
+.textContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.links a:link {
+    text-decoration: none;
+    color: black;
+}
+
+.links a:visited {
+    text-decoration: none;
+    color: black;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
+
+.links {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
