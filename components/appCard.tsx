@@ -3,28 +3,33 @@ import Link from 'next/link';
 import styles from '@/styles/AppCard.module.css';
 import * as FaIcons from "react-icons/fa";
 import { useState } from 'react';
+import { App } from '@prisma/client';
 
-interface Props {
-    app: Props;
-    onClose: () => void;
-}
+// interface Props {
+//     app: Props;
+//     onClose: () => void;
+// }
 
-interface Props {
-    appName: string;
-    description: string;
-    appLink: string;
-    linkedin: string;
-    id: string;
+// interface Props {
+//     appName: string;
+//     description: string;
+//     appLink: string;
+//     linkedin: string;
+//     id: string;
     
-}
+// }
 
-const AppCard: React.FC<Props> = ({ app, onClose }) => {
+const AppCard = ({ app }: {
+    app: App,
+}) => {
     const name = app?.appName ?? 'No name available';
     const description = app?.description ?? 'No description available';
     const appLink = app?.appLink ?? '#';
-    const linkedin = app?.linkedin ?? '#';
+    const github = app?.github ?? '#';
+    const videoLink = app?.videoLink ?? '#';
+    const technologies = app.technologies;
     const id = app?.id ?? -1;
-    // const { name, description, appLink, linkedin, id } = app; 
+
     const [showPopup, setShowPopup] = useState(false);
 
     const handleOpenPopup = () => {
@@ -40,7 +45,7 @@ const AppCard: React.FC<Props> = ({ app, onClose }) => {
             <div className={styles.content}>
                 <div className={styles.appCardHeader}>
                     <h3>{name}</h3>
-                    <a className={styles.cardGitHub} href={linkedin} target="_blank" >
+                    <a className={styles.cardGitHub} href={github} target="_blank" >
                         <div className={styles.iconContainer}>
                             <FaIcons.FaGithub />
                         </div>
@@ -55,7 +60,7 @@ const AppCard: React.FC<Props> = ({ app, onClose }) => {
                 <button className={styles.cardDetails} onClick={() => handleOpenPopup()}>Details</button>
             </div>
             {showPopup && (
-                <AppDetailsPopup app={{ appName: name, description, appLink, linkedin, id }} onClose={handleClosePopup} />
+                <AppDetailsPopup app={app} onClose={handleClosePopup}/>
             )}
         </div>
     );

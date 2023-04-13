@@ -4,10 +4,11 @@ interface Props {
     app: {
         appName: string;
         description: string;
-        appLink: string;
-        id: string;
-        linkedin: string;
-        // type: string;
+        appLink: string | null;
+        id: number;
+        github: string | null;
+        videoLink: string | null,
+        technologies: string[]
     };
     onClose: () => void;
 }
@@ -21,8 +22,14 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
                 </button>
                 <h2>{app.appName}</h2>
                 <p>{app.description}</p>
-                <a href={app.appLink}>View App</a>
-                <a href={app.linkedin}>View LinkedIn</a>
+                <div className={styles.links}>
+                    {app.appLink && <a href={app.appLink} target="_blank">View App</a>}
+                    {app.github && <a href={app.github} target="_blank">Github</a>}
+                    {app.videoLink && <a href={app.videoLink} target="_blank">Demo Video</a>}
+                </div>
+                
+                {/* Need to pull linked in from Developer table */}
+                {/* <a href={app.linkedin}>View LinkedIn</a> */}
             </div>
         </div>
     );

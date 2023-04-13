@@ -12,7 +12,7 @@ export async function getStaticProps() {
     });
     return {
         props: {
-            gameApps: gameApps,
+            gameApps: gameApps
         },
     }
 }
@@ -29,7 +29,7 @@ const Games = ({ gameApps }: {
                 {/* loop through web apps to create AppCards */}
                 <div className={styles.appsContainer}>
                     {gameApps.map((app)=> (
-                        <AppCard key={app.id}  app={app} appName={app.appName} description={app.description} appLink={app.appLink} linkedin={""} id={app.id}></AppCard>
+                        <AppCard key={app.id} app={app}></AppCard>
                     ))}
                 </div>
             </div>

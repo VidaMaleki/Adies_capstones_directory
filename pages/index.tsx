@@ -38,12 +38,14 @@ export default function Home({ allApps } : {
     }
   });
 
-  const [webAppsRandom, setWebAppsRandom] = useState([])
-  const [mobileAppsRandom, setMobileAppsRandom] = useState([])
-  const [gamingAppsRandom, setGamingAppsRandom] = useState([])
-  const [socialAppsRandom, setSocialAppsRandom] = useState([])
+  const [webAppsRandom, setWebAppsRandom] = useState<App[]>([]);
+  const [mobileAppsRandom, setMobileAppsRandom] = useState<App[]>([]);
+  const [gamingAppsRandom, setGamingAppsRandom] = useState<App[]>([]);
+  const [socialAppsRandom, setSocialAppsRandom] = useState<App[]>([]);
 
   const getRandomApps = (appsList: any) => {
+    if (appsList.length <= 5) return appsList;
+
     const shuffled = appsList.sort(() => 0.5 - Math.random());
     return shuffled.slice(0, 5);
   }
@@ -56,13 +58,13 @@ export default function Home({ allApps } : {
     setMobileAppsRandom(getRandomApps(mobileApps));
   }, []);
 
-  const [showPopup, setShowPopup] = useState(false);
-  const [selectedApp, setSelectedApp] = useState(null);
+  // const [showPopup, setShowPopup] = useState(false);
+  // const [selectedApp, setSelectedApp] = useState<App>();
 
-  const handlePopup = (app: any) => {
-    setShowPopup(true);
-    setSelectedApp(app);
-  };
+  // const handlePopup = (app: App) => {
+  //   setShowPopup(true);
+  //   setSelectedApp(app);
+  // };
 
   return (
     <>
@@ -86,14 +88,14 @@ export default function Home({ allApps } : {
             <div className={styles.appsCardGrid}>
               {webAppsRandom.map((app)=> (
                 <AppCard
-                  appName={app.appName}
-                  description={app.description}
-                  appLink={app.appLink}
+                  // appName={app.appName}
+                  // description={app.description}
+                  // appLink={app.appLink}
                   key={app.id}
-                  linkedin={app.appLink}
+                  // linkedin={app.appLink}
                   app={app}
-                  onClose={() => handlePopup(app)}
-                  id={app.id}
+                  // onClose={() => handlePopup(app)}
+                  // id={app.id}
                 />
               ))}
             </div>
@@ -108,14 +110,14 @@ export default function Home({ allApps } : {
             <div className={styles.appsCardGrid}>
               {mobileAppsRandom.map((app)=> (
                 <AppCard
-                  appName={app.appName}
-                  description={app.description}
-                  appLink={app.appLink}
+                  // appName={app.appName}
+                  // description={app.description}
+                  // appLink={app.appLink}
                   key={app.id}
-                  linkedin={app.appLink}
+                  // linkedin={app.appLink}
                   app={app}
-                  onClose={() => handlePopup(app)}
-                  id={app.id}
+                  // onClose={() => handlePopup(app)}
+                  // id={app.id}
                   />
                 ))}
               </div>
@@ -130,14 +132,14 @@ export default function Home({ allApps } : {
             <div className={styles.appsCardGrid}>
             {gamingAppsRandom.map((app)=> (
               <AppCard
-              appName={app.appName}
-              description={app.description}
-              appLink={app.appLink}
+              // appName={app.appName}
+              // description={app.description}
+              // appLink={app.appLink}
               key={app.id}
-              linkedin={app.appLink}
+              // linkedin={app.appLink}
               app={app}
-              onClose={() => handlePopup(app)}
-              id={app.id}
+              // onClose={() => handlePopup(app)}
+              // id={app.id}
               />
             ))}
             </div>
@@ -152,14 +154,14 @@ export default function Home({ allApps } : {
             <div className={styles.appsCardGrid}>
             {socialAppsRandom.map((app)=> (
               <AppCard
-              appName={app.appName}
-              description={app.description}
-              appLink={app.appLink}
+              // appName={app.appName}
+              // description={app.description}
+              // appLink={app.appLink}
               key={app.id}
-              linkedin={app.appLink}
+              // linkedin={app.appLink}
               app={app}
-              onClose={() => handlePopup(app)}
-              id={app.id}
+              // onClose={() => handlePopup(app)}
+              // id={app.id}
               />
             ))}
             </div>
