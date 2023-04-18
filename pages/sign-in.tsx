@@ -1,31 +1,17 @@
+import { NextPageContext } from "next";
+import { useSession, signIn, signOut, getSession } from "next-auth/react";
 
-const SignIn = () => {
-    return (
-        <h1>Sign In page</h1>
-    )
+
+export default function SignIn () {
+    const { data: session } = useSession()
+    if(session) {
+        return <>
+        Signed in as {session.user?.email} <br/>
+        <button onClick={() => signOut()}>Sign out</button>
+        </>
+    }
+    return <>
+        Not signed in <br/>
+        <button onClick={() => signIn()}>Sign in</button>
+    </>
 }
-
-export default SignIn;
-
-// import useUser from '../lib/useUser'
-// import Layout from '../components/Layout'
-
-// const Profile = () => {
-//   // Fetch the user client-side
-//   const { user } = useUser({ redirectTo: '/login' })
-
-//   // Server-render loading state
-//   if (!user || user.isLoggedIn === false) {
-//     return <Layout>Loading...</Layout>
-//   }
-
-//   // Once the user request finishes, show the user
-//   return (
-//     <Layout>
-//       <h1>Your Profile</h1>
-//       <pre>{JSON.stringify(user, null, 2)}</pre>
-//     </Layout>
-//   )
-// }
-
-// export default Profile

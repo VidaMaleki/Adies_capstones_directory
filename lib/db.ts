@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 // we're going to cache our Prisma client and reuse it when possible to avoid having too many connections.
 // this is pretty copy and paste, but there's only one way to do it
 // npx prisma studio 
-// after any changes in modele run npx prisma generate
+
 
 declare global {
     // eslint-disable-next-line no-var
