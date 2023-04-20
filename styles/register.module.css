@@ -1,0 +1,66 @@
+.registerWrapper {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.RegisterContainer {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.inputWrapper {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+@media screen and (min-width: 768px) {
+    .RegisterContainer {
+        display: flex;
+    }
+}
+
+.inputNameLabel {
+    color: rgb(101, 98, 98);
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.inputContainer {
+    position: relative;
+    margin-top: 1px;
+    column-gap: 10px;
+}
+
+.inputIconContainer {
+    pointer-events: none;
+    position: absolute;
+    margin-left: 15px;
+    padding-left: 3;
+    height: 30px;
+}
+
+.inputIcon {
+    height: 30px;
+    display: flex;
+    align-items: center;
+    color: grey;
+}
+
+.inputName {
+    width: 100%;
+    border: solid 1px;
+    height: 30px;
+    padding-left: 35px;
+    border: solid 1px #ccc;
+    border-radius: 5px;
+}
+
+.inputError {
+    right: 0.5rem;
+    top: 0.40rem;
+    position: absolute;
+    color: red;
+    font-weight: 500;
+}

@@ -1,0 +1,54 @@
+    .authWrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 12px;
+    }
+    
+    .authContainer {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .signUpWrapper {
+        width: 50%;
+        height: 100%;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .signUpContainer {
+        width: 100%;
+        padding: 12px;
+    }
+    
+    .signUpText {
+        text-align: center;
+        font-style: bold;
+        font-size: 1.5rem;
+        color: rgb(63, 61, 61);
+        font-weight: 800;
+    }
+    
+    .signUpParagraph {
+        text-align: center;
+        color: rgb(101, 98, 98);
+        margin-top: 0.75rem;
+        font-size: 14px;
+    }
+    
+    .signInHyperLink {
+        color: rgb(71, 71, 249);
+    }
+    
+    .signInHyperLink:hover {
+        color: rgb(34, 154, 209);
+        text-decoration: underline;
+        cursor: pointer !important;
+    }
