@@ -26,7 +26,7 @@ export default async function createAppHandler(
     case 'GET':
       const appId = Number(req.query.id);
       if (!isNaN(appId)) {
-        return getApp(req, res);
+        return getOneApp(req, res);
       }
       return getAllApps(req, res);
     case 'PUT':
@@ -65,7 +65,7 @@ async function createApp(req: NextApiRequest, res: NextApiResponse) {
 }
 
 // http://localhost:3000/api/appRoutes?id=1
-async function getApp(req: NextApiRequest, res: NextApiResponse) {
+async function getOneApp(req: NextApiRequest, res: NextApiResponse) {
   const appId = Number(req.query.id);
   try {
     const app = await db.app.findUnique({

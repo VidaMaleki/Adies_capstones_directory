@@ -64,3 +64,28 @@
     color: red;
     font-weight: 500;
 }
+
+.passwordScore {
+    display: flex;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.passwordScoreSpan {
+    width: 20%;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+}
+
+.scores {
+    height: 5px;
+    background-color: rgb(183, 182, 182);
+}
+
+.hidePassword {
+    position: absolute;
+    top: 2.5px;
+    right: 2px;
+    color: grey;
+    cursor: pointer;
+}
