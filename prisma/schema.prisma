@@ -75,7 +75,7 @@ model Developer {
   email         String     @unique
   emailVerified Boolean?   @default(false)
   image         String?    @default("https://res.cloudinary.com/dmhcnhtng/image/upload/v1664642479/992490_sskqn3.png")
-  cohort        Int
+  cohort        String
   linkedin      String?
   password      String
   app           App?      

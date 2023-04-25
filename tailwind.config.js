@@ -8,7 +8,12 @@ module.exports = {
     
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'aqua-blue': 'rgb(12, 192, 223)',
+        'dark-turquoise': 'rgb(0, 151, 178)',
+      }
+    },
   },
   plugins: [],
 }

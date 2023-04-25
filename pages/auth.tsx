@@ -20,7 +20,7 @@ export default function auth(){
                     </div>
                 </div>
                 {/*---Background---*/}
-                <Background image="../auth/1.png"/>
+                <Background image="../auth/adabg.png"/>
             </div>
         </div>
     )
