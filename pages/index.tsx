@@ -9,6 +9,19 @@ import { App } from '@prisma/client';
 import { all } from 'axios';
 // import AppDetailsPopup from '@/components/appDetailsPopup';
 
+// import { db, connect } from './db';
+
+// async function main() {
+//   await connect();
+//   const users = await db.user.findMany();
+//   console.log(users);
+// }
+
+// main().catch((err) => console.error(err));
+
+
+
+
 export async function getServerSideProps() {
     const allApps: App[] = await db.app.findMany();
     return {
