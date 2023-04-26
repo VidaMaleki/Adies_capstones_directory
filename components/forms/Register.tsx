@@ -32,11 +32,12 @@ const FormSchema=z.object({
     email: z
         .string().email("Please enter valid email address."),
     cohort: z
-        .string()
+        .string() // change to z.number()
         .min(1, "Cohort must have at least one digit.")
         .max(3, "cohort must not be less than 3 digits.")
         .refine((value) => /^[0-9]+$/.test(value), {
-        message: "Cohort must contain only digits."}),
+            message: "Cohort must contain only digits."
+        }),
     linkedin: z
         .string().url("Link must be valid link."),
     password: z
@@ -57,16 +58,20 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps>=(props) => {
         register,
         handleSubmit,
         watch,
+        reset,
         formState: {errors, isSubmitting},
     } = useForm<FormSchemaType>({
         resolver: zodResolver(FormSchema)
     });
 
     const onSubmit:SubmitHandler<FormSchemaType>=async(values) =>{
+        console.log(values)
         try {
-            const {data} = await axios.post('/api/signup',{
+            const { data } = await axios.post('/api/auth/signup',{
                 ...values,
+                
         });
+        reset()
         toast.success(data.message)
     } catch (error: any) {
         toast.error(error.response.data.message)
@@ -77,10 +82,10 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps>=(props) => {
         let password = watch().password;
         return zxcvbn(password ? password: "").score;
     };
-    
+    const password = watch().password;
     useEffect(() => {
         setPasswordScore(validatePasswordStrength())
-    }, [watch().password]);
+    }, [password]);
     
     return(
         <form className={styles.registerWrapper} onSubmit={handleSubmit(onSubmit)}>
@@ -173,7 +178,7 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps>=(props) => {
             icon={<FiLock/>}
             disabled={isSubmitting}
             />
-            <button onClick={() =>toast.success('This is a success message!')}>Toast</button>
+            {/* <button onClick={() =>toast.success('This is a success message!')}>Toast</button> */}
         </form>
     );
 };
