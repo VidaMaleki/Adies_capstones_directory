@@ -40,38 +40,7 @@ export default async function handler(
     }
 }
 
-// http://localhost:3000/api/auth/signup?id=1
-async function getOneDeveloper(req: NextApiRequest, res: NextApiResponse) {
-    const devId = Number(req.query.id);
-    try {
-        const developer = await db.developer.findUnique({
-        where: { id: devId },
-        });
-        return res.status(200).json({ developer });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: 'Internal server error' });
-    }
-}
-
-
-// Get all developers http://localhost:3000/api/auth/signup
-async function getAllDevelopers(
-    req: NextApiRequest,
-    res: NextApiResponse<Developer[]>
-) {
-    if (req.method !== "GET") {
-        return res.status(405).json(Array<Developer>(0));
-    }
-
-    try {
-        const developers = await db.developer.findMany();
-        return res.status(200).json(developers);
-    } catch (error) {
-        return res.status(500).json([]);
-    }
-}
-
+// http://localhost:3000/api/auth/signup
 async function registerDeveloper(
     req: NextApiRequest, res: NextApiResponse<{message: string}>
 ) {
@@ -123,17 +92,47 @@ async function registerDeveloper(
         });
 
         const url = `${process.env.NEXTAUTH_URL}/activate/${activation_token}`;
-
+        
         await sendMail(newdeveloper.email, newdeveloper.fullName, "", url, "Activate your account - Adie", activateTemplateEmail);
 
         res.json({ message: "Register success! Please create your app to start." });
     } catch (error) {
         res.status(500).json({ message: (error as Error).message });
+    } 
+}
+
+// Get all developers http://localhost:3000/api/auth/signup?id=1
+async function getOneDeveloper(req: NextApiRequest, res: NextApiResponse) {
+    const devId = Number(req.query.id);
+    try {
+        const developer = await db.developer.findUnique({
+        where: { id: devId },
+        });
+        return res.status(200).json({ developer });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+// Remove one user http://localhost:3000/api/auth/signup?id=1
+async function getAllDevelopers(
+    req: NextApiRequest,
+    res: NextApiResponse<Developer[]>
+) {
+    if (req.method !== "GET") {
+        return res.status(405).json(Array<Developer>(0));
     }
 
-    
-    
+    try {
+        const developers = await db.developer.findMany();
+        return res.status(200).json(developers);
+    } catch (error) {
+        return res.status(500).json([]);
+    }
 }
+
+
 async function deleteDeveloper(
     req: NextApiRequest,
     res: NextApiResponse<{ message: string }>

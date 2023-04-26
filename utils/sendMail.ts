@@ -16,18 +16,18 @@ export default async function sendMail(
     const {MAILING_EMAIL, MAILING_PASSWORD, SMTP_EMAIL, SMTP_HOST, SMTP_PASSWORD, SMTP_PORT} = process.env;
 
     let transporter = await nodemailer.createTransport({
-        // service: "gmail",
-        // auth:{
-        //     user: MAILING_EMAIL,
-        //     pass: MAILING_PASSWORD
-        // }
-
-        port: Number(SMTP_PORT),
-        host:SMTP_HOST,
-        auth: {
-            user: SMTP_EMAIL,
-            pass:SMTP_PASSWORD
+        service: "gmail",
+        auth:{
+            user: MAILING_EMAIL,
+            pass: MAILING_PASSWORD
         }
+
+        // port: Number(SMTP_PORT),
+        // host:SMTP_HOST,
+        // auth: {
+        //     user: SMTP_EMAIL,
+        //     pass:SMTP_PASSWORD
+        // }
     });
     // ---- html replacement
     const data = handlebars.compile(template);

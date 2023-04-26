@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 // npm i --include=dev @types/jsonwebtoken
 
-const {ACTIVATION_TOKEN_SECRET, REST_TOKEN_SECRET} = process.env
+const {ACTIVATION_TOKEN_SECRET, RESET_TOKEN_SECRET} = process.env
 
 export const createActivationToken = (payload: any) => {
     return jwt.sign(payload, ACTIVATION_TOKEN_SECRET!, {
@@ -10,7 +10,7 @@ export const createActivationToken = (payload: any) => {
 };
 
 export const createResetToken = (payload: any) => {
-    return jwt.sign(payload, REST_TOKEN_SECRET!, {
+    return jwt.sign(payload, RESET_TOKEN_SECRET!, {
         expiresIn: "6h",
-    })
-}
+    });
+};
