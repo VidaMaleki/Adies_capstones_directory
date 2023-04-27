@@ -35,6 +35,9 @@ export default async function handler(
         case "DELETE":
             await deleteDeveloper(req, res);
             break;
+        case "PUT":
+            await updateDeveloper(req, res);
+            break;
         default:
             res.status(405).json({ message: "Method not allowed" });
     }
@@ -149,6 +152,51 @@ async function deleteDeveloper(
         });
 
         res.json({ message: `User with ID ${id} has been deleted.` });
+    } catch (error) {
+        res.status(500).json({ message: (error as Error).message });
+    }
+}
+
+async function updateDeveloper(
+    req: NextApiRequest,
+    res: NextApiResponse<{ message: string }>
+) {
+    try {
+        const input: DeveloperInput = req.body;
+
+        const developer = await db.developer.findUnique({
+            where: { id: input.id },
+        });
+
+        if (!developer) {
+            return res.status(404).json({ message: "Developer not found" });
+        }
+
+        if (input.email !== developer.email) {
+            const existingDeveloper = await db.developer.findUnique({
+                where: { email: input.email },
+            });
+            if (existingDeveloper) {
+                return res
+                    .status(400)
+                    .json({ message: "This email address already exists." });
+            }
+        }
+
+        const updatedDeveloper = await db.developer.update({
+            where: { id: input.id },
+            data: {
+                fullName: input.fullName,
+                email: input.email,
+                cohort: input.cohort,
+                linkedin: input.linkedin,
+                password: input.password
+                    ? await bcrypt.hash(input.password, 6)
+                    : undefined,
+            },
+        });
+
+        res.json({ message: "Developer updated successfully" });
     } catch (error) {
         res.status(500).json({ message: (error as Error).message });
     }

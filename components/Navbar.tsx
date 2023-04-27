@@ -17,14 +17,16 @@ const Navbar = () => {
                     <Link href="/about" className="nav-link">About</Link>
                 </div>
                 <div>
-                    <Link href="/sign-in" className="nav-link">Sign In</Link>
+                    <Link href="/auth" className="nav-link">Sign </Link>
                 </div>
             </div>
-            
             <div className="search-container">
                 <form action="/action_page.php">
-                    <input type="text" placeholder="Search..." name="search"/>
-                
+                    <input 
+                    type="text" 
+                    placeholder="Search..." 
+                    name="search"
+                    />
                 </form>
                 <button type="submit"><FaSearch/></button>
             </div>
