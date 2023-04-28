@@ -14,7 +14,8 @@ import {z} from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 import zxcvbn from "zxcvbn";
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 // npm install zod
 // npm install @hookform/resolvers
