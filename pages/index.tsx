@@ -71,14 +71,6 @@ export default function Home({ allApps } : {
     setMobileAppsRandom(getRandomApps(mobileApps));
   }, []);
 
-  // const [showPopup, setShowPopup] = useState(false);
-  // const [selectedApp, setSelectedApp] = useState<App>();
-
-  // const handlePopup = (app: App) => {
-  //   setShowPopup(true);
-  //   setSelectedApp(app);
-  // };
-
   return (
     <>
       <Head>
@@ -101,14 +93,8 @@ export default function Home({ allApps } : {
             <div className={styles.appsCardGrid}>
               {webAppsRandom.map((app)=> (
                 <AppCard
-                  // appName={app.appName}
-                  // description={app.description}
-                  // appLink={app.appLink}
                   key={app.id}
-                  // linkedin={app.appLink}
                   app={app}
-                  // onClose={() => handlePopup(app)}
-                  // id={app.id}
                 />
               ))}
             </div>
@@ -123,14 +109,8 @@ export default function Home({ allApps } : {
             <div className={styles.appsCardGrid}>
               {mobileAppsRandom.map((app)=> (
                 <AppCard
-                  // appName={app.appName}
-                  // description={app.description}
-                  // appLink={app.appLink}
                   key={app.id}
-                  // linkedin={app.appLink}
                   app={app}
-                  // onClose={() => handlePopup(app)}
-                  // id={app.id}
                   />
                 ))}
               </div>
@@ -145,14 +125,8 @@ export default function Home({ allApps } : {
             <div className={styles.appsCardGrid}>
             {gamingAppsRandom.map((app)=> (
               <AppCard
-              // appName={app.appName}
-              // description={app.description}
-              // appLink={app.appLink}
               key={app.id}
-              // linkedin={app.appLink}
               app={app}
-              // onClose={() => handlePopup(app)}
-              // id={app.id}
               />
             ))}
             </div>
@@ -167,14 +141,8 @@ export default function Home({ allApps } : {
             <div className={styles.appsCardGrid}>
             {socialAppsRandom.map((app)=> (
               <AppCard
-              // appName={app.appName}
-              // description={app.description}
-              // appLink={app.appLink}
               key={app.id}
-              // linkedin={app.appLink}
               app={app}
-              // onClose={() => handlePopup(app)}
-              // id={app.id}
               />
             ))}
             </div>
