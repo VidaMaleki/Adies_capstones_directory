@@ -30,9 +30,9 @@ const Navbar = () => {
                 </form>
                 <button type="submit"><FaSearch/></button>
             </div>
-            <div>
-                <Image  src={profileImg} alt="Image" priority />
-            </div>
+            {/* <div>
+                <Image  src="" alt="Image" priority />
+            </div> */}
         </div>
     )
 }
