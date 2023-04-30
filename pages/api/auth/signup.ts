@@ -15,6 +15,7 @@ interface DeveloperInput {
     email: string;
     cohort: string;
     linkedin: string;
+    image: string;
     password: string;
 }
 
@@ -86,6 +87,7 @@ async function registerDeveloper(
                 email: input.email,
                 cohort: input.cohort,
                 linkedin: input.linkedin,
+                image: input.image,
                 password: cryptedPassword
             }
         });
@@ -190,8 +192,9 @@ async function updateDeveloper(
                 email: input.email,
                 cohort: input.cohort,
                 linkedin: input.linkedin,
+                image: input.image,
                 password: input.password
-                    ? await bcrypt.hash(input.password, 6)
+                    ? await bcrypt.hash(input.password, 12)
                     : undefined,
             },
         });

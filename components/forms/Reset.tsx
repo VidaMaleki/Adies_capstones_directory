@@ -4,10 +4,7 @@ import axios from 'axios';
 import styles from '@/styles/register.module.css';
 import Input from '../inputs/Input';
 import SlideButton from '../buttons/SlideButton';
-import { CiUser } from "react-icons/ci";
-import { AiOutlineMail, AiFillLock } from "react-icons/ai";
-import {IoSchoolSharp } from "react-icons/io5";
-import {FaLinkedinIn } from "react-icons/fa";
+import { AiFillLock } from "react-icons/ai";
 import {FiLock} from "react-icons/fi"
 import {SubmitHandler, useForm} from "react-hook-form";
 import {z} from "zod";
@@ -23,26 +20,11 @@ import Link from 'next/link';
 // npm i axios
 // npm install react-router-dom@latest
 
-interface IRegisterFormProps{
+interface IResetFormProps{
+    token: string;
 }
 
 const FormSchema=z.object({
-    fullName: z
-        .string()
-        .min(2, "Full name must have at least 2 characters.")
-        .max(32, "Full name must not be more than 32 characters.")
-        .regex(new RegExp("^[a-zA-Z\\s]+$"), "No special characters allowed."),
-    email: z
-        .string().email("Please enter valid email address."),
-    cohort: z
-        .string() // change to z.number()
-        .min(1, "Cohort must have at least one digit.")
-        .max(3, "cohort must not be less than 3 digits.")
-        .refine((value) => /^[0-9]+$/.test(value), {
-            message: "Cohort must contain only digits."
-        }),
-    linkedin: z
-        .string().url("Link must be valid link."),
     password: z
         .string()
         .min(6, "password must have at least 6 characters.")
@@ -55,7 +37,8 @@ const FormSchema=z.object({
 });
 type FormSchemaType = z.infer<typeof FormSchema>;
 
-const RegisterForm: React.FunctionComponent<IRegisterFormProps>=(props) => {
+const ResetForm: React.FunctionComponent<IResetFormProps>=(props) => {
+    const {token} = props
     const [passwordScore, setPasswordScore] = useState(0)
     const {
         register,
@@ -70,9 +53,9 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps>=(props) => {
     const onSubmit:SubmitHandler<FormSchemaType>=async(values) =>{
         console.log(values)
         try {
-            const { data } = await axios.post('/api/auth/signup',{
-                ...values,
-                
+            const { data } = await axios.post('/api/auth/reset',{
+                password: values.password,
+                token,            
         });
         reset()
         toast.success(data.message)
@@ -91,55 +74,13 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps>=(props) => {
     
     return(
         <div className="w-full px-12 py-4">
-            <h2 className="text-center text-2x1 font-bold tracking-wide text-gray-800">Sign up</h2>
-            <p className="text-center text-sm text-gray-600 mt-2">You already have an account ? &nbsp;
+            <h2 className="text-center text-2x1 font-bold tracking-wide text-gray-800">Reset password</h2>
+            <p className="text-center text-sm text-gray-600 mt-2">Sign in instead ? &nbsp;
                 <Link href="/auth" className="text-blue-600 hover:text-blue-700 hover:uderline cursor-pointer">
                     Sign in
                 </Link>
             </p>
             <form className={styles.registerWrapper} onSubmit={handleSubmit(onSubmit)}>
-                <div className={styles.RegisterContainer}>
-                    <Input 
-                    name="fullName"
-                    label="Full name"
-                    type="text"
-                    icon={<CiUser/>}
-                    placeholder="example"
-                    register={register}
-                    error={errors?.fullName?.message}
-                    disabled={isSubmitting}
-                    />
-                </div>
-                <Input 
-                    name="email"
-                    label="Email"
-                    type="text"
-                    icon={<AiOutlineMail/>}
-                    placeholder="example@example.com"
-                    register={register}
-                    error={errors?.email?.message}
-                    disabled={isSubmitting}
-                    />
-                    <Input 
-                    name="cohort"
-                    label="Cohort"
-                    type="number"
-                    icon={<IoSchoolSharp/>}
-                    placeholder="17"
-                    register={register}
-                    error={errors?.cohort?.message}
-                    disabled={isSubmitting}
-                    />
-                    <Input 
-                    name="linkedin"
-                    label="Linkedin URL"
-                    type="text"
-                    icon={<FaLinkedinIn/>}
-                    placeholder="https://www.linkedin.com/"
-                    register={register}
-                    error={errors?.linkedin?.message}
-                    disabled={isSubmitting}
-                    />
                     <Input 
                     name="password"
                     label="Password"
@@ -181,8 +122,8 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps>=(props) => {
                     />
                 <SlideButton 
                 type="submit"
-                text="Sign up"
-                slide_text="Secure sign up"
+                text="Change password"
+                slide_text="Secure"
                 icon={<FiLock/>}
                 disabled={isSubmitting}
                 />
@@ -190,4 +131,4 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps>=(props) => {
         </div>
     );
 };
-export default RegisterForm;
+export default ResetForm;

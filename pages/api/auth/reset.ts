@@ -1,8 +1,9 @@
 import { db } from "@/lib/db";
 import type { NextApiRequest, NextApiResponse } from "next";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
-const { ACTIVATION_TOKEN_SECRET } = process.env;
+const { RESET_TOKEN_SECRET } = process.env;
 interface UserToken {
     id:string;
 }
@@ -10,21 +11,19 @@ interface UserToken {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         await db.$connect();
-        const { token } = req.body;
-        const userToken = jwt.verify(token, ACTIVATION_TOKEN_SECRET!) as UserToken;
+        const { token, password} = req.body;
+        const userToken = jwt.verify(token, RESET_TOKEN_SECRET!) as UserToken;
         const developerId = parseInt(userToken?.id as string, 10);
         const developerDb = await db.developer.findUnique({ where: { id: developerId } });
-        console.log(developerDb)
-        console.log(userToken.id)
-        // return;
-        if (developerDb?.emailVerified == true) {
+        if (!developerDb) {
             return res
             .status(400)
-            .json({message: "Your email address already verified."});
+            .json({message: "This account no longer exist."})
         }
-        await db.developer.update({where:{ id: developerId },data: { emailVerified: true } }); 
+        const cryptedPassword = await bcrypt.hash(password, 12)
+        await db.developer.update({where:{ id: developerId },data: { password: cryptedPassword } }); 
         res.json({
-            message:"Your account successfuly verified!"
+            message:"Your account password has been successfuly updated!"
         });
     } catch (error) {
         console.error(error);

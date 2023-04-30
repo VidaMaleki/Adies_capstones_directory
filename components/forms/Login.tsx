@@ -10,10 +10,14 @@ import {z} from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
+import { signIn } from 'next-auth/react';
+import Link from 'next/link';
 // npm install zod
 // npm install @hookform/resolvers
 
 interface ILoginFormProps{
+    callbackUrl: string;
+    csrfToken: string;
 }
 
 const FormSchema=z.object({
@@ -27,6 +31,7 @@ const FormSchema=z.object({
 type FormSchemaType = z.infer<typeof FormSchema>;
 
 const LoginForm: React.FunctionComponent<ILoginFormProps>=(props) => {
+    const { callbackUrl , csrfToken} = props
     const router = useRouter();
     const path = router.pathname
     const {
@@ -37,7 +42,21 @@ const LoginForm: React.FunctionComponent<ILoginFormProps>=(props) => {
         resolver: zodResolver(FormSchema)
     });
 
-    const onSubmit:SubmitHandler<FormSchemaType>=async(values) =>{}
+    const onSubmit:SubmitHandler<FormSchemaType>=async(values) =>{
+        
+        const res: any = await signIn("credentials", {
+            redirect: false,
+            email: values.email,
+            password: values.password,
+            callbackUrl,
+        });
+        // console.log(res); log the response object to the console
+        if (res.error) {
+            return toast.error(res.error);
+        } else {
+            return router.push("/");
+        }
+    };
     
     return(
         <div className="w-full px-12 py-4">
@@ -53,7 +72,12 @@ const LoginForm: React.FunctionComponent<ILoginFormProps>=(props) => {
                 })
             }}>Sign up</a>
             </p>
-            <form className={styles.registerWrapper} onSubmit={handleSubmit(onSubmit)}>
+            <form 
+            method="post"
+            action="/api/auth/signin/email"
+            className={styles.registerWrapper} 
+            onSubmit={handleSubmit(onSubmit)}>
+                <input type="hidden" name="csrfToken" defaultValue={csrfToken}/>
                 <Input 
                     name="email"
                     label="Email"
@@ -74,6 +98,9 @@ const LoginForm: React.FunctionComponent<ILoginFormProps>=(props) => {
                     error={errors?.password?.message}
                     disabled={isSubmitting}
                     />
+                    <div className="mt-2 hover:underline w-fit">
+                        <Link href="/forgot" className="text-blue-600">Fogot password ?</Link>
+                    </div>
                 <SlideButton 
                 type="submit"
                 text="Sign in"
@@ -81,7 +108,6 @@ const LoginForm: React.FunctionComponent<ILoginFormProps>=(props) => {
                 icon={<FiLock/>}
                 disabled={isSubmitting}
                 />
-                {/* <button onClick={() =>toast.success('This is a success message!')}>Toast</button> */}
             </form>
         </div>
     );

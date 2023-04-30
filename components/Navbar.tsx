@@ -7,7 +7,7 @@ const Navbar = () => {
     return (
         <div className="navbar-container">
             <div>
-                <Image id="nav-img" src={LOGO} alt="Image" />
+                <Image id="nav-img" src={LOGO} alt="Image" priority />
             </div>
             <div className="button-wrapper">
                 <div >
@@ -29,6 +29,9 @@ const Navbar = () => {
                     />
                 </form>
                 <button type="submit"><FaSearch/></button>
+            </div>
+            <div>
+                <Image  src={profileImg} alt="Image" priority />
             </div>
         </div>
     )
