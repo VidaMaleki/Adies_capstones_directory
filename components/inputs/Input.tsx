@@ -21,7 +21,7 @@ const Input: React.FunctionComponent<InputProps> = (props) => {
 
     const [ showPassword, setShowPassword] = useState(false);
     // const calculateTranslate = (): string => {
-    //     // if (name == "fullName") return "translateY(-12PX)";
+    //     // if (name == "name") return "translateY(-12PX)";
     //     return "translateY(-12PX)";
     // }
     return(

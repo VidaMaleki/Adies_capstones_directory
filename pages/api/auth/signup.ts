@@ -51,8 +51,8 @@ async function registerDeveloper(
     try {
         const input: DeveloperInput = req.body;
 
-        if (!input.fullName || !input.email || !input.cohort || !input.linkedin || !input.password) {
-            return res.status(400).json({ message: "Please fill in all fields." });
+        if (!input.fullName || !input.email || !input.password) {
+            return res.status(400).json({ message: "Please fill in all necessary fields." });
         }
 
         if (!validator.isEmail(input.email)) {

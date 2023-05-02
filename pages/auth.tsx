@@ -16,7 +16,7 @@ export default function auth({
     callbackUrl:string,
     csrfToken: string
 }) {
-    console.log(tab)
+    
     return(
         <div className={styles.authWrapper}>
             <div className={styles.authContainer}>

@@ -14,9 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const userToken = jwt.verify(token, ACTIVATION_TOKEN_SECRET!) as UserToken;
         const developerId = parseInt(userToken?.id as string, 10);
         const developerDb = await db.developer.findUnique({ where: { id: developerId } });
-        console.log(developerDb)
-        console.log(userToken.id)
-        // return;
+        
         if (developerDb?.emailVerified == true) {
             return res
             .status(400)

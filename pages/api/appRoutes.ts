@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { db } from '@/lib/db';
+import validator from "validator";
 
 
 
@@ -14,6 +15,11 @@ interface AppInput {
   github?: string;
   type: string;
   technologies: string[];
+}
+
+interface DeveloperInput {
+  fullName: string;
+  email: string;
 }
 
 export default async function createAppHandler(
@@ -40,10 +46,29 @@ export default async function createAppHandler(
 
 // http://localhost:3000/api/appRoutes and write details of app
 async function createApp(req: NextApiRequest, res: NextApiResponse) {
-  const input: AppInput = req.body;
+  const typeList: string[]= ["web app", "mobile app", "social media", "game"]
   // Validate the input data here
 
   try {
+    const input: AppInput = req.body;
+    const developerInput : DeveloperInput = req.body;
+
+    if (!input.appName || !input.developers || !input.type || !input.technologies || !input.github) {
+      return res.status(400).json({ message: "Please fill in all fields." });
+    }
+
+    if (!validator.isEmail(developerInput.email)) {
+      return res.status(400).json({ message: "Please add a valid developer email address." });
+    }
+
+    if (!validator.isURL(input.appLink! || input.videoLink! || input.github)) {
+      return res.status(400).json({ message: "Please enter a valid URL." });
+    }
+
+    if (input.technologies.length > 5) {
+      return res.status(400).json({ message: "Please add maximum of 5 technologies." });
+    }
+    
     const app = await db.app.create({
       data: {
         appName: input.appName,

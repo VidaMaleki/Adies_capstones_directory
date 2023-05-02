@@ -50,7 +50,6 @@ export default NextAuth({
                 isNewUser?: boolean | undefined;
                 session?: any;
             }) {
-            console.log(account)
             return token
         }
     }

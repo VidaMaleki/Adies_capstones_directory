@@ -2,8 +2,32 @@ import Link from "next/link";
 import LOGO from '../images/appLogo.png';
 import Image from 'next/image'
 import { FaSearch } from "react-icons/fa";
+import { useRouter } from 'next/router';
+import ProfileIcon from "./profile/ProfileIcon";
+import { Developer } from "@prisma/client";
+import { useEffect, useState } from "react";
 
-const Navbar = () => {
+
+interface Props {
+
+}
+
+const Navbar: React.FunctionComponent<Props> = () => {
+    const router = useRouter();
+    const [developers, setDevelopers] = useState<Developer[]>([])
+
+    useEffect(() => {
+        const fetchDevelopers = async () => {
+            const res = await fetch("/api/developers")
+            const data = await res.json();
+            setDevelopers(data);
+        };
+        fetchDevelopers();
+    }, []);
+
+    // const handleProfileClick = () => {
+    //     router.push('/profile');
+    // }
     return (
         <div className="navbar-container">
             <div>
@@ -17,7 +41,7 @@ const Navbar = () => {
                     <Link href="/about" className="nav-link">About</Link>
                 </div>
                 <div>
-                    <Link href="/auth" className="nav-link">Sign up </Link>
+                    <Link href="/auth" className="nav-link">Sign up</Link>
                 </div>
             </div>
             <div className="search-container">
@@ -28,11 +52,11 @@ const Navbar = () => {
                     name="search"
                     />
                 </form>
-                <button type="submit"><FaSearch/></button>
+                <button type="submit" className="search-icon"><FaSearch/></button>
             </div>
-            {/* <div>
-                <Image  src="" alt="Image" priority />
-            </div> */}
+            <div className="">
+                <ProfileIcon/>
+            </div>
         </div>
     )
 }
