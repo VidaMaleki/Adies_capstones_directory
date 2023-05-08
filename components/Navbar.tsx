@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import ProfileIcon from "./profile/ProfileIcon";
 import { Developer } from "@prisma/client";
 import { useEffect, useState } from "react";
+import styles from '@/styles/Navbar.module.css'
 
 
 interface Props {
@@ -29,32 +30,35 @@ const Navbar: React.FunctionComponent<Props> = () => {
     //     router.push('/profile');
     // }
     return (
-        <div className="navbar-container">
-            <div>
-                <Image id="nav-img" src={LOGO} alt="Image" priority />
+        <div className={styles.navbarContainer}>
+            <div className={styles.logoContainer}>
+                <Image className={styles.appLogo} src={LOGO} alt="Image" priority />
             </div>
-            <div className="button-wrapper">
-                <div >
-                    <Link href="/" className="nav-link">Home</Link>
+            <div className={styles.buttonWrapper}>
+                <div className={styles.navButtonContainer}>
+                    <Link href="/" className={styles.navLink}>Home</Link>
                 </div>
-                <div>
-                    <Link href="/about" className="nav-link">About</Link>
+                <div className={styles.navButtonContainer}>
+                    <Link href="/about" className={styles.navLink}>About</Link>
                 </div>
-                <div>
-                    <Link href="/auth" className="nav-link">Sign up</Link>
+                <div className={styles.navButtonContainer}>
+                    <Link href="/auth" className={styles.navSignInLink}>Sign in</Link>
                 </div>
             </div>
-            <div className="search-container">
-                <form action="/action_page.php">
+            <div className={styles.searchContainer}>
+                <form 
+                className={styles.searchForm}
+                action="/action_page.php">
                     <input 
+                    className={styles.searchInput}
                     type="text" 
                     placeholder="Search..." 
                     name="search"
                     />
                 </form>
-                <button type="submit" className="search-icon"><FaSearch/></button>
+                <button type="submit" className={styles.searchIcon}><FaSearch/></button>
             </div>
-            <div className="">
+            <div className={styles.profileContainer}>
                 <ProfileIcon/>
             </div>
         </div>

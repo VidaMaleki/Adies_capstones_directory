@@ -86,9 +86,9 @@ export default function Home({ allApps } : {
           <div>
             <div className={styles.appsHeader}>
               <h2>Web apps</h2>
-              <button className={styles.seeMoreButton}>
-                <Link href="/web-apps" className={styles.seeMoreText}>See more</Link>
-              </button>
+              <div className={styles.seeMoreButton}>
+                <Link href="/web-apps" className={styles.seeMoreText}>See All</Link>
+              </div>
             </div>
             <div className={styles.appsCardGrid}>
               {webAppsRandom.map((app)=> (
@@ -103,7 +103,7 @@ export default function Home({ allApps } : {
             <div className={styles.appsHeader}>
               <h2>Mobile apps</h2>
               <button className={styles.seeMoreButton}>
-                <Link href="/mobile-apps" className={styles.seeMoreText}>See more</Link>
+                <Link href="/mobile-apps" className={styles.seeMoreText}>See All</Link>
               </button>
             </div>
             <div className={styles.appsCardGrid}>
@@ -119,7 +119,7 @@ export default function Home({ allApps } : {
           <div className={styles.appsHeader}>
               <h2>Gaming apps</h2>
               <button className={styles.seeMoreButton}>
-                <Link href="/game-apps" className={styles.seeMoreText}>See more</Link>
+                <Link href="/game-apps" className={styles.seeMoreText}>See All</Link>
               </button>
             </div>
             <div className={styles.appsCardGrid}>
@@ -135,7 +135,7 @@ export default function Home({ allApps } : {
           <div className={styles.appsHeader}>
               <h2>Social Media apps</h2>
               <button className={styles.seeMoreButton}>
-                <Link href="/social-apps" className={styles.seeMoreText}>See more</Link>
+                <Link href="/social-apps" className={styles.seeMoreText}>See All</Link>
               </button>
             </div>
             <div className={styles.appsCardGrid}>

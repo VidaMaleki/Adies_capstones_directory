@@ -48,17 +48,17 @@
     right: 10%;
     padding: 8px;
     margin-bottom: 10px;
-    background-color: #A0E4D8;
     border: none;
 }
 
 .seeMoreText:link {
     text-decoration: none;
-    color: black;
+    color: rgb(8, 73, 237);
+    font-style: bold;
 }
 
 .seeMoreText:visited {
-    color: black;
+    color: rgb(8, 73, 237);
 }
 
 .appsCardGrid {

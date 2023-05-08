@@ -1,8 +1,8 @@
 import '@/styles/globals.css'
-import '@/styles/navbar.css'
+import '@/styles/Navbar.module.css'
 import '@/styles/Home.module.css'
 import type { AppProps } from 'next/app'
-import { BrowserRouter } from 'react-router-dom'
+// import { BrowserRouter } from 'react-router-dom'
 import { SessionProvider } from "next-auth/react"
 import 'tailwindcss/tailwind.css';
 import { ToastContainer } from 'react-toastify';

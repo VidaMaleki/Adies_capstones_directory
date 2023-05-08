@@ -58,6 +58,7 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 // after any changes in modele run npx prisma generate
+// npx prisma migrate dev --skip-seed
 
 generator client {
   provider = "prisma-client-js"
@@ -92,4 +93,6 @@ model App {
   github       String?
   type         String
   technologies String[]
+  picture      String?    @default("https://ibb.co/LpkhW5Z")
+
 }
