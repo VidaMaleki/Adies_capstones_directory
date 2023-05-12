@@ -42,7 +42,8 @@ export default function Profile () {
                             You logged in using &nbsp; 
                             <span
                             className="capitalize bg-blue-400 text-white px-4 py-1 ml-2 font-bold italix text-lg rounded-md"
-                            >{session?.user?.provider}
+                            >
+                            {/* {session?.user?.provider} */}
                             </span>
                         </div>
                     </div>
