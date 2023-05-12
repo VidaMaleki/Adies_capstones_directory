@@ -48,8 +48,8 @@ export default function Profile () {
                     </div>
                     <div className="flex flex-col  justify-center items-center">
                         <h4>Create your capstone app</h4>
-                        <div className="bg-sky-500/100 w-2/4 flex justify-center items-center border border-gray font-bold rounded-lg mt-5 px-8 py-2">
-                            <Link href="/appCard">Create</Link>
+                        <div className="w-full bg-sky-500/100 w-2/4 flex justify-center items-center border border-gray font-bold rounded-lg mt-5 px-8 py-2">
+                            <Link href="/capstone">Add Your app</Link>
                         </div>
                     </div>
                     <div className="mt-10 py-10 border-t text-center">

@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
 .navbarContainer {
+    position: fixed;
     display: flex;
     flex-direction: row;
     height: 80px;
@@ -10,9 +11,9 @@
     top: 0;
     flex: 1 1 auto;
     min-height: 0;
-    min-width: 0;
+    /* min-width: 0; */
     width: 100%;
-    width: calc(12/var(--g-ncols)*100%);
+    /* width: calc(12/var(--g-ncols)*100%); */
     box-sizing: border-box;
     z-index: 671;
     padding-bottom: 4px;
@@ -23,7 +24,7 @@
     width: 100px;
     height: 80px;
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
 }
 
@@ -106,7 +107,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 60%;
+    width: 65%;
     min-width: 407px;
     /* height: 40px; */
     height: 56px;
@@ -158,7 +159,7 @@
     right: 0;
     height: 80px;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     align-items: center;
     box-sizing: border-box;
     margin-right: 20px;
