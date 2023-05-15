@@ -15,16 +15,16 @@ interface Props {
 
 const Navbar: React.FunctionComponent<Props> = () => {
     const router = useRouter();
-    const [developers, setDevelopers] = useState<Developer[]>([])
+    // const [developers, setDevelopers] = useState<Developer[]>([])
 
-    useEffect(() => {
-        const fetchDevelopers = async () => {
-            const res = await fetch("/api/developers")
-            const data = await res.json();
-            setDevelopers(data);
-        };
-        fetchDevelopers();
-    }, []);
+    // useEffect(() => {
+    //     const fetchDevelopers = async () => {
+    //         const res = await fetch("/api/developers")
+    //         const data = await res.json();
+    //         setDevelopers(data);
+    //     };
+    //     fetchDevelopers();
+    // }, []);
 
     // const handleProfileClick = () => {
     //     router.push('/profile');

@@ -46,20 +46,21 @@ export default async function createAppHandler(
 
 // http://localhost:3000/api/appRoutes and write details of app
 async function createApp(req: NextApiRequest, res: NextApiResponse) {
-  const typeList: string[]= ["web app", "mobile app", "social media", "game"]
+  // const typeLisoot: string[]= ["web app", "mobile app", "social media", "game"]
   // Validate the input data here
 
   try {
     const input: AppInput = req.body;
-    const developerInput : DeveloperInput = req.body;
+    // const developerInput : DeveloperInput = req.body;
 
     if (!input.appName || !input.developers || !input.type || !input.technologies || !input.github) {
-      return res.status(400).json({ message: "Please fill in all fields." });
+      // console.log(`${input.appName}, ${input.developers}, ${input.type}, ${input.technologies}, ${input.github}`)
+      return res.status(400).json({ message: `Please fill in all fields: ${input.appName}, ${input.developers}, ${input.type}, ${input.technologies}, ${input.github}` });
     }
 
-    if (!validator.isEmail(developerInput.email)) {
-      return res.status(400).json({ message: "Please add a valid developer email address." });
-    }
+    // if (!validator.isEmail(developerInput.email)) {
+    //   return res.status(400).json({ message: "Please add a valid developer email address." });
+    // }
 
     if (!validator.isURL(input.appLink! || input.videoLink! || input.github)) {
       return res.status(400).json({ message: "Please enter a valid URL." });
@@ -85,7 +86,7 @@ async function createApp(req: NextApiRequest, res: NextApiResponse) {
     return res.status(201).json({ app });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: `${error}` });
   }
 }
 

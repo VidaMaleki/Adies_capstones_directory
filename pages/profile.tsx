@@ -4,9 +4,21 @@ import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import Image from "next/image";
 import { AiFillGithub } from "react-icons/ai";
 import Link from "next/link";
+import { Session } from "@auth0/nextjs-auth0";
 
-export default function Profile () {
+export async function getServerSideProps(ctx: NextPageContext) {
+    const session = await getSession(ctx);
+    console.log(`session in get server side props: ${session}`);
+    return {
+        props:{
+            session,
+        }
+    }
+}
+
+export default function Profile() {
     const { data: session } = useSession()
+    console.log(session);
     const text1: string = ""
     const text2: string = ""
     return (
@@ -50,7 +62,8 @@ export default function Profile () {
                     <div className="flex flex-col  justify-center items-center">
                         <h4>Create your capstone app</h4>
                         <div className="w-full bg-sky-500/100 w-2/4 flex justify-center items-center border border-gray font-bold rounded-lg mt-5 px-8 py-2">
-                            <Link href="/capstone">Add Your app</Link>
+                                <Link href={`/capstone/`}>Add Your app</Link>
+                                {/* <Link href={`/capstone/${session?.user?.name}`}>Add Your app</Link> */}
                         </div>
                     </div>
                     <div className="mt-10 py-10 border-t text-center">
@@ -77,14 +90,7 @@ export default function Profile () {
     )     
 }
 
-export async function getServerSideProps(ctx: NextPageContext) {
-    const session = await getSession(ctx);
-    return {
-        props:{
-            session,
-        }
-    }
-}
+
 
 // import { useState, useEffect } from 'react';
 // import { db } from '@/lib/db';
