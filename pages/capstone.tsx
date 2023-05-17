@@ -15,6 +15,7 @@ import techOptions from '../app-data/technologies-data.json';
 export async function getServerSideProps(ctx: NextPageContext) {
     const session = await getSession(ctx);
     const allDevs: Developer[] = await db.developer.findMany();
+    // get the signed in (if signed in) dev here, add as prop
 
     return {
         props:{
@@ -33,11 +34,23 @@ const defaultApp = {
     github: "",
     type: "",
     technologies: [],
-    ownerId: null,
-    picture: "",
-    owner: null
+    // ownerId: null,
+    // picture: "",
+    // owner: null
 };
-
+// let defaultApp : {
+//     appName: string,
+//     description: string,
+//     developers: string[],
+//     appLink?: string,
+//     videoLink?: string,
+//     github?: string,
+//     type: string,
+//     technologies: string[],
+//     ownerId: number,
+//     picture?: string,
+//     owner: Developer
+// };
 interface AppProperties {
     appName: string,
     description: string,
@@ -47,9 +60,9 @@ interface AppProperties {
     github: string,
     type: string,
     technologies: string[],
-    ownerId: null | number,
-    picture: string,
-    owner: null | Developer
+    // ownerId: number,
+    // picture: string,
+    // owner: Developer
 }
 
 export default function Capstone ({ allDevs }: {
@@ -57,6 +70,8 @@ export default function Capstone ({ allDevs }: {
 }) {
 
     const { data: session } = useSession();
+    // const isSignedIn = session?.user?.email;
+    // console.log(isSignedIn); // currently says null, even though I am signed in?
     const [appData, setAppData] = useState<AppProperties>(defaultApp);
 
     const typeOptions: {value: string; label: string}[] = [
@@ -92,7 +107,7 @@ export default function Capstone ({ allDevs }: {
             const inputName: string = event.target.name;
             const targetValue = event.target.value;
             // newAppData[inputName as keyof AppProperties] = targetValue;
-            newAppData[inputName] = targetValue;
+            newAppData[inputName as keyof AppProperties] = targetValue;
         } 
         setAppData(newAppData);
         console.log(appData);
