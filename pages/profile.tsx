@@ -9,6 +9,7 @@ import { db } from "@/lib/db";
 import axios from "axios";
 import { App, Developer } from "@prisma/client";
 import AppCard from "@/components/appCard";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps(ctx: NextPageContext) {
     const session = await getSession(ctx);
@@ -41,12 +42,15 @@ export default function Profile({ signedInUser, signedInUserApp }: {
     // console.log(session);
     const text1: string = ""
     const text2: string = ""
+    const router = useRouter();
     
     const handleDelete = () => {
         axios.delete(`/api/appRoutes?id=${signedInUserApp.id}`)
             .then(function (response) {
                 console.log(response);
                 alert("Your app was successfully deleted")
+                // Need to trigger a refresh
+                router.reload();
             })
             .catch(function (error) {
                 console.log(error);
@@ -100,14 +104,14 @@ export default function Profile({ signedInUser, signedInUserApp }: {
                                 {/* <Link href={`/capstone/${session?.user?.name}`}>Add Your app</Link> */}
                         </div>}
                         {signedInUserApp && <AppCard app={signedInUserApp} />}
-                        <div className="w-full bg-sky-500/100 w-2/4 flex justify-center items-center border border-gray font-bold rounded-lg mt-5 px-8 py-2">
+                        {signedInUserApp && <div className="w-full bg-sky-500/100 w-2/4 flex justify-center items-center border border-gray font-bold rounded-lg mt-5 px-8 py-2">
                             <button onClick={handleDelete}>Delete Your App</button>
                             {/* <Link href={`/capstone/${session?.user?.name}`}>Add Your app</Link> */}
-                        </div>
-                        <div className="w-full bg-sky-500/100 w-2/4 flex justify-center items-center border border-gray font-bold rounded-lg mt-5 px-8 py-2">
+                        </div>}
+                        {signedInUserApp && <div className="w-full bg-sky-500/100 w-2/4 flex justify-center items-center border border-gray font-bold rounded-lg mt-5 px-8 py-2">
                             <button onClick={() => alert("Need to add edit function")}>Edit Your App</button>
                             {/* <Link href={`/capstone/${session?.user?.name}`}>Add Your app</Link> */}
-                        </div>
+                        </div>}
                     </div>
                     <div className="mt-10 py-10 border-t text-center">
                         <div className="flex flex-wrap justify-center">
