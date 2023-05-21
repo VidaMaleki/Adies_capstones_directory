@@ -12,6 +12,8 @@ import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import techOptions from '../app-data/technologies-data.json';
 import axios from "axios";
+import { useRouter } from 'next/router';
+
 
 export async function getServerSideProps(ctx: NextPageContext) {
     const session = await getSession(ctx);
@@ -78,7 +80,7 @@ export default function Capstone ({ allDevs, signedInUser }: {
     allDevs: Developer[],
     signedInUser: Developer
 }) {
-
+    const router = useRouter();
     const { data: session } = useSession();
     // const isSignedIn = session?.user?.email;
     // console.log(isSignedIn); // currently says null, even though I am signed in?
@@ -119,7 +121,9 @@ export default function Capstone ({ allDevs, signedInUser }: {
         })
             .then(function (response) {
                 console.log(response);
-                alert("You successfully added your capstone project")
+                router.push("/profile");
+                // alert("You successfully added your capstone project");
+                // redirect to profile page
             })
             .catch(function (error) {
                 console.log(error);

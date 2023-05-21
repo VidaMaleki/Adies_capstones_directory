@@ -18,7 +18,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
 
 export default function Profile() {
     const { data: session } = useSession()
-    console.log(session);
+    // console.log(session);
     const text1: string = ""
     const text2: string = ""
     return (
