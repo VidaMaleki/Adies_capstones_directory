@@ -48,11 +48,12 @@ export default async function createAppHandler(
 async function createApp(req: NextApiRequest, res: NextApiResponse) {
   // const typeLisoot: string[]= ["web app", "mobile app", "social media", "game"]
   // Validate the input data here
-
+  console.log("At start of createApp")
   try {
     const input: AppInput = req.body;
     // const developerInput : DeveloperInput = req.body;
-
+    console.log("in try block for post route");
+    console.log(`App input: ${input}`);
     if (!input.appName || !input.developers || !input.type || !input.technologies || !input.github) {
       // console.log(`${input.appName}, ${input.developers}, ${input.type}, ${input.technologies}, ${input.github}`)
       return res.status(400).json({ message: `Please fill in all fields: ${input.appName}, ${input.developers}, ${input.type}, ${input.technologies}, ${input.github}` });

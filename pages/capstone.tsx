@@ -11,16 +11,25 @@ import { useState } from "react";
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import techOptions from '../app-data/technologies-data.json';
+import axios from "axios";
 
 export async function getServerSideProps(ctx: NextPageContext) {
     const session = await getSession(ctx);
     const allDevs: Developer[] = await db.developer.findMany();
     // get the signed in (if signed in) dev here, add as prop
+    // current work around to not get error when querying db by user email
+    let userEmail = session?.user?.email ? session.user.email : "";
+    const signedInUser = await db.developer.findUnique({
+        where: {
+            email: userEmail,
+        },
+    })
 
     return {
         props:{
             session,
-            allDevs
+            allDevs,
+            signedInUser
         }
     }
 }
@@ -35,7 +44,7 @@ const defaultApp = {
     type: "",
     technologies: [],
     // ownerId: null,
-    // picture: "",
+    picture: "",
     // owner: null
 };
 // let defaultApp : {
@@ -61,19 +70,20 @@ interface AppProperties {
     type: string,
     technologies: string[],
     // ownerId: number,
-    // picture: string,
+    picture: string,
     // owner: Developer
 }
 
-export default function Capstone ({ allDevs }: {
-    allDevs: Developer[]
+export default function Capstone ({ allDevs, signedInUser }: {
+    allDevs: Developer[],
+    signedInUser: Developer
 }) {
 
     const { data: session } = useSession();
     // const isSignedIn = session?.user?.email;
     // console.log(isSignedIn); // currently says null, even though I am signed in?
     const [appData, setAppData] = useState<AppProperties>(defaultApp);
-
+    
     const typeOptions: {value: string; label: string}[] = [
         { value: "web", label: "Web" },
         { value: "mobile", label: "Mobile" },
@@ -83,16 +93,38 @@ export default function Capstone ({ allDevs }: {
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
+        // axios.post('/user', {
+        //     firstName: 'Fred',
+        //     lastName: 'Flintstone'
+        // })
+        // .then(function (response) {
+        //     console.log(response);
+        // })
+        // .catch(function (error) {
+        //     console.log(error);
+        // });
         
-        const response = await fetch('/api/appRoutes', {
-            method: "POST",
-            body: JSON.stringify(appData),
-        });
-        if (response.status === 201) {
-            alert(`You successfully added your capstone project`); 
-        } else {
-            alert("Error adding capstone project, please try again");
-        }
+        // const response = await fetch('/api/appRoutes', {
+        //     method: "POST",
+        //     body: JSON.stringify({...appData, ownerId: signedInUser.id}),
+        // });
+        // if (response.status === 201) {
+        //     alert(`You successfully added your capstone project`);
+        // } else {
+        //     alert("Error adding capstone project, please try again");
+        // }
+        axios.post('/api/appRoutes', {
+            ...appData,
+            ownerId: signedInUser.id
+        })
+            .then(function (response) {
+                console.log(response);
+                alert("You successfully added your capstone project")
+            })
+            .catch(function (error) {
+                console.log(error);
+                alert("Error adding capstone project, please try again");
+        })
     }
 
     const handleChange = (event: any) => {
@@ -110,7 +142,7 @@ export default function Capstone ({ allDevs }: {
             newAppData[inputName as keyof AppProperties] = targetValue;
         } 
         setAppData(newAppData);
-        console.log(appData);
+        // console.log(appData);
     }
 
     const convertDeveloperNames = (names: Developer[]) => {
@@ -119,14 +151,14 @@ export default function Capstone ({ allDevs }: {
             const newLabel = dev.fullName;
             // const newValue = dev.fullName.toLowerCase().replace(/\s/g, '');
             // names might not be unique, so use id as string as value
-            nameOptions.push({ value: dev.id, label: newLabel });
+            nameOptions.push({ value: String(dev.id), label: newLabel });
         }
         return nameOptions
     }
     const nameOptions = convertDeveloperNames(allDevs);
 
     const handleTechnologiesChange = (event: any) => {
-        console.log(event);
+        // console.log(event);
         let newAppData = { ...appData };
         // technologies has more than one option, returns a list [{value: "", label: ""}, ...]
         const currTechs = [];
@@ -139,8 +171,9 @@ export default function Capstone ({ allDevs }: {
 
     const handleDevChange = (event: any) => {
         let newAppData = { ...appData };
-        const currDevs = [];
+        const currDevs: string[] = [];
         for (let option of event) {
+            console.log(typeof option.value)
             currDevs.push(option.value);
         }
         newAppData.developers = currDevs;
