@@ -102,6 +102,10 @@ export default function Profile({ signedInUser, signedInUserApp }: {
                             <button onClick={handleDelete}>Delete Your App</button>
                             {/* <Link href={`/capstone/${session?.user?.name}`}>Add Your app</Link> */}
                         </div>
+                        <div className="w-full bg-sky-500/100 w-2/4 flex justify-center items-center border border-gray font-bold rounded-lg mt-5 px-8 py-2">
+                            <button onClick={() => alert("Need to add edit function")}>Edit Your App</button>
+                            {/* <Link href={`/capstone/${session?.user?.name}`}>Add Your app</Link> */}
+                        </div>
                     </div>
                     <div className="mt-10 py-10 border-t text-center">
                         <div className="flex flex-wrap justify-center">
