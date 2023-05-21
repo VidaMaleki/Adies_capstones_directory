@@ -52,18 +52,18 @@ async function createApp(req: NextApiRequest, res: NextApiResponse) {
     const input: AppInput = req.body;
     // const developerInput : DeveloperInput = req.body;
 
-    if (!input.appName || !input.developers || !input.type || !input.technologies || !input.github) {
-      // console.log(`${input.appName}, ${input.developers}, ${input.type}, ${input.technologies}, ${input.github}`)
-      return res.status(400).json({ message: `Please fill in all fields: ${input.appName}, ${input.developers}, ${input.type}, ${input.technologies}, ${input.github}` });
-    }
+    // if (!input.appName || !input.developers || !input.type || !input.technologies || !input.github) {
+    //   // console.log(`${input.appName}, ${input.developers}, ${input.type}, ${input.technologies}, ${input.github}`)
+    //   return res.status(400).json({ message: `Please fill in all fields: ${input.appName}, ${input.developers}, ${input.type}, ${input.technologies}, ${input.github}` });
+    // }
 
-    if (!validator.isURL(input.appLink! || input.videoLink! || input.github)) {
-      return res.status(400).json({ message: "Please enter a valid URL." });
-    }
+    // if (!validator.isURL(input.appLink! || input.videoLink! || input.github)) {
+    //   return res.status(400).json({ message: "Please enter a valid URL." });
+    // }
 
-    if (input.technologies.length > 5) {
-      return res.status(400).json({ message: "Please add maximum of 5 technologies." });
-    }
+    // if (input.technologies.length > 5) {
+    //   return res.status(400).json({ message: "Please add maximum of 5 technologies." });
+    // }
     
     const app = await db.app.create({
       data: {

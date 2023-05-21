@@ -13,6 +13,7 @@ import CreatableSelect from 'react-select/creatable';
 import techOptions from '../app-data/technologies-data.json';
 import axios from "axios";
 import { useRouter } from 'next/router';
+import validator from "validator";
 
 
 export async function getServerSideProps(ctx: NextPageContext) {
@@ -78,19 +79,24 @@ export default function Capstone ({ allDevs, signedInUser }: {
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
-
-        axios.post('/api/appRoutes', {
-            ...appData,
-            ownerId: signedInUser.id
-        })
-            .then(function (response) {
-                console.log(response);
-                router.push("/profile");
+        if (validateFormData()) {
+            axios.post('/api/appRoutes', {
+                ...appData,
+                ownerId: signedInUser.id
             })
-            .catch(function (error) {
-                console.log(error);
-                alert("Error adding capstone project, please try again");
-        })
+                .then(function (response) {
+                    console.log(response);
+                    router.push("/profile");
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    alert("Error adding capstone project, please try again");
+            })
+        }
+        else {
+            alert("Please fill in all required fields properly");
+            // change this to show an error message on page with more details
+        }
     }
 
     const handleChange = (event: any) => {
@@ -117,9 +123,23 @@ export default function Capstone ({ allDevs, signedInUser }: {
 
     const handleDevChange = (event: any) => {
         let newAppData = { ...appData };
-        const currDevs: string[] = event.map((option: { value: any; }) => option.value);
+        const currDevs: string[] = event.map((option: { value: any; label: any; }) => `${option.value} ${option.label}`);
         newAppData.developers = currDevs;
         setAppData(newAppData);
+    }
+
+    const validateFormData = () => {
+        if ([appData.appName, appData.developers, appData.type, appData.technologies, appData.description].every((elem) => elem.length <= 0)) {
+            console.log("must enter name, description, developers, technologies, and/or type");
+            return false
+        }
+        const links = [appData.github, appData.videoLink, appData.appLink];
+        const inputLinks = links.filter(link => link.length > 0);
+        if (inputLinks.some((elem) => !validator.isURL(elem))) {
+            console.log("Check validity of links");
+            return false;
+        }
+        return true;
     }
 
     return (
@@ -127,11 +147,11 @@ export default function Capstone ({ allDevs, signedInUser }: {
             <h2>Your Capstone App</h2>
             <form onSubmit={handleSubmit}>
                     <label>
-                        App Name
+                        App Name *
                         <input type="text" value={appData.appName} onChange={handleChange} name="appName" />
                     </label>
                     <label>
-                        Description
+                        Description *
                         <textarea value={appData.description} onChange={handleChange} name="description" />
                     </label>
                     <label>
@@ -147,15 +167,15 @@ export default function Capstone ({ allDevs, signedInUser }: {
                         <input type="text" value={appData.videoLink} onChange={handleChange} name="videoLink"/>
                     </label>
                     <label>
-                        Category
+                        Category *
                         <Select options={typeOptions} onChange={handleChange} instanceId="appType" />
                     </label>
                     <label>
-                        Technologies
+                        Technologies *
                         <CreatableSelect options={techOptions} onChange={handleTechnologiesChange} isMulti isClearable instanceId="appTechnologies" />
                     </label>
                     <label>
-                        Developers
+                        Developers *
                         <CreatableSelect options={nameOptions} onChange={handleDevChange} isMulti isClearable instanceId="appDevs" />
                     </label>
                     <input type="submit" value="Submit" className={styles.submitButton}/>
