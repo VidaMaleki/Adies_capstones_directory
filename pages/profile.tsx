@@ -5,22 +5,55 @@ import Image from "next/image";
 import { AiFillGithub } from "react-icons/ai";
 import Link from "next/link";
 import { Session } from "@auth0/nextjs-auth0";
+import { db } from "@/lib/db";
+import axios from "axios";
+import { App, Developer } from "@prisma/client";
 
 export async function getServerSideProps(ctx: NextPageContext) {
     const session = await getSession(ctx);
-    console.log(`session in get server side props: ${session}`);
+    // console.log(`session in get server side props: ${session}`);
+    let userEmail = session?.user?.email ? session.user.email : "";
+    const signedInUser = await db.developer.findUnique({
+        where: {
+            email: userEmail,
+        },
+    })
+    const signedInUserApp = await db.app.findUnique({
+        where: {
+            ownerId: signedInUser?.id
+        }
+    })
     return {
         props:{
             session,
+            signedInUser,
+            signedInUserApp
         }
     }
 }
 
-export default function Profile() {
+export default function Profile({ signedInUser, signedInUserApp }: {
+    signedInUser: Developer,
+    signedInUserApp: App
+}) {
     const { data: session } = useSession()
     // console.log(session);
     const text1: string = ""
     const text2: string = ""
+    
+    const handleDelete = () => {
+        axios.delete(`/api/appRoutes?id=${signedInUserApp.id}`)
+            .then(function (response) {
+                console.log(response);
+                alert("Your app was successfully deleted")
+            })
+            .catch(function (error) {
+                console.log(error);
+                alert("Could not delete app, try again")
+        })
+
+    }
+
     return (
     <div className=" bg-white min-h-screen text-black flex items-center justify-center ">
         <div className="mx-auto w-3/5">
@@ -64,6 +97,10 @@ export default function Profile() {
                         <div className="w-full bg-sky-500/100 w-2/4 flex justify-center items-center border border-gray font-bold rounded-lg mt-5 px-8 py-2">
                                 <Link href={`/capstone/`}>Add Your app</Link>
                                 {/* <Link href={`/capstone/${session?.user?.name}`}>Add Your app</Link> */}
+                        </div>
+                        <div className="w-full bg-sky-500/100 w-2/4 flex justify-center items-center border border-gray font-bold rounded-lg mt-5 px-8 py-2">
+                            <button onClick={handleDelete}>Delete Your App</button>
+                            {/* <Link href={`/capstone/${session?.user?.name}`}>Add Your app</Link> */}
                         </div>
                     </div>
                     <div className="mt-10 py-10 border-t text-center">

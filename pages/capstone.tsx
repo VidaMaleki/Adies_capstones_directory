@@ -45,23 +45,9 @@ const defaultApp = {
     github: "",
     type: "",
     technologies: [],
-    // ownerId: null,
     picture: "",
-    // owner: null
 };
-// let defaultApp : {
-//     appName: string,
-//     description: string,
-//     developers: string[],
-//     appLink?: string,
-//     videoLink?: string,
-//     github?: string,
-//     type: string,
-//     technologies: string[],
-//     ownerId: number,
-//     picture?: string,
-//     owner: Developer
-// };
+
 interface AppProperties {
     appName: string,
     description: string,
@@ -71,9 +57,7 @@ interface AppProperties {
     github: string,
     type: string,
     technologies: string[],
-    // ownerId: number,
     picture: string,
-    // owner: Developer
 }
 
 export default function Capstone ({ allDevs, signedInUser }: {
@@ -82,8 +66,6 @@ export default function Capstone ({ allDevs, signedInUser }: {
 }) {
     const router = useRouter();
     const { data: session } = useSession();
-    // const isSignedIn = session?.user?.email;
-    // console.log(isSignedIn); // currently says null, even though I am signed in?
     const [appData, setAppData] = useState<AppProperties>(defaultApp);
     
     const typeOptions: {value: string; label: string}[] = [
@@ -95,26 +77,7 @@ export default function Capstone ({ allDevs, signedInUser }: {
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
-        // axios.post('/user', {
-        //     firstName: 'Fred',
-        //     lastName: 'Flintstone'
-        // })
-        // .then(function (response) {
-        //     console.log(response);
-        // })
-        // .catch(function (error) {
-        //     console.log(error);
-        // });
-        
-        // const response = await fetch('/api/appRoutes', {
-        //     method: "POST",
-        //     body: JSON.stringify({...appData, ownerId: signedInUser.id}),
-        // });
-        // if (response.status === 201) {
-        //     alert(`You successfully added your capstone project`);
-        // } else {
-        //     alert("Error adding capstone project, please try again");
-        // }
+
         axios.post('/api/appRoutes', {
             ...appData,
             ownerId: signedInUser.id
@@ -122,8 +85,6 @@ export default function Capstone ({ allDevs, signedInUser }: {
             .then(function (response) {
                 console.log(response);
                 router.push("/profile");
-                // alert("You successfully added your capstone project");
-                // redirect to profile page
             })
             .catch(function (error) {
                 console.log(error);
