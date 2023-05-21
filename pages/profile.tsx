@@ -94,7 +94,7 @@ export default function Profile({ signedInUser, signedInUserApp }: {
                         </div>
                     </div>
                     <div className="flex flex-col  justify-center items-center">
-                        <h4>Create your capstone app</h4>
+                        <h4>Your capstone project</h4>
                         {!signedInUserApp && <div className="w-full bg-sky-500/100 w-2/4 flex justify-center items-center border border-gray font-bold rounded-lg mt-5 px-8 py-2">
                                 <Link href={`/capstone/`}>Add Your app</Link>
                                 {/* <Link href={`/capstone/${session?.user?.name}`}>Add Your app</Link> */}
