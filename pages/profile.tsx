@@ -8,6 +8,7 @@ import { Session } from "@auth0/nextjs-auth0";
 import { db } from "@/lib/db";
 import axios from "axios";
 import { App, Developer } from "@prisma/client";
+import AppCard from "@/components/appCard";
 
 export async function getServerSideProps(ctx: NextPageContext) {
     const session = await getSession(ctx);
@@ -94,10 +95,11 @@ export default function Profile({ signedInUser, signedInUserApp }: {
                     </div>
                     <div className="flex flex-col  justify-center items-center">
                         <h4>Create your capstone app</h4>
-                        <div className="w-full bg-sky-500/100 w-2/4 flex justify-center items-center border border-gray font-bold rounded-lg mt-5 px-8 py-2">
+                        {!signedInUserApp && <div className="w-full bg-sky-500/100 w-2/4 flex justify-center items-center border border-gray font-bold rounded-lg mt-5 px-8 py-2">
                                 <Link href={`/capstone/`}>Add Your app</Link>
                                 {/* <Link href={`/capstone/${session?.user?.name}`}>Add Your app</Link> */}
-                        </div>
+                        </div>}
+                        {signedInUserApp && <AppCard app={signedInUserApp} />}
                         <div className="w-full bg-sky-500/100 w-2/4 flex justify-center items-center border border-gray font-bold rounded-lg mt-5 px-8 py-2">
                             <button onClick={handleDelete}>Delete Your App</button>
                             {/* <Link href={`/capstone/${session?.user?.name}`}>Add Your app</Link> */}
