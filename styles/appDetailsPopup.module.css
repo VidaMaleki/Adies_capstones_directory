@@ -7,18 +7,29 @@
     left: 0;
     z-index: 9999;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
 .popup {
-    /* height: 55%; */
-    width: 60%;
-    height: fit-content;
+    height: 55%;
+    max-width: 800px;
+    min-width: 700px;
     background-color: #fff;
     padding: 2rem;
     border-radius: 0.5rem;
     text-align: left;
+}
+
+.closingPop {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    border-bottom: 0.5px solid;
+    padding: 1rem;
 }
 
 .popup .closeButton {
@@ -32,38 +43,84 @@
 }
 
 .imageContainer img {
-    width: 300px;
+    width: 100%;
 }
 
 .appContentContainer {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 3em;
+    padding: 2em;
+    width: 100%;
+    height: 100%;
+}
+
+.appDetailsContainer {
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+}
+
+.appPopupTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 800;
+    font-size: 18px;
+}
+
+.appPopupText {
+    margin-left: 5px;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.appPopupSubText {
+    font-weight: 500;
+    font-size: 14px;
 }
 
 .textContainer {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-}
-
-.links a:link {
-    text-decoration: none;
-    color: black;
-}
-
-.links a:visited {
-    text-decoration: none;
-    color: black;
-}
-
-.links a:hover {
-    text-decoration: underline;
-}
-
-.links {
-    display: flex;
-    flex-direction: row;
     justify-content: space-between;
+    box-sizing: border-box;
+    padding-left: 12px;
+    padding-right: 12px;
+    width: 100%;
+    height: 100%;
+    border-left: 0.5px solid;
+}
+
+.viewApplinks {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #FAB96C;
+    border-radius: 3px;
+    width: fit-content;
+    height: 20px;
+    border: None;
+    padding: 7px;
+    border-radius: 5px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 5px;
+    margin-bottom: 5px;
+}
+
+.viewApplinks a:link {
+    text-decoration: none;
+    color: black;
+}
+
+.viewApplinks a:visited {
+    text-decoration: none;
+    color: black;
+}
+
+.viewApplinks a:hover {
+    text-decoration: none;
 }

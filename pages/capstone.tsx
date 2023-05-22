@@ -11,6 +11,7 @@ import { useState } from "react";
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import techOptions from '../app-data/technologies-data.json';
+import Upload from "@/components/upload/Upload";
 
 export async function getServerSideProps(ctx: NextPageContext) {
     const session = await getSession(ctx);
@@ -148,6 +149,7 @@ export default function Capstone ({ allDevs }: {
     }
     return (
     <div className={styles.appCardWrapper}>
+        <Upload/>
         <h2>Capstone app</h2>
         <form onSubmit={handleSubmit}>
                 <label>

@@ -93,6 +93,6 @@ model App {
   github       String?
   type         String
   technologies String[]
-  picture      String?    @default("https://ibb.co/LpkhW5Z")
+  picture      String?    @default("https://res.cloudinary.com/dbrsvtcm0/image/upload/v1684530914/srqzav6cgahfzfqtzoyy.webp")
 
 }
