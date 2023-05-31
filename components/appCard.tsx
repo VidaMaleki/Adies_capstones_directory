@@ -5,6 +5,7 @@ import * as FaIcons from "react-icons/fa";
 import { useState } from 'react';
 import { App } from '@prisma/client';
 import { db } from '@/lib/db';
+import { string } from 'zod';
 
 // export async function getStaticProps() {
 //     const appDevelopers = await db.developer.findMany({
@@ -37,6 +38,7 @@ const AppCard = ({ app }: {
     const github = app?.github ?? '#';
     const technologies = app.technologies;
     const developers = app.developers;
+    const picture = app.picture;
     // const developersIDs = app.developers.map(elem => parseInt(elem));
     // const developerNames = getDeveloperNames();
     
@@ -51,11 +53,12 @@ const AppCard = ({ app }: {
         setShowPopup(false);
     };
 
-    const developersElement = developers.length === 1 ? developers[0] : developers.join(', ');
-    
+    const developersElement = developers && developers.length === 1 ? developers[0] : developers?.join(', ') ?? '';
+
     return (
         <div className={styles.card}>
-            <div className={styles.appMiniScreen}></div>
+            <div className={styles.appMiniScreen} style={{ backgroundImage: `url(${app.picture})` }}>
+            </div>
             <div className={styles.content}>
                 <div className={styles.appCardHeader}>
                     <h3>{name}</h3>

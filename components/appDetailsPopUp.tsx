@@ -21,7 +21,10 @@ interface Props {
 const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
     // const defaultImage = "https://img.freepik.com/free-vector/isometric-3d-computer-laptop-tablet-pc-smartphone_1284-51716.jpg?w=1380&t=st=1681421310~exp=1681421910~hmac=4256a4d5ec8193b087196488c66522210fca664163bacf6fa3fc32061c2f7a0c";
     // const developersName = app.developers.length === 1 ? app.developers[0] : app.developers.join(', ');
-    const developersName = app.developers && app.developers.length === 1 ? app.developers[0]?.fullName : app.developers.map(developer => developer.fullName).join(', ');
+    const developers = app.developers;
+
+    const developersElement = developers && developers.length === 1 ? developers[0] : developers?.join(', ') ?? '';
+
 
     // const [developerName, setDeveloperName] = useState('')
 
@@ -60,8 +63,8 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
                             {app.appName}
                             {app.github && <a href={app.github} target="_blank"><FaIcons.FaGithub /></a>}
                         </h2>
-                        <h3 className={styles.appPopupText}>Created by:
-                            <p className={styles.appPopupSubText}>{developersName}</p> 
+                        <h3 className={styles.appPopupText}>Created by: 
+                            <p className={styles.appPopupSubText}>{String(developersElement)}</p> 
                         </h3>
                         <h3 className={styles.appPopupText}>Description:
                             <p className={styles.appPopupSubText}>{app.description}</p> 
@@ -70,10 +73,22 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
                             <p className={styles.appPopupSubText}>{app.technologies.join(', ')}</p> 
                         </h3>
                         </div>
-                        
-                        
                         <div className={styles.viewApplinks}>
-                        {app.appLink && <a href={app.appLink} target="_blank">View App</a>}
+                            {app.appLink && (
+                                <a href={app.appLink} target="_blank">
+                                View App
+                                </a>
+                            )}
+                            {!app.appLink && app.videoLink && (
+                                <a href={app.videoLink} target="_blank">
+                                View Video
+                                </a>
+                            )}
+                            {!app.appLink && !app.videoLink && app.github && (
+                                <a href={app.github} target="_blank">
+                                View GitHub
+                                </a>
+                            )}
                         </div>
                     </div>
                     

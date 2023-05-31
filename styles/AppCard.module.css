@@ -4,6 +4,9 @@
 }
 
 .appMiniScreen {
+    /* background: url(${picture}); */
+    background-size: cover;
+    background-position: center;
     width: 221px;
     height: 175px;
     border-radius: 20px;

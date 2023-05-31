@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "App" ALTER COLUMN "picture" SET DEFAULT 'https://i.ibb.co/XC5Zf1r/tech2.webp';
+ALTER TABLE "App" ALTER COLUMN "picture" SET DEFAULT 'https://res.cloudinary.com/dbrsvtcm0/image/upload/v1684530914/srqzav6cgahfzfqtzoyy.webp';
