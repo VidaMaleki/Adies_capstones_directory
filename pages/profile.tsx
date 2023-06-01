@@ -3,6 +3,7 @@ import { NextPageContext } from "next";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import Image from "next/image";
 import { AiFillGithub } from "react-icons/ai";
+import { BiLogOut } from "react-icons/bi";
 import Link from "next/link";
 import { Session } from "@auth0/nextjs-auth0";
 import { db } from "@/lib/db";
@@ -86,16 +87,16 @@ export default function Profile({ signedInUser, signedInUserApp }: {
     return (
         <div className={styles.pageWrapper}>
             <Navbar />
-            <div className="mx-auto w-3/5 mt-20 mb-20">
-                <div className=" border border-gray-500 relative flex flex-col w-full rounded-lg">
+            <div className="mx-auto w-2/5 mt-20 mb-20">
+                <div className=" border border-gray-300 relative flex flex-col w-full rounded-lg">
                     <div className="flex flex-col justify-center items-center">
                         <div className="w-full text-right">
-                            <div className="py-6 px-3">
-                                <button 
-                                className="bg-sky-500/100 hover:bg-blue-700 text-md uppercase font-bold px-8 py-2 rounded-md sm:mr-2 mb-1 ease-linear transition-all duration-150"
+                            <div className="flex justify-end items-center text-3xl py-6 px-3">
+                                <a 
+                                className="font-bold px-8 py-2 rounded-md sm:mr-2 mb-1 ease-linear transition-all cursor-pointer duration-150"
                                 onClick={handleSignOut}>
-                                    Log out
-                                </button>
+                                    <BiLogOut/>
+                                </a>
                             </div>
                         </div>
                         <div className="w-full flex justify-center">

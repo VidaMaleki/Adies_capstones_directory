@@ -16,7 +16,7 @@ import zxcvbn from "zxcvbn";
 import { toast } from 'react-toastify';
 // import { Link } from 'react-router-dom';
 import Link from 'next/link';
-
+// import authorizedEmails from '../../data/developers.json'
 // npm install zod
 // npm install @hookform/resolvers
 // npm install @types/zxcvbn
@@ -69,6 +69,13 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps>=(props) => {
 
     const onSubmit:SubmitHandler<FormSchemaType>=async(values) =>{
         console.log(values)
+        // const { email } = values;
+
+        // Check if the entered email is in the list of authorized emails
+        // const isAuthorized = authorizedEmails.authorizedEmails.some(
+        // (authorizedEmail) => authorizedEmail.email === email
+        // );
+        
         try {
             const { data } = await axios.post('/api/auth/signup',{
                 ...values,
@@ -76,10 +83,11 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps>=(props) => {
         });
         reset()
         toast.success(data.message)
-    } catch (error: any) {
+        } catch (error: any) {
         toast.error(error.response.data.message)
         }
-    }
+    };
+        
     const validatePasswordStrength = () => {
         let password = watch().password;
         return zxcvbn(password ? password: "").score;
