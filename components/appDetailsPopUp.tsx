@@ -59,19 +59,22 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
                     </div>
                     <div className={styles.textContainer}>
                         <div className={styles.appDetailsContainer}>
-                        <h2 className={styles.appPopupTitle}>
-                            {app.appName}
-                            {app.github && <a href={app.github} target="_blank"><FaIcons.FaGithub /></a>}
-                        </h2>
-                        <h3 className={styles.appPopupText}>Created by: 
-                            <p className={styles.appPopupSubText}>{String(developersElement)}</p> 
-                        </h3>
-                        <h3 className={styles.appPopupText}>Description:
-                            <p className={styles.appPopupSubText}>{app.description}</p> 
-                        </h3>
-                        <h3 className={styles.appPopupText}>Technologies:
-                            <p className={styles.appPopupSubText}>{app.technologies.join(', ')}</p> 
-                        </h3>
+                            <div>
+                                <h2 className={styles.appPopupTitle}>
+                                    {app.appName}
+                                </h2>
+                                {app.github && <a href={app.github} target="_blank"><FaIcons.FaGithub /></a>}
+                            </div>
+                            
+                            <h3 className={styles.appPopupText}>Created by: 
+                                <p className={styles.appPopupSubText}>{String(developersElement)}</p> 
+                            </h3>
+                            <h3 className={styles.appPopupText}>Description:
+                                <p className={styles.appPopupSubText}>{app.description}</p> 
+                            </h3>
+                            <h3 className={styles.appPopupText}>Technologies:
+                                <p className={styles.appPopupSubText}>{app.technologies.join(', ')}</p> 
+                            </h3>
                         </div>
                         <div className={styles.viewApplinks}>
                             {app.appLink && (

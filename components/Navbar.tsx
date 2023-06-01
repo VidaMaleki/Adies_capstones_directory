@@ -4,8 +4,6 @@ import Image from 'next/image'
 import { FaSearch } from "react-icons/fa";
 import { useRouter } from 'next/router';
 import ProfileIcon from "./profile/ProfileIcon";
-import { Developer } from "@prisma/client";
-import { useEffect, useState } from "react";
 import styles from '@/styles/Navbar.module.css'
 
 
@@ -15,24 +13,21 @@ interface Props {
 
 const Navbar: React.FunctionComponent<Props> = () => {
     const router = useRouter();
-    // const [developers, setDevelopers] = useState<Developer[]>([])
 
-    // useEffect(() => {
-    //     const fetchDevelopers = async () => {
-    //         const res = await fetch("/api/developers")
-    //         const data = await res.json();
-    //         setDevelopers(data);
-    //     };
-    //     fetchDevelopers();
-    // }, []);
-
-    // const handleProfileClick = () => {
-    //     router.push('/profile');
-    // }
+    const handleClick = () => {
+        router.push("/");
+    };
+    
     return (
         <div className={styles.navbarContainer}>
             <div className={styles.logoContainer}>
-                <Image className={styles.appLogo} src={LOGO} alt="Image" priority />
+                <Image
+                className={styles.appLogo}
+                src={LOGO}
+                alt="Image"
+                priority
+                onClick={handleClick}
+                />
             </div>
             <div className={styles.buttonWrapper}>
                 <div className={styles.navButtonContainer}>
@@ -45,22 +40,24 @@ const Navbar: React.FunctionComponent<Props> = () => {
                     <Link href="/auth" className={styles.navSignInLink}>Sign in</Link>
                 </div>
             </div>
-            <div className={styles.searchContainer}>
-                <form 
-                className={styles.searchForm}
-                action="/action_page.php">
-                    <input 
-                    className={styles.searchInput}
-                    type="text" 
-                    placeholder="Search..." 
-                    name="search"
-                    />
-                </form>
-                <button type="submit" className={styles.searchIcon}><FaSearch/></button>
-            </div>
-            <div className={styles.profileContainer}>
+            {router.pathname === "/" && (
+                <div className={styles.searchContainer}>
+                    <form 
+                    className={styles.searchForm}
+                    action="/action_page.php">
+                        <input 
+                        className={styles.searchInput}
+                        type="text" 
+                        placeholder="Search..." 
+                        name="search"
+                        />
+                    </form>
+                    <button type="submit" className={styles.searchIcon}><FaSearch/></button>
+                </div>
+            )}
+                <div className={styles.profileContainer}>
                 <ProfileIcon/>
-            </div>
+                </div>
         </div>
     )
 }

@@ -38,7 +38,7 @@ export default function Home({ allApps } : {
   const mobileApps: App[] = [];
   const gamingApps: App[] = [];
   const socialApps: App[] = [];
-
+  
   allApps.forEach(app => {
     if (app.type === "web") {
       webApps.push(app);

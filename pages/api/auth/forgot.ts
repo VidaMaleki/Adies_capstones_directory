@@ -32,14 +32,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.error(error);
         res.status(500).json({ message: (error as Error).message });
     } 
-    // finally {
-    //     await db.$disconnect();
-    // }
 };
-
-
-// { id: '18', iat: 1682456520, exp: 1682629320 }
-// {
-//   token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE3IiwiaWF0IjoxNjgyNDU2NTIwLCJleHAiOjE2ODI2MjkzMjB9.syZ5Gsx-qFxUPpDju-3tuVj3amGZLAK4UZN9qentRnc'
-// }
-

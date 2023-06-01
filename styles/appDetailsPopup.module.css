@@ -77,6 +77,8 @@
 }
 
 .appPopupSubText {
+    height: 60px;
+    overflow: scroll;
     font-weight: 500;
     font-size: 14px;
 }
