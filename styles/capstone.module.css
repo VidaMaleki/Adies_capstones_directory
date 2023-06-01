@@ -35,10 +35,10 @@
 .createAppFormsWrapper {
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-direction: column;
     gap: 20px;
     width: 50%;
+    padding: 20px;
 }
 
 .createAppForms {
@@ -48,12 +48,21 @@
     width: 100%;
 }
 
-.createAppInputWrapper {
+.createAppLabel {
     width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: row;
+}
+
+.createAppInput {
+    width: 20rem;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     padding: 6px;
+    margin-left: 35px;
 }
 
 .submitButton {

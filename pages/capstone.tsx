@@ -1,9 +1,6 @@
 
 import { NextPageContext } from "next";
-import { useSession, signIn, signOut, getSession } from "next-auth/react";
-import Image from "next/image";
-// import { AiFillGithub } from "react-icons/ai";
-// import Link from "next/link";
+import { useSession, getSession } from "next-auth/react";
 import styles from '@/styles/capstone.module.css';
 import { db } from "@/lib/db";
 import { Developer } from "@prisma/client";
@@ -144,27 +141,31 @@ export default function Capstone ({ allDevs, signedInUser }: {
 
     return (
         <div className={styles.appCardWrapper}>
-            <h2>Your Capstone App</h2>
-            <form onSubmit={handleSubmit}>
-                    <label>
+            <div className={styles.createAppImageDrop}>
+                <p>Image</p>
+            </div>
+            <form 
+                className={styles.createAppFormsWrapper}
+                onSubmit={handleSubmit}>
+                    <label className={styles.createAppLabel}>
                         App Name *
-                        <input type="text" value={appData.appName} onChange={handleChange} name="appName" />
+                        <input className={styles.createAppInput} type="text" value={appData.appName} onChange={handleChange} name="appName" />
                     </label>
-                    <label>
+                    <label className={styles.createAppLabel}>
                         Description *
-                        <textarea value={appData.description} onChange={handleChange} name="description" />
+                        <textarea  className={styles.createAppInput} value={appData.description} onChange={handleChange} name="description" />
                     </label>
-                    <label>
+                    <label className={styles.createAppLabel}>
                         Github Link
-                        <input type="text" value={appData.github} onChange={handleChange} name="github"/>
+                        <input className={styles.createAppInput} type="text" value={appData.github} onChange={handleChange} name="github"/>
                     </label>
-                    <label>
+                    <label className={styles.createAppLabel}>
                         App Link
-                        <input type="text" value={appData.appLink} onChange={handleChange} name="appLink"/>
+                        <input className={styles.createAppInput} type="text" value={appData.appLink} onChange={handleChange} name="appLink"/>
                     </label>
-                    <label>
+                    <label className={styles.createAppLabel}>
                         Video Demo Link
-                        <input type="text" value={appData.videoLink} onChange={handleChange} name="videoLink"/>
+                        <input className={styles.createAppInput} type="text" value={appData.videoLink} onChange={handleChange} name="videoLink"/>
                     </label>
                     <label>
                         Category *
