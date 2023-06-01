@@ -176,7 +176,7 @@ export default function Capstone ({ allDevs, signedInUser }: {
                     </label>
                     <label>
                         Developers *
-                        <CreatableSelect options={nameOptions} onChange={handleDevChange} isMulti isClearable instanceId="appDevs" />
+                        <Select options={nameOptions} onChange={handleDevChange} isMulti isClearable instanceId="appDevs" />
                     </label>
                     <input type="submit" value="Submit" className={styles.submitButton}/>
                 </form>
