@@ -59,7 +59,7 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
                     </div>
                     <div className={styles.textContainer}>
                         <div className={styles.appDetailsContainer}>
-                            <div>
+                            <div className={styles.appPopupTitleWraper}>
                                 <h2 className={styles.appPopupTitle}>
                                     {app.appName}
                                 </h2>

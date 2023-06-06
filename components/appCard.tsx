@@ -7,6 +7,7 @@ import { App } from '@prisma/client';
 import { db } from '@/lib/db';
 import { string } from 'zod';
 
+
 // export async function getStaticProps() {
 //     const appDevelopers = await db.developer.findMany({
 //         where: {
@@ -28,9 +29,7 @@ import { string } from 'zod';
     //     return appDevelopers.map(elem => elem.fullName);
     // }
 
-const AppCard = ({ app }: {
-    app: App,
-}) => {
+const AppCard = ({ app }: {app: App}) => {
 
 
     const name = app?.appName ?? 'No name available';
@@ -57,7 +56,7 @@ const AppCard = ({ app }: {
 
     return (
         <div className={styles.card}>
-            <div className={styles.appMiniScreen} style={{ backgroundImage: `url(${app.picture})` }}>
+            <div className={styles.appMiniScreen} style={{ backgroundImage: `url(${app.picture})` }} onClick={handleOpenPopup}>
             </div>
             <div className={styles.content}>
                 <div className={styles.appCardHeader}>

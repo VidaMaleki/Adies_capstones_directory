@@ -31,10 +31,14 @@ export default async function createAppHandler(
       return createApp(req, res);
     case 'GET':
       const appId = Number(req.query.id);
+      const searchTerm = req.query.search as string;
       if (!isNaN(appId)) {
         return getOneApp(req, res);
+      } else if (searchTerm) {
+        return searchApps(req, res);
+      } else {
+        return getAllApps(req, res);
       }
-      return getAllApps(req, res);
     case 'PUT':
       return updateApp(req, res);
     case 'DELETE':
@@ -143,8 +147,28 @@ async function deleteApp(req: NextApiRequest, res: NextApiResponse) {
 
 // http://localhost:3000/api/appRoutes
 async function getAllApps(req: NextApiRequest, res: NextApiResponse) {
-  try {
+  try {    
     const apps = await db.app.findMany();
+    return res.status(200).json({ apps });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+async function searchApps(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const searchTerm = req.query.search as string;
+
+    const apps = await db.app.findMany({
+      where: {
+        appName: {
+          contains: searchTerm,
+          mode: "insensitive", // Enable case-insensitive search
+        },
+      },
+    });
+
     return res.status(200).json({ apps });
   } catch (error) {
     console.error(error);

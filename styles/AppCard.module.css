@@ -23,6 +23,7 @@
 
 .cardGitHub {
     margin-right: 20px;
+    font-size: 14px;
 }
 
 .iconContainer {
@@ -39,6 +40,8 @@
     text-align: left;
     margin-left: 10px;
     margin-top: 10px;
+    font-size: 12px;
+    font-weight: 500;
 }
 
 .cardFooterButtons {
@@ -60,8 +63,8 @@
     border-radius: 5px;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     text-decoration: none;
-    /* padding: 5px; */
-    font-size: 15px;
+    font-size: 13px;
+    font-weight: 700;
 }
 
 .cardView:visited {
@@ -77,5 +80,6 @@
     border-radius: 5px;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     cursor: pointer;
-    font-size: 15px;
+    font-size: 13px;
+    font-weight: 700;
 }

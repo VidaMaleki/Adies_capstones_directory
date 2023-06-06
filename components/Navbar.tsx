@@ -1,10 +1,11 @@
-import Link from "next/link";
 import LOGO from '../images/appLogo.png';
 import Image from 'next/image'
-import { FaSearch } from "react-icons/fa";
 import { useRouter } from 'next/router';
 import ProfileIcon from "./profile/ProfileIcon";
 import styles from '@/styles/Navbar.module.css'
+import NavButton from "./NavButton";
+import Search from './Search';
+import { useState } from 'react';
 
 
 interface Props {
@@ -12,6 +13,7 @@ interface Props {
 }
 
 const Navbar: React.FunctionComponent<Props> = () => {
+    const [searchResults, setSearchResults] = useState([]);
     const router = useRouter();
 
     const handleClick = () => {
@@ -30,34 +32,16 @@ const Navbar: React.FunctionComponent<Props> = () => {
                 />
             </div>
             <div className={styles.buttonWrapper}>
-                <div className={styles.navButtonContainer}>
-                    <Link href="/" className={styles.navLink}>Home</Link>
-                </div>
-                <div className={styles.navButtonContainer}>
-                    <Link href="/about" className={styles.navLink}>About</Link>
-                </div>
-                <div className={styles.navButtonContainer}>
-                    <Link href="/auth" className={styles.navSignInLink}>Sign in</Link>
-                </div>
+                <NavButton href={'/'} name={"Home"}/>
+                <NavButton href={'/about'} name={"About"}/>
+                <NavButton href={'/auth'} name={"Sign in"} isSpecial={true}/>
             </div>
-            {router.pathname === "/" && (
-                <div className={styles.searchContainer}>
-                    <form 
-                    className={styles.searchForm}
-                    action="/action_page.php">
-                        <input 
-                        className={styles.searchInput}
-                        type="text" 
-                        placeholder="Search..." 
-                        name="search"
-                        />
-                    </form>
-                    <button type="submit" className={styles.searchIcon}><FaSearch/></button>
-                </div>
-            )}
-                <div className={styles.profileContainer}>
-                <ProfileIcon/>
-                </div>
+            <div>
+            {router.pathname === "/" && ( <Search /> )}
+            </div>
+            <div className={styles.profileContainer}>
+            <ProfileIcon/>
+            </div>
         </div>
     )
 }
