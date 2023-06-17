@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/Navbar/Navbar";
 import styles from "@/styles/Home.module.css";
 import Link from "next/link";
 import { db } from "@/lib/db";
@@ -55,9 +55,7 @@ export default function Home({ allApps }: { allApps: App[] }) {
 
   return (
     <>
-      <Head>
-        {/* Head content */}
-      </Head>
+      <Head>{/* Head content */}</Head>
       <main className={styles.main}>
         <Navbar />
         <section className={styles.appsWrapper}>

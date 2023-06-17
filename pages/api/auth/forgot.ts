@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { createResetToken } from "@/utils/tokens";
 import sendMail from "@/utils/sendMail";
-import { resetPasswordEmail } from "@/components/emailTemplates/reset";
+import { resetPasswordEmail } from "@/components/SignIn/components/emailTemplates/reset";
 
 // Middleware function to connect to the database
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

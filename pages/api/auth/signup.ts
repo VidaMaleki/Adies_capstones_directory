@@ -5,9 +5,11 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
 import { createActivationToken } from "@/utils/tokens";
 import sendMail from "@/utils/sendMail";
-import { activateTemplateEmail } from "@/components/emailTemplates/activate";
-
+import { activateTemplateEmail } from "@/components/SignIn/components/emailTemplates/activate";
+import dotenv from 'dotenv';
 // npm i bcryptjs
+
+dotenv.config({ path: '.env.emails' });
 
 interface DeveloperInput {
     id: number,
@@ -17,6 +19,10 @@ interface DeveloperInput {
     linkedin: string;
     image: string;
     password: string;
+}
+
+interface AuthorizedEmail {
+    email: string;
 }
 
 export default async function handler(
@@ -77,6 +83,14 @@ async function registerDeveloper(
 
         if (input.password.length < 6) {
             return res.status(400).json({ message: "Password must be at least 6 characters." });
+        }
+
+        // Check if the user's email is in the list of authorized emails
+        const authorizedEmails: AuthorizedEmail[] = JSON.parse(process.env.AUTHORIZED_EMAILS || '[]');
+        const isAuthorizedEmail = authorizedEmails.some(authorizedEmail => authorizedEmail.email === input.email);
+        
+        if (!isAuthorizedEmail) {
+            return res.status(403).json({ message: "Your email is not authorized to create account." });
         }
 
         const cryptedPassword = await bcrypt.hash(input.password, 12);

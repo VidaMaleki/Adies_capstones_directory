@@ -4,14 +4,35 @@ import { useSession, getSession } from "next-auth/react";
 import styles from '@/styles/capstone.module.css';
 import { db } from "@/lib/db";
 import { Developer } from "@prisma/client";
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import techOptions from '../app-data/technologies-data.json';
 import axios from "axios";
 import { useRouter } from 'next/router';
 import validator from "validator";
+// import AppInput from '../components/AppInput';
+// import { GrTechnology } from "react-icons/gr";
+// import { useForm } from "react-hook-form";
+// import { zodResolver } from '@hookform/resolvers/zod';
+// import { z } from 'zod';
+// import categories from '../components/categories';
 
+
+// Define form schema for validation
+// const FormSchema = z.object({
+//     appName: z.string().nonempty({ message: 'App Name is required' }),
+//     description: z.string().nonempty({ message: 'Description is required' }),
+//     developers: z.array(z.string()).min(1, { message: 'Developers are required' }),
+//     appLink: z.string().url({ message: 'Invalid App Link URL' }).optional(),
+//     videoLink: z.string().url({ message: 'Invalid Video Link URL' }).optional(),
+//     github: z.string().url({ message: 'Invalid Github Link URL' }).optional(),
+//     type: z.string().nonempty({ message: "Category is required." }),
+//     technologies: z.array(z.string()).min(1, { message: 'Technologies are required' }),
+//     picture: z.string().optional(),
+// });
+
+// type FormSchemaType = z.infer<typeof FormSchema>;
 
 export async function getServerSideProps(ctx: NextPageContext) {
     const session = await getSession(ctx);
@@ -89,7 +110,7 @@ export default function Capstone ({ allDevs, signedInUser }: {
                     console.log(error);
                     alert("Error adding capstone project, please try again");
             })
-        }
+                }
         else {
             alert("Please fill in all required fields properly");
             // change this to show an error message on page with more details
@@ -170,17 +191,17 @@ export default function Capstone ({ allDevs, signedInUser }: {
                     <label>
                         Category *
                         <Select options={typeOptions} onChange={handleChange} instanceId="appType" />
-                    </label>
-                    <label>
-                        Technologies *
+                </label>
+                <label>
+                    Technologies *
                         <CreatableSelect options={techOptions} onChange={handleTechnologiesChange} isMulti isClearable instanceId="appTechnologies" />
-                    </label>
-                    <label>
-                        Developers *
-                        <Select options={nameOptions} onChange={handleDevChange} isMulti isClearable instanceId="appDevs" />
-                    </label>
+                </label>
+                <label>
+                Developers *
+                <Select options={nameOptions} onChange={handleDevChange} isMulti isClearable instanceId="appDevs" />
+                </label>
                     <input type="submit" value="Submit" className={styles.submitButton}/>
-                </form>
+            </form>
         </div>
     )     
 }

@@ -80,7 +80,7 @@ model Developer {
   cohort        String
   linkedin      String?
   password      String
-  app           App? @relation(fields: [appId], references: [id])  // relation fields define connections and don't exist in the db
+  app           App?   @relation(fields: [appId], references: [id])  // relation fields define connections and don't exist in the db
   appId         Int?    
 }
 
@@ -88,8 +88,6 @@ model App {
   id           Int       @id @default(autoincrement())
   appName      String
   description  String
-  // ownerId      Int       @unique
-  // owner        Developer @relation(fields: [ownerId], references: [id])
   developers   Developer[]
   appLink      String?
   videoLink    String?

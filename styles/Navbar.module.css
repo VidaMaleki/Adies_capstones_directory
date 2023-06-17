@@ -18,6 +18,27 @@
     padding-top: 4px;
 }
 
+.navbarContainerScroll {
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    height: 80px;
+    font-size: 1.5rem;
+    text-decoration: none;
+    align-items: center;
+    color: #000;
+    top: 0;
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 671;
+    padding-bottom: 4px;
+    padding-top: 4px;
+    background: rgba(255, 255, 255, 0.5);
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
 .logoContainer {
     width: 100px;
     height: 80px;
