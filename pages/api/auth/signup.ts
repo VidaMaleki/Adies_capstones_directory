@@ -86,12 +86,12 @@ async function registerDeveloper(
         }
 
         // Check if the user's email is in the list of authorized emails
-        const authorizedEmails: AuthorizedEmail[] = JSON.parse(process.env.AUTHORIZED_EMAILS || '[]');
-        const isAuthorizedEmail = authorizedEmails.some(authorizedEmail => authorizedEmail.email === input.email);
+        // const authorizedEmails: AuthorizedEmail[] = JSON.parse(process.env.AUTHORIZED_EMAILS || '[]');
+        // const isAuthorizedEmail = authorizedEmails.some(authorizedEmail => authorizedEmail.email === input.email);
         
-        if (!isAuthorizedEmail) {
-            return res.status(403).json({ message: "Your email is not authorized to create account." });
-        }
+        // if (!isAuthorizedEmail) {
+        //     return res.status(403).json({ message: "Your email is not authorized to create account." });
+        // }
 
         const cryptedPassword = await bcrypt.hash(input.password, 12);
 
@@ -125,9 +125,12 @@ async function getOneDeveloper(req: NextApiRequest, res: NextApiResponse) {
     const devId = Number(req.query.id);
     try {
         const developer = await db.developer.findUnique({
-        where: { id: devId },
-        });
-        return res.status(200).json({ developer });
+            where: { id: devId },
+            include: {
+            app: true, // Include the associated app
+            },
+    });
+    return res.status(200).json({ developer });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Internal server error' });

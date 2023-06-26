@@ -1,4 +1,11 @@
-[
+export const typeOptions: {value: string; label: string}[] = [
+    { value: "web", label: "Web" },
+    { value: "mobile", label: "Mobile" },
+    { value: "game", label: "Game" },
+    { value: "social", label: "Social" }
+];
+
+export const techOptions: {value: string; label: string} [] = [
     { "value": "java", "label": "Java" },
     { "value": "python", "label": "Python" },
     { "value": "javascript", "label": "JavaScript" },

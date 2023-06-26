@@ -1,16 +1,15 @@
 import Link from "next/link";
 import styles from "@/styles/Home.module.css";
-import AppCard from "@/components/appCard";
-import { App } from "@prisma/client";
+import { AppWithIdProps } from "./types";
+import AppCard from "./AppCard";
 
 type AppSectionProps = {
     sectionTitle: string;
-    apps: App[];
+    apps: AppWithIdProps[];
     seeAllLink: string;
 };
 
 const AppSection: React.FC<AppSectionProps> = ({ sectionTitle, apps, seeAllLink }) => {
-
     return (
         <div>
         <div className={styles.appsHeader}>

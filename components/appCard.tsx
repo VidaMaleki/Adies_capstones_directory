@@ -1,47 +1,50 @@
-import AppDetailsPopup from './appDetailsPopUp';
+import AppDetailsPopup from './AppDetailsPopUp';
 import Link from 'next/link';
 import styles from '@/styles/AppCard.module.css';
-import * as FaIcons from "react-icons/fa";
+import * as FaIcons from 'react-icons/fa';
 import { useState } from 'react';
-import { App } from '@prisma/client';
+import { AppWithIdProps } from './types';
+import { NextPageContext } from 'next';
+import { getSession } from "next-auth/react";
 import { db } from '@/lib/db';
-import { string } from 'zod';
 
 
-// export async function getStaticProps() {
-//     const appDevelopers = await db.developer.findMany({
-//         where: {
-//             id: {in: developersIDs}
-//         }
-//     });
-//     return {
-//         props: {
-//             appDevelopers: appDevelopers,
-//         },
-//     }
-// }
-    // const getDeveloperNames = async () => {
-    //     const appDevelopers = await db.developer.findMany({
-    //         where: {
-    //             id: {in: developersIDs}
-    //         }
-    //     })
-    //     return appDevelopers.map(elem => elem.fullName);
-    // }
+export async function getServerSideProps(ctx: NextPageContext) {
+    const session = await getSession(ctx);
+    let userEmail = session?.user?.email ? session.user.email : '';
 
-const AppCard = ({ app }: {app: App}) => {
+    const signedInUser = await db.developer.findUnique({
+        where: {
+        email: userEmail,
+        },
+        include: {
+        app: {
+            include: {
+            developers: true, // Include the developers associated with the app
+            },
+        },
+        },
+    });
 
+    return {
+        props: {
+        session,
+        signedInUser,
+        },
+    };
+}
 
+const AppCard = ({app}: {app: AppWithIdProps }) => {
+    console.log(app); // Log the app prop to inspect its data
     const name = app?.appName ?? 'No name available';
     const appLink = app?.appLink ?? '#';
     const github = app?.github ?? '#';
     const technologies = app.technologies;
-    const developers = app.developers;
     const picture = app.picture;
-    // const developersIDs = app.developers.map(elem => parseInt(elem));
-    // const developerNames = getDeveloperNames();
+    const developers = app.developers;
     
-    
+    console.log(developers)
+
     const [showPopup, setShowPopup] = useState(false);
 
     const handleOpenPopup = () => {
@@ -52,35 +55,40 @@ const AppCard = ({ app }: {app: App}) => {
         setShowPopup(false);
     };
 
-    const developersElement = developers && developers.length === 1 ? developers[0] : developers?.join(', ') ?? '';
-
+    const developerNames = developers?.map((developer) => developer.fullName) ?? [];
+    const developerNamesString = developerNames.join(', ') ?? '';
+    // const developerList = Array.isArray(developers) ? (
+    //     developers.map((developer) => <li key={developer.id}>{developer.fullName}</li>)
+    // ) : (
+    // <li>{developers}</li> // Display the string as a single list item
+    // );
     return (
         <div className={styles.card}>
-            <div className={styles.appMiniScreen} style={{ backgroundImage: `url(${app.picture})` }} onClick={handleOpenPopup}>
-            </div>
-            <div className={styles.content}>
-                <div className={styles.appCardHeader}>
-                    <h3>{name}</h3>
-                    
-                    <a className={styles.cardGitHub} href={github} target="_blank" >
-                        <div className={styles.iconContainer}>
-                            <FaIcons.FaGithub />
-                        </div>
-                    </a>
+        <div className={styles.appMiniScreen} style={{ backgroundImage: `url(${picture})` }} onClick={handleOpenPopup}></div>
+        <div className={styles.content}>
+            <div className={styles.appCardHeader}>
+            <h3>{name}</h3>
+            <a className={styles.cardGitHub} href={github} target="_blank">
+                <div className={styles.iconContainer}>
+                <FaIcons.FaGithub />
                 </div>
-                <p>Created by: {developersElement}</p>
-                <p>Tech Stack: {technologies.join(', ')}</p>
+            </a>
             </div>
-            <div className={styles.cardFooterButtons}>
-                <Link href={appLink} className={styles.cardView} target="_blank">
-                    View
-                </Link>
-                <button className={styles.cardDetails} onClick={() => handleOpenPopup()}>Details</button>
-            </div>
-            {showPopup && (
-                <AppDetailsPopup app={app} onClose={handleClosePopup}/>
-            )}
+            <h3>Created by: {developerNamesString}</h3>
+            <h3>Tech Stack: {technologies.join(', ')}</h3>
+        </div>
+        <div className={styles.cardFooterButtons}>
+            <Link href={appLink} className={styles.cardView} target="_blank">
+            View
+            </Link>
+            <button className={styles.cardDetails} onClick={() => handleOpenPopup()}>
+            Details
+            </button>
+        </div>
+        {showPopup && <AppDetailsPopup app={app} onClose={handleClosePopup} />}
         </div>
     );
-}
+};
+
 export default AppCard;
+

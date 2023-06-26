@@ -6,14 +6,14 @@ import { NextPageContext } from "next";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { AiFillGithub } from "react-icons/ai";
 
-interface Props {
-  
-}
 
 const ProfileIcon = () => {
   const { data: session } = useSession()
-  // const hasImage = !!developer.image;
-  // const imageSrc = hasImage ? developer.image : "/default-profile.png";
+  
+  // Hide the profile icon if user is not signed in
+  if (!session) {
+    return null; 
+  }
 
   return (
     <Link href="/profile">

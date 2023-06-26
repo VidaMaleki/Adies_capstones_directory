@@ -1,16 +1,9 @@
+import { ISlideButtonProps } from '@/components/types';
 import styles from '@/styles/register.module.css';
 import { relative } from 'path';
 import BeatLoader from "react-spinners/BeatLoader";
 // npm install --save react-spinners
 
-
-interface ISlideButtonProps {
-    type:"submit" | "reset" | "button";
-    text: string;
-    slide_text: string;
-    disabled: boolean;
-    icon:JSX.Element;
-}
 
 const SlideButton: React.FunctionComponent<ISlideButtonProps> = (props) => {
     const {type, text, slide_text, disabled, icon } = props

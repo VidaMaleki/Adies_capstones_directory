@@ -6,6 +6,7 @@ import Link from "next/link";
 import { db } from "@/lib/db";
 import { App } from "@prisma/client";
 import AppSection from "@/components/AppSection";
+import { AppWithIdProps } from "@/components/types";
 
 export async function getServerSideProps() {
   const allApps: App[] = await db.app.findMany();
@@ -16,11 +17,11 @@ export async function getServerSideProps() {
   };
 }
 
-export default function Home({ allApps }: { allApps: App[] }) {
-  const [webAppsRandom, setWebAppsRandom] = useState<App[]>([]);
-  const [mobileAppsRandom, setMobileAppsRandom] = useState<App[]>([]);
-  const [gamingAppsRandom, setGamingAppsRandom] = useState<App[]>([]);
-  const [socialAppsRandom, setSocialAppsRandom] = useState<App[]>([]);
+export default function Home({ allApps }: { allApps: AppWithIdProps[] }) {
+  const [webAppsRandom, setWebAppsRandom] = useState<AppWithIdProps[]>([]);
+  const [mobileAppsRandom, setMobileAppsRandom] = useState<AppWithIdProps[]>([]);
+  const [gamingAppsRandom, setGamingAppsRandom] = useState<AppWithIdProps[]>([]);
+  const [socialAppsRandom, setSocialAppsRandom] = useState<AppWithIdProps[]>([]);
 
   const getRandomApps = (appsList: any) => {
     if (appsList.length <= 5) return appsList;
@@ -51,7 +52,7 @@ export default function Home({ allApps }: { allApps: App[] }) {
     setGamingAppsRandom(getRandomApps(gamingApps));
     setSocialAppsRandom(getRandomApps(socialApps));
     setMobileAppsRandom(getRandomApps(mobileApps));
-  }, []);
+  }, [allApps]);
 
   return (
     <>

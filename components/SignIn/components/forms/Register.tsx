@@ -53,6 +53,10 @@ const FormSchema = z
   });
 type FormSchemaType = z.infer<typeof FormSchema>;
 
+const validatePasswordStrength = (password:any) => {
+  return zxcvbn(password ? password : "").score;
+};
+
 const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
   const [passwordScore, setPasswordScore] = useState(0);
   const {
@@ -69,11 +73,6 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
     console.log(values);
     // const { email } = values;
 
-    // Check if the entered email is in the list of authorized emails
-    // const isAuthorized = authorizedEmails.authorizedEmails.some(
-    // (authorizedEmail) => authorizedEmail.email === email
-    // );
-
     try {
       const { data } = await axios.post("/api/auth/signup", {
         ...values,
@@ -85,14 +84,10 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
     }
   };
 
-  const validatePasswordStrength = () => {
-    let password = watch().password;
-    return zxcvbn(password ? password : "").score;
-  };
-  const password = watch().password;
   useEffect(() => {
-    setPasswordScore(validatePasswordStrength());
-  }, [password]);
+    const password = watch().password;
+    setPasswordScore(validatePasswordStrength(password));
+  }, [watch, setPasswordScore]);
 
   return (
     <div className="w-full px-12 py-4">

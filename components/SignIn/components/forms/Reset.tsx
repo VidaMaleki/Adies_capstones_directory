@@ -38,6 +38,10 @@ const FormSchema = z
   });
 type FormSchemaType = z.infer<typeof FormSchema>;
 
+const validatePasswordStrength = (password: any) => {
+  return zxcvbn(password ? password : "").score;
+};
+
 const ResetForm: React.FunctionComponent<IResetFormProps> = (props) => {
   const { token } = props;
   const [passwordScore, setPasswordScore] = useState(0);
@@ -64,14 +68,15 @@ const ResetForm: React.FunctionComponent<IResetFormProps> = (props) => {
       toast.error(error.response.data.message);
     }
   };
-  const validatePasswordStrength = () => {
-    let password = watch().password;
-    return zxcvbn(password ? password : "").score;
-  };
-  const password = watch().password;
+  // const validatePasswordStrength = () => {
+  //   let password = watch().password;
+  //   return zxcvbn(password ? password : "").score;
+  // };
+  
   useEffect(() => {
-    setPasswordScore(validatePasswordStrength());
-  }, [password]);
+    const password = watch().password;
+    setPasswordScore(validatePasswordStrength(password));
+  }, [watch, setPasswordScore]);
 
   return (
     <div className="w-full px-12 py-4">

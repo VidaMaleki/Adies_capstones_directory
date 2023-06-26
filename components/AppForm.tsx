@@ -2,8 +2,8 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "@/styles/register.module.css";
-import Input from "../inputs/Input";
-import SlideButton from "../buttons/SlideButton";
+import Input from "../components/SignIn/components/inputs/Input";
+import SlideButton from "../components/SignIn/components/buttons/SlideButton";
 import { CiUser } from "react-icons/ci";
 import { AiOutlineMail, AiFillLock } from "react-icons/ai";
 import { IoSchoolSharp } from "react-icons/io5";
@@ -90,9 +90,16 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
     return zxcvbn(password ? password : "").score;
   };
   const password = watch().password;
+
   useEffect(() => {
+    const validatePasswordStrength = () => {
+      let password = watch().password;
+      return zxcvbn(password ? password : "").score;
+    };
+    
+    const password = watch().password;
     setPasswordScore(validatePasswordStrength());
-  }, [password]);
+  }, [watch]);
 
   return (
     <div className="w-full px-12 py-4">

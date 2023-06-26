@@ -10,9 +10,7 @@ import { useEffect, useState } from "react";
 interface Props {}
 
 const Navbar: React.FunctionComponent<Props> = () => {
-  // const [searchResults, setSearchResults] = useState([]);
   const router = useRouter();
-
   const handleClick = () => {
     router.push("/");
   };
@@ -21,24 +19,31 @@ const Navbar: React.FunctionComponent<Props> = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 0) {
+      if (window.scrollY > 1) {
         setScrolling(true);
       } else {
         setScrolling(false);
       }
     };
 
+    const handleRouteChange = () => {
+      setScrolling(false);
+    };
+
     window.addEventListener("scroll", handleScroll);
+    router.events.on("routeChangeStart", handleRouteChange);
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      router.events.off("routeChangeStart", handleRouteChange);
     };
-  }, []);
+  }, [router.events]);
 
   return (
     <div
       id="navbar"
       className={`${styles.navbarContainer} ${
-        scrolling ? styles.navbarContainerScroll : ""
+        scrolling || router.pathname !== "/" ? styles.navbarContainerScroll : ""
       }`}
     >
       <div className={styles.logoContainer}>

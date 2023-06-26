@@ -3,6 +3,7 @@ import styles from "@/styles/AppPage.module.css";
 import { db } from "@/lib/db";
 import { App } from "@prisma/client";
 import AppList from "@/components/AppExtentionPage";
+import { AppWithIdProps } from "@/components/types";
 
 export async function getStaticProps() {
   const webApps: App[] = await db.app.findMany({
@@ -17,7 +18,7 @@ export async function getStaticProps() {
   };
 }
 
-const WebApps = ({ webApps }: { webApps: App[] }) => {
+const WebApps = ({ webApps }: { webApps: AppWithIdProps[] }) => {
   return (
     <div className={styles.pageWrapper}>
       <Navbar />

@@ -5,6 +5,8 @@ import styles from "@/styles/About.module.css";
 import Image from "next/image";
 import vida from "../images/vida.png";
 import megan from "../images/megan.png";
+import { toast } from "react-toastify";
+
 
 const About = () => {
   const [name, setName] = useState("");
@@ -12,11 +14,13 @@ const About = () => {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("");
 
+
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("sending");
     try {
-      await axios.post("/api/send-email", { name, email, message });
+      await axios.post("/api/auth/send-email", { name, email, message });
       setStatus("sent");
       setName("");
       setEmail("");
@@ -31,26 +35,46 @@ const About = () => {
       <Navbar />
       <div className={styles.aboutContainer}>
         <div className={styles.aboutTextWrapper}>
-          <h2>About Adies capstone Hub</h2>
+          <h2 className="font-bold text-lg">About Adies capstone Hub</h2>
           <p>
-            AdiesCapstoneHub is a web application that allows developers to
-            showcase their apps and connect with potential users. The app has
-            two main modes: developer mode and user mode. In developer mode,
-            developers can create and manage app cards, which contain
-            information about their app, such as the app name, category,
-            description, and a link to the app or website. In user mode, users
-            can browse app cards and search for apps by category, name, or
-            developer name.
-          </p>
+          AdiesCapstoneHub is a web application that allows{' '}
+          <a
+            href="https://adadevelopersacademy.org//"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500"
+          >
+            Ada Developer Academy
+          </a>{' '}
+          students to showcase their apps and connect with potential users. The app has
+          two main modes: developer mode and user mode. In developer mode,
+          developers can create and manage app cards, which contain
+          information about their app, such as the app name, category,
+          description, and a link to the app or website. In user mode, users
+          can browse app cards and search for apps by category, name, or
+          developer name.
+        </p>
         </div>
         <div className={styles.aboutCreatorsWrapper}>
           <div className={styles.aboutCreators}>
-            <Image src={vida} alt="" width={50} height={50} />
+            <a
+              href="https://www.linkedin.com/in/vida-ghorbannezhad-maleki-4082a4197/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image src={vida} alt="" width={50} height={50} />
+            </a>
             <h2>Vida Ghorbannezhad Maleki</h2>
             <p>Software Engineer</p>
           </div>
           <div className={styles.aboutCreators}>
-            <Image src={megan} alt="" width={50} height={50} />
+            <a
+              href="https://www.linkedin.com/in/megan-korling/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image src={megan} alt="" width={50} height={50} />
+            </a>
             <h2>Megan Korling</h2>
             <p>Software Engineer</p>
           </div>
@@ -105,6 +129,11 @@ const About = () => {
             </div>
           </form>
         </div>
+        {status === "sent" && (
+          <p className={styles.successMessage}>
+            Thank you for your feedback! The email has been sent successfully.
+          </p>
+        )}
       </div>
     </div>
   );

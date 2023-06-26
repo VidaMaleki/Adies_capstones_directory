@@ -3,18 +3,9 @@ import * as FaIcons from "react-icons/fa";
 import Image from 'next/image';
 import { db } from '@/lib/db';
 import { useEffect, useState } from 'react';
+import { AppDataProps } from './types';
 interface Props {
-    app: {
-        appName: string;
-        description: string;
-        appLink: string | null;
-        id: number;
-        github: string | null;
-        videoLink: string | null;
-        technologies: string[];
-        developers: {fullName: string}[];
-        picture: string
-    };
+    app: AppDataProps;
     onClose: () => void;
 }
 
@@ -26,23 +17,6 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
     const developersElement = developers && developers.length === 1 ? developers[0] : developers?.join(', ') ?? '';
 
 
-    // const [developerName, setDeveloperName] = useState('')
-
-    // useEffect(() => {
-    //     async function fetchDeveloperName() {
-    //         try {
-    //             const response = await db.app.findUnique({
-    //             where: { id: app.id },
-    //             select: { owner: { select: { fullName: true } } }
-    //             });
-    //             setDeveloperName(response.owner.fullName);
-    //         } catch (error) {
-    //             console.error('Error fetching developer name:', error);
-    //         }
-    //     }
-    
-    //     fetchDeveloperName();
-    //   }, [app.id]);
     
     return (
         <div className={styles.overlay}>

@@ -1,9 +1,10 @@
-import AppCard from "./appCard";
+import AppCard from "./AppCard";
 import styles from "@/styles/AppPage.module.css";
-import { App } from "@prisma/client";
+// import { App } from "@prisma/client";
+import { AppWithIdProps } from "./types";
 
 interface Props {
-  apps: App[];
+  apps: AppWithIdProps[];
   page: string;
 }
 

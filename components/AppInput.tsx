@@ -1,18 +1,8 @@
 import { FC } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import { GrTechnology } from 'react-icons/gr';
+import { AppInputProps } from './types';
 
-
-interface AppInputProps {
-name: string;
-label: string;
-type: string;
-icon?: JSX.Element;
-placeholder?: string;
-register: any;
-error?: string;
-disabled?: boolean;
-}
 
 const AppInput: FC<AppInputProps> = ({
     name,

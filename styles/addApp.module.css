@@ -3,41 +3,19 @@
     width: 100%;
     height: 100vh;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 20px;
 }
 
-.createAppImageDrop {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 50%;
-    height: 50%;
-}
-
-.createAppImageDrop label {
-    height: 300px;
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.createAppImageDrop div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .createAppFormsWrapper {
-    display: flex;
+    margin-top: 120px;
+    height: 100%;
     justify-content: center;
     flex-direction: column;
-    gap: 20px;
-    width: 50%;
+    row-gap: 20px;
+    min-width: 30rem;
+    max-width: 50rem;
     padding: 20px;
 }
 
@@ -54,15 +32,18 @@
     justify-content: flex-start;
     align-items: center;
     flex-direction: row;
+    margin-top: 20px;
 }
 
 .createAppInput {
-    width: 20rem;
+    width: 100%;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     padding: 6px;
-    margin-left: 35px;
+    border: .05em solid #777;
+    border-radius: .25em;
+    border-color: hsl(200, 100%, 50%);
 }
 
 .submitButton {

@@ -3,20 +3,10 @@ import {useState} from "react";
 import {IoAlertCircle} from "react-icons/io5";
 import {ImEye, ImEyeBlocked} from "react-icons/im";
 import styles from '@/styles/register.module.css';
+import { SignupInputProps } from "@/components/types";
 
 
-interface InputProps{
-    name: string;
-    label: string;
-    type: string;
-    icon: JSX.Element;
-    placeholder: string;
-    register: any;
-    error: any;
-    disabled: boolean;
-
-}
-const Input: React.FunctionComponent<InputProps> = (props) => {
+const Input: React.FunctionComponent<SignupInputProps> = (props) => {
     const { name, label, type, icon, placeholder, register, error, disabled} = props;
 
     const [ showPassword, setShowPassword] = useState(false);

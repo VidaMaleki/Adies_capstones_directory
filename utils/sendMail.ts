@@ -1,7 +1,6 @@
 import nodemailer from "nodemailer";
 // npm i nodemailer handlebars  
 import * as handlebars from "handlebars";
-import next from "next";
 // npm i --include=dev @types/nodemailer
 
 

@@ -1,26 +1,8 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { db } from '@/lib/db';
-import validator from "validator";
+import validator from 'validator';
+import { AppDataProps} from '@/components/types';
 
-
-
-interface AppInput {
-  appName: string;
-  description: string;
-  ownerId: number;
-  developers: string[];
-  appLink?: string;
-  videoLink?: string;
-  github?: string;
-  type: string;
-  technologies: string[];
-}
-
-interface DeveloperInput {
-  fullName: string;
-  email: string;
-}
 
 export default async function createAppHandler(
   req: NextApiRequest,
@@ -48,54 +30,90 @@ export default async function createAppHandler(
   }
 }
 
-// http://localhost:3000/api/appRoutes and write details of app
 async function createApp(req: NextApiRequest, res: NextApiResponse) {
-  // const typeLisoot: string[]= ["web app", "mobile app", "social media", "game"]
-  // Validate the input data here
   try {
-    const input: AppInput = req.body;
-    // const developerInput : DeveloperInput = req.body;
+    const input = req.body;
+    const errors = [];
 
-    // if (!input.appName || !input.developers || !input.type || !input.technologies || !input.github) {
-    //   // console.log(`${input.appName}, ${input.developers}, ${input.type}, ${input.technologies}, ${input.github}`)
-    //   return res.status(400).json({ message: `Please fill in all fields: ${input.appName}, ${input.developers}, ${input.type}, ${input.technologies}, ${input.github}` });
-    // }
+    if (!input.appName) {
+      errors.push('App name is required.');
+    }
 
-    // if (!validator.isURL(input.appLink! || input.videoLink! || input.github)) {
-    //   return res.status(400).json({ message: "Please enter a valid URL." });
-    // }
+    if (!input.developers || input.developers.length === 0) {
+      errors.push('At least one developer is required.');
+    }
 
-    // if (input.technologies.length > 5) {
-    //   return res.status(400).json({ message: "Please add maximum of 5 technologies." });
-    // }
-    
+    if (!input.type) {
+      errors.push('App type is required.');
+    }
+
+    if (!input.github || !validator.isURL(input.github)) {
+      errors.push('Please enter a valid GitHub URL.');
+    }
+
+    if (input.technologies && input.technologies.length > 5) {
+      errors.push('Please add a maximum of 5 technologies.');
+    }
+
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
+    }
+
     const app = await db.app.create({
       data: {
         appName: input.appName,
         description: input.description,
-        ownerId: input.ownerId,
-        developers: input.developers,
         appLink: input.appLink,
         videoLink: input.videoLink,
         github: input.github,
         type: input.type,
         technologies: input.technologies,
+        picture: input.picture,
       },
     });
+
+    const developerNames = input.developers.map((developer: { fullName: string }) => developer.fullName);
+    const developers = await db.developer.findMany({
+      where: {
+        fullName: {
+          in: developerNames,
+        },
+      },
+    });
+
+    await Promise.all(
+      developers.map(async (developer) => {
+        await db.developer.update({
+          where: { id: developer.id },
+          data: {
+            app: { connect: { id: app.id } },
+          },
+        });
+      })
+    );
+
     return res.status(201).json({ app });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: `${error}` });
+    return res.status(500).json({ message: 'Internal server error' });
   }
 }
 
-// http://localhost:3000/api/appRoutes?id=1
 async function getOneApp(req: NextApiRequest, res: NextApiResponse) {
   const appId = Number(req.query.id);
+
   try {
     const app = await db.app.findUnique({
       where: { id: appId },
+      include: {
+        developers: true,
+      },
     });
+
+    if (!app) {
+      return res.status(404).json({ message: 'App not found' });
+    }
+
     return res.status(200).json({ app });
   } catch (error) {
     console.error(error);
@@ -103,41 +121,73 @@ async function getOneApp(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-// http://localhost:3000/api/appRoutes?id=1
 async function updateApp(req: NextApiRequest, res: NextApiResponse) {
-  const appId = Number(req.query.id);
-  const input: AppInput = req.body;
-  // Validate the input data here
-
   try {
-    const app = await db.app.update({
-      where: { id: appId },
+    const { id } = req.query as { id: string };
+    const input: AppDataProps = req.body as AppDataProps;
+    const errors: string[] = [];
+
+    if (!input.appName) {
+      errors.push('App name is required.');
+    }
+
+    if (!input.developers || input.developers.length === 0) {
+      errors.push('At least one developer is required.');
+    }
+
+    if (!input.type) {
+      errors.push('App type is required.');
+    }
+
+    if (!input.github || !validator.isURL(input.github)) {
+      errors.push('Please enter a valid GitHub URL.');
+    }
+
+    if (input.technologies && input.technologies.length > 5) {
+      errors.push('Please add a maximum of 5 technologies.');
+    }
+
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
+    }
+
+    const existingApp = await db.app.findUnique({ where: { id: Number(id) } });
+
+    if (!existingApp) {
+      return res.status(404).json({ message: 'App not found.' });
+    }
+
+    const updatedApp = await db.app.update({
+      where: { id: Number(id) },
       data: {
         appName: input.appName,
         description: input.description,
-        ownerId: input.ownerId,
-        developers: input.developers,
         appLink: input.appLink,
         videoLink: input.videoLink,
         github: input.github,
         type: input.type,
         technologies: input.technologies,
+        picture: input.picture,
+        developers: {
+          connect: input.developers.map((developer) => ({ id: developer.id })),
+        },
       },
     });
-    return res.status(200).json({ app });
+
+    return res.status(200).json({ app: updatedApp });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
-
-// http://localhost:3000/api/appRoutes?id=1
 async function deleteApp(req: NextApiRequest, res: NextApiResponse) {
   const appId = Number(req.query.id);
+
   try {
     await db.app.delete({
       where: { id: appId },
     });
+
     return res.status(204).end();
   } catch (error) {
     console.error(error);
@@ -145,10 +195,13 @@ async function deleteApp(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-// http://localhost:3000/api/appRoutes
 async function getAllApps(req: NextApiRequest, res: NextApiResponse) {
-  try {    
-    const apps = await db.app.findMany();
+  try {
+    const apps = await db.app.findMany({
+      include: {
+        developers: true,
+      },
+    });
     return res.status(200).json({ apps });
   } catch (error) {
     console.error(error);
@@ -164,7 +217,7 @@ async function searchApps(req: NextApiRequest, res: NextApiResponse) {
       where: {
         appName: {
           contains: searchTerm,
-          mode: "insensitive", // Enable case-insensitive search
+          mode: 'insensitive',
         },
       },
     });

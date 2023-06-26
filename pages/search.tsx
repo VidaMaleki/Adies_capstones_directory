@@ -4,11 +4,12 @@ import axios from "axios";
 import AppCard from "@/components/AppCard";
 import Navbar from "@/components/Navbar/Navbar";
 import styles from "@/styles/Search.module.css";
+import { AppWithIdProps } from "@/components/types";
 
 const SearchPage = () => {
   const router = useRouter();
   const { query } = router.query;
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState<AppWithIdProps[]>([]);
 
   useEffect(() => {
     const fetchSearchResults = async () => {
@@ -30,7 +31,7 @@ const SearchPage = () => {
     <div className={styles.searchResultsContainer}>
       <Navbar />
       <div className={styles.searchResults}>
-        <h2>Search Results for "{query}"</h2>
+        <h2>Search Results for &quot;{query}&quot;</h2>
         <div>
           {searchResults.map((app) => (
             <AppCard key={app.id} app={app} />
