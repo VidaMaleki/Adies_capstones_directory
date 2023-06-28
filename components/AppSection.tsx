@@ -1,7 +1,7 @@
 import Link from "next/link";
 import styles from "@/styles/Home.module.css";
 import { AppWithIdProps } from "./types";
-import AppCard from "./AppCard";
+import AppCard from "./appCard";
 
 type AppSectionProps = {
     sectionTitle: string;

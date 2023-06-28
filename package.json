@@ -6,7 +6,8 @@
         "dev": "node --experimental-top-level-await ./node_modules/.bin/next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "test":"ECHO $POSTGRES_PRISMA_URL"
     },
     "dependencies": {
         "@auth0/nextjs-auth0": "^2.4.0",
@@ -23,6 +24,7 @@
         "@types/react-select": "^5.0.1",
         "@types/validator": "^13.7.15",
         "@types/zxcvbn": "^4.4.1",
+        "@vercel/postgres": "^0.4.0",
         "axios": "^1.4.0",
         "bcryptjs": "^2.4.3",
         "cloudinary": "^1.37.0",

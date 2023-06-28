@@ -1,4 +1,4 @@
-import AppCard from "./AppCard";
+import AppCard from "./appCard";
 import styles from "@/styles/AppPage.module.css";
 // import { App } from "@prisma/client";
 import { AppWithIdProps } from "./types";
