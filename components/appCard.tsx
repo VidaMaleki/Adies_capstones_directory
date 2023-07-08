@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styles from '@/styles/AppCard.module.css';
 import * as FaIcons from 'react-icons/fa';
 import { useState } from 'react';
-import { AppWithIdProps } from './types';
+import { AppWithDevelopersProps, AppWithIdProps } from './types';
 import { NextPageContext } from 'next';
 import { getSession } from "next-auth/react";
 import { db } from '@/lib/db';
@@ -34,14 +34,14 @@ export async function getServerSideProps(ctx: NextPageContext) {
     };
 }
 
-const AppCard = ({app}: {app: AppWithIdProps }) => {
+const AppCard = ({app}: {app: AppWithDevelopersProps }) => {
     console.log(app); // Log the app prop to inspect its data
     const name = app?.appName ?? 'No name available';
     const appLink = app?.appLink ?? '#';
     const github = app?.github ?? '#';
     const technologies = app.technologies;
     const picture = app.picture;
-    const developers = app.developers;
+    const developers = app.developers ?? ""
     
     console.log(developers)
 

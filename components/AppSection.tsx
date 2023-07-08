@@ -1,11 +1,11 @@
 import Link from "next/link";
 import styles from "@/styles/Home.module.css";
-import { AppWithIdProps } from "./types";
+import { AppWithDevelopersProps, AppWithIdProps } from "./types";
 import AppCard from "./AppCard";
 
 type AppSectionProps = {
     sectionTitle: string;
-    apps: AppWithIdProps[];
+    apps: AppWithDevelopersProps[];
     seeAllLink: string;
 };
 

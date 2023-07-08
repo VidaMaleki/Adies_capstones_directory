@@ -11,7 +11,7 @@ async function connect() {
         prisma = new PrismaClient();
     } else {
         if (!global.cachedPrisma) {
-        global.cachedPrisma = new PrismaClient();
+            global.cachedPrisma = new PrismaClient();
         }
         prisma = global.cachedPrisma;
     }
@@ -21,6 +21,10 @@ async function connect() {
     return prisma;
 }
 
-const db = await connect();
+let db: PrismaClient;
+
+if (typeof window === 'undefined') {
+    db = await connect();
+}
 
 export { db };
