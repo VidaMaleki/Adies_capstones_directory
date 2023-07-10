@@ -21,7 +21,7 @@ const FormSchema = z.object({
     developers: z.array(z.object({ fullName: z.string() })).min(1, { message: 'Developers are required' }),
     appLink: z.string().url({ message: 'Invalid App Link URL' }).optional(),
     videoLink: z.string().url({ message: 'Invalid Video Link URL' }).optional(),
-    github: z.string().url({ message: 'Invalid Github Link URL' }).optional(),
+    github: z.string().url({ message: 'Invalid Github Link URL' }),
     type: z.string().nonempty({ message: "Category is required." }),
     technologies: z.array(z.string()).min(1, { message: 'Technologies are required' }),
     picture: z.string().optional(),
@@ -66,11 +66,13 @@ export default function Capstone ({ allDevs, signedInUser }: {
     allDevs: Developer[],
     signedInUser: Developer
 }) {
+    
     const router = useRouter();
     const { data: session } = useSession();
     const [appData, setAppData] = useState<FormSchemaType>(defaultApp);
     const [appImage, setAppImage] = useState<File | string>("");
-
+    console.log(appData)
+    
     const nameOptions = allDevs.map(name => ({ value: String(name.id), label: name.fullName }));
 
     const handleChange = (event: any) => {
@@ -93,7 +95,6 @@ export default function Capstone ({ allDevs, signedInUser }: {
     const handleTechnologiesChange = (event: any) => {
         let newAppData: FormSchemaType = { ...appData };
         const currTechs = event.map((option: { label: any; }) => option.label);
-        console.log(typeof currTechs, currTechs);
         newAppData.technologies = currTechs;
         setAppData(newAppData);
         
@@ -103,13 +104,11 @@ export default function Capstone ({ allDevs, signedInUser }: {
         let newAppData: FormSchemaType = { ...appData };
         const currDevs: { fullName: string }[]= event.map((option: { value: string; label: string }) => 
         ({ fullName: option.label }));
-        console.log(typeof currDevs, currDevs);
         newAppData.developers = currDevs
         setAppData(newAppData);
     };
 
     const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
-        console.log(event, typeof event)
         const file = event.target.files?.[0];
         console.log(file)
         if (file) {

@@ -10,10 +10,9 @@ import Navbar from "@/components/Navbar/Navbar";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import styles from "@/styles/About.module.css";
 import { useEffect } from "react";
-import { AppWithIdProps, DeveloperWithAppProps} from "@/components/types";
 import Image from "next/image";
-import App from "next/app";
 import { Developer } from "@prisma/client";
+import { AppWithDevelopersProps } from '../components/types';
 
 
 export async function getServerSideProps(ctx: NextPageContext) {
@@ -42,7 +41,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
     };
 }
 
-export default function Profile({ signedInUser}: {signedInUser: Developer & { app: AppWithIdProps }}) {
+export default function Profile({ signedInUser}: {signedInUser: Developer & { app: AppWithDevelopersProps}}) {
     const { data: session, status } = useSession();
     const router = useRouter();
 
@@ -149,67 +148,3 @@ export default function Profile({ signedInUser}: {signedInUser: Developer & { ap
     );
 }
 
-// <div className="text-center mt-12">
-//                 <h3 className="text-4xl font-semibold mb-2">
-//                     {session?.user?.name}
-//                 </h3>
-//                 <div className="text-sm mb-2 font-bold">
-//                     {session?.user?.email}
-//                 </div>
-//                 {/* <div className="mb-2 mt-10">
-//                                 You logged in using &nbsp; 
-//                                 <span
-//                                 className="capitalize bg-blue-400 text-white px-4 py-1 ml-2 font-bold italix text-lg rounded-md"
-//                                 >
-//                                 {session?.user?.provider}
-//                                 </span>
-//                             </div> */}
-//             </div>
-//                 <div className="mt-10 py-10 border-t text-center">
-//                 <div className="flex flex-wrap justify-center">
-//                     <div className="w-full px-4">
-//                     <p className="mb-4 text-sm">
-//                         {text1}
-//                     </p>
-//                     <p className="font-bold text-xs">
-//                         {text2}
-//                     </p>
-//                     <br></br>
-//                 </div>
-//                 </div>
-//                 <div className="flex flex-col  justify-center items-center">
-//                     {signedInUser.app && (
-//                     <div className="w-full mb-8 flex items-center justify-around ">
-//                         <h4>Your capstone project</h4>
-//                         <div className="w-1/4 flex justify-between items-center  ">
-//                         {signedInUser.app && (
-//                             <div className="w-50 flex justify-center items-center font-bold cursor-pointer ">
-//                             <a onClick={handleDelete}>
-//                                 <FaTrashAlt />
-//                             </a>
-//                             </div>
-//                         )}
-//                         {signedInUser.app && (
-//                             <div className="w-50 flex justify-center items-center font-bold cursor-pointer">
-//                             <a onClick={() => alert("Need to add edit function")}>
-//                                 <FaEdit />
-//                             </a>
-//                             </div>
-//                         )}
-//                         </div>
-//                     </div>
-//                     )}
-//                     {!signedInUser.app && (
-//                     <div className="w-full bg-sky-500/100 w-2/4 flex justify-center items-center border border-gray font-bold rounded-lg mt-5 px-8 py-2">
-//                         <Link href={`/capstone/`}>Add Your app</Link>
-//                     </div>
-//                 )}
-//                     {signedInUser.appId && <AppCard app={signedInUser.app} />}
-//                 </div>
-//                 </div>
-//             </div>
-//             </div>
-//         </div>
-//         </div>
-//     );
-// }

@@ -72,27 +72,27 @@ datasource db {
 // https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#connect
 // May need to adjust db POST queries to use the syntax in the link above
 model Developer {
-  id            Int        @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   fullName      String
-  email         String     @unique
-  emailVerified Boolean?   @default(false)
-  image         String?    @default("https://res.cloudinary.com/dmhcnhtng/image/upload/v1664642479/992490_sskqn3.png")
+  email         String   @unique
+  emailVerified Boolean? @default(false)
+  image         String?  @default("https://res.cloudinary.com/dmhcnhtng/image/upload/v1664642479/992490_sskqn3.png")
   cohort        String
   linkedin      String?
   password      String
-  app           App?   @relation(fields: [appId], references: [id])  // relation fields define connections and don't exist in the db
-  appId         Int?    
+  app           App?     @relation(fields: [appId], references: [id]) // relation fields define connections and don't exist in the db
+  appId         Int?
 }
 
 model App {
-  id           Int       @id @default(autoincrement())
+  id           Int         @id @default(autoincrement())
   appName      String
   description  String
   developers   Developer[]
   appLink      String?
   videoLink    String?
-  github       String?
+  github       String
   type         String
   technologies String[]
-  picture      String?    @default("https://res.cloudinary.com/dbrsvtcm0/image/upload/v1684530914/srqzav6cgahfzfqtzoyy.webp")
+  picture      String?     @default("https://res.cloudinary.com/dbrsvtcm0/image/upload/v1684530914/srqzav6cgahfzfqtzoyy.webp")
 }

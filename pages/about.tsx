@@ -20,7 +20,8 @@ const About = () => {
     e.preventDefault();
     setStatus("sending");
     try {
-      await axios.post("/api/auth/send-email", { name, email, message });
+      await axios.post("/api/auth/send-feedback", { name, email, message });
+      console.log(name, email, message )
       setStatus("sent");
       setName("");
       setEmail("");
@@ -79,8 +80,47 @@ const About = () => {
             <p>Software Engineer</p>
           </div>
         </div>
-        <div className={styles.aboutFeedbackWrapper}>
-          <form className={styles["feedback-form"]} onSubmit={handleSubmit}>
+        <div className={styles.aboutFeedbackWrapper} >
+          <h2>Give us your feedback</h2>
+          <form onSubmit={handleSubmit}>
+            <label htmlFor="name">Name:</label>
+            <input
+              type="text"
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+
+            <label htmlFor="email">Email:</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+
+            <label htmlFor="message">Message:</label>
+            <textarea
+              id="message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              required
+            ></textarea>
+
+            <button type="submit">Submit</button>
+          </form>
+        </div>
+        </div>
+    </div>
+  );
+};
+
+export default About;
+
+
+{/* <form className={styles["feedback-form"]} onSubmit={handleSubmit}>
             <div className={styles.aboutFeedbackHeader}>
               <h2>Send us your Feedback</h2>
               <button type="submit" disabled={status === "sending"}>
@@ -134,9 +174,4 @@ const About = () => {
             Thank you for your feedback! The email has been sent successfully.
           </p>
         )}
-      </div>
-    </div>
-  );
-};
-
-export default About;
+       */}

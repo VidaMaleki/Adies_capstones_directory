@@ -67,14 +67,6 @@
     justify-content: space-evenly;
 }
 
-
-/* hr {
-    border: none;
-    border-bottom: 2px solid black;
-    margin: 20px 0;
-    text-align: center;
-} */
-
 @media (min-width: 701px) and (max-width: 1120px) {
     .grid {
         grid-template-columns: repeat(2, 50%);
