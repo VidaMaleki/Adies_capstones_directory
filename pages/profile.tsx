@@ -115,7 +115,7 @@ export default function Profile({ signedInUser}: {signedInUser: Developer & { ap
                     {signedInUser.app ? (
                         <div className="flex flex-col justify-center space-y-4">
                             <div className="flex justify-center gap-10">
-                                <Link href={`/edit-app/${signedInUser.app.id}`} className="flex justify-center items-center">
+                                <Link href="/edit-app" className="flex justify-center items-center">
                                     <FaEdit className="mr-2" />Edit
                                 </Link>
                                 <button

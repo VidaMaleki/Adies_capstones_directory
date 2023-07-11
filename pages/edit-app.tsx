@@ -41,6 +41,7 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
 
     const handleSave = () => {
         setIsSaving(true);
+        appData.developers = [signedInUser];
         axios
         .put(`/api/appRoutes?id=${appData.id}`, appData)
         .then(function (response) {
