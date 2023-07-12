@@ -1,4 +1,4 @@
-import AppDetailsPopup from './appDetailsPopUp';
+import AppDetailsPopup from './AppDetailsPopUp';
 import Link from 'next/link';
 import styles from '@/styles/AppCard.module.css';
 import * as FaIcons from 'react-icons/fa';
