@@ -127,8 +127,3 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
         </div>
     );
 }
-
-
-
-
-
