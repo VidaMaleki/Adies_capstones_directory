@@ -1,14 +1,13 @@
 import Navbar from "@/components/Navbar/Navbar";
 import styles from "@/styles/AppPage.module.css";
-import AppCard from "@/components/AppCard";
 import { db } from "@/lib/db";
 import { App } from "@prisma/client";
-import { AppWithIdProps } from "@/components/types";
+import AppList from '@/components/AppExtentionPage';
 
 export async function getStaticProps() {
   const mobileApps: App[] = await db.app.findMany({
     where: {
-      type: "mobile",
+      type: "Mobile",
     },
   });
   return {
@@ -18,19 +17,11 @@ export async function getStaticProps() {
   };
 }
 
-const MobileApps = ({ mobileApps }: { mobileApps: AppWithIdProps[] }) => {
+const MobileApps = ({ mobileApps }: { mobileApps: App[] }) => {
   return (
     <div className={styles.pageWrapper}>
       <Navbar />
-      <div className={styles.pageContainer}>
-        <h1 className={styles.appHeader}>Mobile Apps</h1>
-        {/* loop through web apps to create AppCards */}
-        <div className={styles.appsContainer}>
-          {mobileApps.map((app) => (
-            <AppCard key={app.id} app={app}></AppCard>
-          ))}
-        </div>
-      </div>
+      <AppList apps={mobileApps} page="Mobile apps" />
     </div>
   );
 };

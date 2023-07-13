@@ -1,11 +1,13 @@
-import Link from "next/link";
-import styles from "@/styles/Home.module.css";
-import { AppWithIdProps } from "./types";
-import AppCard from "./AppCard";
+import * as React from 'react';
+import Link from 'next/link';
+import { App } from "@prisma/client";
+import AppCard from './AppCard';
+import styles from '@/styles/Home.module.css';
+import { AppWithDevelopersProps } from './types';
 
 type AppSectionProps = {
     sectionTitle: string;
-    apps: AppWithIdProps[];
+    apps: AppWithDevelopersProps[];
     seeAllLink: string;
 };
 

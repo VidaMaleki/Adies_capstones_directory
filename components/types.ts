@@ -9,29 +9,29 @@ export interface DeveloperProps {
   cohort: string;
   linkedin: string;
   password: string;
-  app: AppDataProps; 
+  app: App; 
   appId: number;
 }
 
 export interface DeveloperWithAppProps extends Developer {
-  app?: AppWithIdProps; 
+  app?: App; 
 }
 
-export interface AppWithDevelopersProps extends AppWithIdProps {
+export interface AppWithDevelopersProps extends App {
   developers: DeveloperProps[]
 }
 
 
-export interface AppWithIdProps extends AppDataProps{
-  id: number;
-}
+// export interface AppWithIdProps extends AppDataProps{
+//   id: number;
+// }
 
 export interface AppDataProps {
   appName: string,
   description: string,
   developers: Developer[],
-  appLink: string,
-  videoLink: string,
+  appLink: string | null,
+  videoLink: string | null,
   github: string,
   type: string,
   technologies: string[],

@@ -23,6 +23,10 @@ async function connect() {
     }
 }
 
-const db = await connect();
+let db: PrismaClient;
+
+if (typeof window === 'undefined') {
+    db = await connect();
+}
 
 export { db };

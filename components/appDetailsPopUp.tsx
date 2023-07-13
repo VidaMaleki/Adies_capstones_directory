@@ -3,14 +3,14 @@ import * as FaIcons from "react-icons/fa";
 import Image from 'next/image';
 import { db } from '@/lib/db';
 import { useEffect, useState } from 'react';
-import { AppDataProps } from './types';
+import { AppWithDevelopersProps } from './types';
 interface Props {
-    app: AppDataProps;
+    app: AppWithDevelopersProps;
     onClose: () => void;
 }
 
 const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
-    // const defaultImage = "https://img.freepik.com/free-vector/isometric-3d-computer-laptop-tablet-pc-smartphone_1284-51716.jpg?w=1380&t=st=1681421310~exp=1681421910~hmac=4256a4d5ec8193b087196488c66522210fca664163bacf6fa3fc32061c2f7a0c";
+    const defaultImage = "https://img.freepik.com/free-vector/isometric-3d-computer-laptop-tablet-pc-smartphone_1284-51716.jpg?w=1380&t=st=1681421310~exp=1681421910~hmac=4256a4d5ec8193b087196488c66522210fca664163bacf6fa3fc32061c2f7a0c";
     // const developersName = app.developers.length === 1 ? app.developers[0] : app.developers.join(', ');
     const developers = app.developers;
 
@@ -29,7 +29,7 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
                 <div className={styles.appContentContainer}>
                     <div className={styles.imageContainer}>
                         {/* change to Image from next/image */}
-                        <Image src={app.picture} alt="graphic of computers" width={700} height={500} />
+                        <Image src={app.picture ?? defaultImage} alt="graphic of computers" width={700} height={500} />
                     </div>
                     <div className={styles.textContainer}>
                         <div className={styles.appDetailsContainer}>
