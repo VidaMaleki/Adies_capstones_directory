@@ -1,6 +1,7 @@
 import { NextPageContext } from "next";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { BiLogOut } from "react-icons/bi";
+import {AiFillSetting} from "react-icons/ai";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import axios from "axios";
@@ -89,6 +90,12 @@ export default function Profile({ signedInUser}: {signedInUser: Developer & { ap
                     <div className="flex flex-col justify-center items-center"></div>
                     <div className="w-full text-center p-4 bg-gray-100 rounded-t-lg">
                         <div className="relative">
+                            <Link href="/settings"
+                                className="absolute top-0 left-0 mt-2 mr-2 text-gray-500"
+                                
+                            >
+                                <AiFillSetting size={24} />
+                            </Link>
                             <h2 className="text-2xl font-bold">My Profile</h2>
                             <button
                                 className="absolute top-0 right-0 mt-2 mr-2 text-gray-500"
