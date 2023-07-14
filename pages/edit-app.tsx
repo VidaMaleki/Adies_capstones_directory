@@ -81,7 +81,7 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
     return (
         <div className="bg-gray-100 min-h-screen">
         <Navbar />
-        <div className="max-w-3xl mx-auto px-4 py-8">
+        <div className="max-w-3xl mx-auto px-4 py-8 pt-20">
             <h1 className="text-3xl font-bold mb-6">Edit App</h1>
             <form>
             <div className="mb-6">

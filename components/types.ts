@@ -22,9 +22,9 @@ export interface AppWithDevelopersProps extends App {
 }
 
 
-// export interface AppWithIdProps extends AppDataProps{
-//   id: number;
-// }
+export interface AppWithIdProps extends AppDataProps{
+  id: number;
+}
 
 export interface AppDataProps {
   appName: string,
