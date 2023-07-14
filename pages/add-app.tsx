@@ -24,7 +24,7 @@ const FormSchema = z.object({
     github: z.string().url({ message: 'Invalid Github Link URL' }),
     type: z.string().nonempty({ message: "Category is required." }),
     technologies: z.array(z.string()).min(1, { message: 'Technologies are required' }),
-    picture: z.string().optional(),
+    // picture: z.string().optional(),
 });
 
 type FormSchemaType = z.infer<typeof FormSchema>;
@@ -59,7 +59,7 @@ const defaultApp: FormSchemaType = {
     github: "",
     type: "",
     technologies: [],
-    picture: "",
+    // picture: "",
 };
 
 export default function Capstone ({ allDevs, signedInUser }: {
@@ -70,7 +70,7 @@ export default function Capstone ({ allDevs, signedInUser }: {
     const router = useRouter();
     const { data: session } = useSession();
     const [appData, setAppData] = useState<FormSchemaType>(defaultApp);
-    const [appImage, setAppImage] = useState<File | string>("");
+    // const [appImage, setAppImage] = useState<File | string>("");
     console.log(appData)
     
     const nameOptions = allDevs.map(name => ({ value: String(name.id), label: name.fullName }));
@@ -108,13 +108,13 @@ export default function Capstone ({ allDevs, signedInUser }: {
         setAppData(newAppData);
     };
 
-    const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        console.log(file)
-        if (file) {
-        setAppImage(file);
-        }
-    };
+    // const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    //     const file = event.target.files?.[0];
+    //     console.log(file)
+    //     if (file) {
+    //     setAppImage(file);
+    //     }
+    // };
 
     const validateFormData = () => {
         const validationResult = FormSchema.safeParse(appData);
@@ -192,7 +192,7 @@ export default function Capstone ({ allDevs, signedInUser }: {
                 Developers *
                 <Select options={nameOptions} onChange={handleDevChange} isMulti isClearable instanceId="appDevs" />
                 </label>
-                <div className="mb-4">
+                {/* <div className="mb-4">
                 <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="appImage">
                     App Image
                 </label>
@@ -203,7 +203,7 @@ export default function Capstone ({ allDevs, signedInUser }: {
                     accept="image/*"
                     onChange={handleImageUpload}
                 />
-                </div>
+                </div> */}
                 <input type="submit" value="Submit" className={styles.submitButton}/>
             </form>
         </div>

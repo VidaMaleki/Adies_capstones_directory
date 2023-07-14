@@ -4,7 +4,7 @@ CREATE TABLE "Developer" (
     "fullName" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "emailVerified" BOOLEAN DEFAULT false,
-    "image" TEXT DEFAULT '.../auth/user-in-gray-circle.png',
+    "image" TEXT DEFAULT '/auth/user-in-gray-circle.png',
     "cohort" TEXT NOT NULL,
     "linkedin" TEXT,
     "password" TEXT NOT NULL,

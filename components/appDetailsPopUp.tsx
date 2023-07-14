@@ -10,7 +10,8 @@ interface Props {
 }
 
 const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
-    const defaultImage = "https://img.freepik.com/free-vector/isometric-3d-computer-laptop-tablet-pc-smartphone_1284-51716.jpg?w=1380&t=st=1681421310~exp=1681421910~hmac=4256a4d5ec8193b087196488c66522210fca664163bacf6fa3fc32061c2f7a0c";
+    const defaultImage = "/Users/andiegarcia/Developer/Adies_capstones/Adies_capstones_directory/public/auth/default-app.png";
+    // There was a conflict with the props from App.image that doesn't exist anymore in the db (line 33). Image replaced for an image in public folder instead
     // const developersName = app.developers.length === 1 ? app.developers[0] : app.developers.join(', ');
     const developers = app.developers;
 
@@ -29,7 +30,7 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
                 <div className={styles.appContentContainer}>
                     <div className={styles.imageContainer}>
                         {/* change to Image from next/image */}
-                        <Image src={app.picture ?? defaultImage} alt="graphic of computers" width={700} height={500} />
+                        <Image src= {defaultImage} alt="graphic of computers" width={100} height={300} />
                     </div>
                     <div className={styles.textContainer}>
                         <div className={styles.appDetailsContainer}>
