@@ -76,7 +76,7 @@ model Developer {
   fullName      String
   email         String   @unique
   emailVerified Boolean? @default(false)
-  image         String?  @default("https://res.cloudinary.com/dmhcnhtng/image/upload/v1664642479/992490_sskqn3.png")
+  image         String?  @default(".../auth/user-in-gray-circle.png")
   cohort        String
   linkedin      String?
   password      String
@@ -89,9 +89,9 @@ model App {
   appName      String
   description  String
   developers   Developer[]
-  appLink      String?
-  videoLink    String?
-  github       String
+  appLink      String
+  videoLink    String
+  github       String?
   type         String
   technologies String[]
 }
