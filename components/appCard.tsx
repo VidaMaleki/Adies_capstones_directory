@@ -11,7 +11,22 @@ type AppCardProps = {
 };
 
 const AppCard: React.FC<AppCardProps> = ({ app }) => {
-  const [showPopup, setShowPopup] = useState(false);
+  const [ showPopup, setShowPopup ] = useState(false);
+  const [ picture , setPicture ] = useState("")
+
+  const webPicture = "../images/webapp.jpg"
+  const mobilePicture = "../images/mobileapp.jpg"
+  const nativePicture = "../images/nativeapp.jpg"
+
+  if ( app.type === "Web") {
+    setPicture(webPicture)
+  } else if (app.type === "Mobile") {
+    setPicture(mobilePicture)
+  } else if (app.type === "Native") {
+    setPicture(nativePicture)
+  } else {
+    setPicture("")
+  }
 
   const handleOpenPopup = () => {
     setShowPopup(true);
@@ -21,13 +36,15 @@ const AppCard: React.FC<AppCardProps> = ({ app }) => {
     setShowPopup(false);
   };
 
-  const { appName, appLink, github, technologies, picture, developers } = app;
+  const { appName, appLink, github, technologies, developers } = app;
 
   const developerNamesString = developers?.map((developer) => developer.fullName).join(', ') ?? '';
 
   return (
     <div className={styles.card}>
-      <div className={styles.appMiniScreen} style={{ backgroundImage: `url(${picture})` }} onClick={handleOpenPopup}></div>
+      <div className={styles.appMiniScreen} style={{ backgroundImage: picture }} onClick={handleOpenPopup}>
+        <div></div>
+      </div>
       <div className={styles.content}>
         <div className={styles.appCardHeader}>
           <h3>{appName}</h3>
