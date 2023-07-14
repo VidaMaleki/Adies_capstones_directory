@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const { name, email, message } = req.body;
         try {
             await transporter.sendMail({
-                from: "vida.basmani@gmail.com",
+                from: email,
                 to: "adiescapstonehub@gmail.com",
                 subject: "Feedback from your app",
                 text: `
