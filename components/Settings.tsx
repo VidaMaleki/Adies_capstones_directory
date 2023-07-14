@@ -4,16 +4,19 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { NextPageContext } from 'next';
 import { db } from "@/lib/db";
-import { toast } from "react-toastify";
+import { toast ,ToastContainer} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { DeveloperProps } from '../components/types';
+import styles from '@/styles/appDetailsPopup.module.css';
+import { DeveloperWithAppProps } from './types';
 
 interface AccountStatusResponse {
     isDeleted: boolean;
 } 
 
 interface EditDeveloperProps {
-    session: any;
-    signedInUser: DeveloperProps;
+    signedInUser: DeveloperWithAppProps;
+    onClose: () => void;
 }
 
 export async function getServerSideProps(ctx: NextPageContext) {
@@ -34,8 +37,8 @@ export async function getServerSideProps(ctx: NextPageContext) {
     };
 }
 
-export default function Settings({ signedInUser }: EditDeveloperProps) {
-    const [developerData, setDeveloperData] = useState<DeveloperProps>(signedInUser || {} as DeveloperProps);
+export default function Settings({ signedInUser, onClose }: EditDeveloperProps) {
+    const [developerData, setDeveloperData] = useState<DeveloperWithAppProps>(signedInUser || {} as DeveloperWithAppProps);
 
     // Add more state variables for other developer fields as needed
 
@@ -59,11 +62,6 @@ export default function Settings({ signedInUser }: EditDeveloperProps) {
         .catch(function (error: any) {
             toast.error("Could not update information, try again");
         });
-    };
-
-    const handleCancel = () => {
-        // Redirect to the profile page or perform any other desired action
-        router.push("/profile");
     };
 
     const handleDelete = () => {
@@ -96,6 +94,8 @@ export default function Settings({ signedInUser }: EditDeveloperProps) {
     
 
     return (
+    <div className={styles.overlay}>
+    <ToastContainer position="top-right" />
     <div className="fixed inset-0 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg shadow-lg p-8">
         <h1 className="text-2xl font-bold mb-4">Edit Developer Information</h1>
@@ -146,7 +146,7 @@ export default function Settings({ signedInUser }: EditDeveloperProps) {
         </div>
         <div className="flex justify-end">
             <button
-            onClick={handleCancel}
+            onClick={onClose}
             className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md mr-2"
             >
             Cancel
@@ -163,6 +163,7 @@ export default function Settings({ signedInUser }: EditDeveloperProps) {
         </div>
         </div>
         
+    </div>
     </div>
     );
 }
