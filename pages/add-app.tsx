@@ -153,59 +153,86 @@ export default function Capstone ({ allDevs, signedInUser }: {
     };
     
     return (
-        <div className={styles.appCardWrapper}>
-            <Navbar/>
-            <form 
-                className={styles.createAppFormsWrapper}
-                onSubmit={handleSubmit}
-                encType="multipart/form-data"
-                >
-                <label className={styles.createAppLabel}>
-                    App Name *
-                </label>
-                <input className={styles.createAppInput} type="text" value={appData.appName} onChange={handleChange} name="appName" />
-                <label className={styles.createAppLabel}>
-                    Description *
-                </label>
-                <textarea  className={styles.createAppInput} value={appData.description} onChange={handleChange} name="description" />
-                <label className={styles.createAppLabel}>
-                    Github Link
-                </label>
-                <input className={styles.createAppInput} type="text" value={appData.github} onChange={handleChange} name="github"/>
-                <label className={styles.createAppLabel}>
-                    App Link
-                </label>
-                <input className={styles.createAppInput} type="text" value={appData.appLink} onChange={handleChange} name="appLink"/>
-                <label className={styles.createAppLabel}>
-                    Video Demo Link
-                </label>
-                <input className={styles.createAppInput} type="text" value={appData.videoLink} onChange={handleChange} name="videoLink"/>
-                <label>
-                    Category *
-                </label>
-                <Select options={typeOptions} onChange={handleChange} instanceId="appType" />
-                <label>
-                    Technologies *
-                    <CreatableSelect options={techOptions} onChange={handleTechnologiesChange} isMulti isClearable instanceId="appTechnologies" />
-                </label>
-                <label>
-                Developers *
-                <Select options={nameOptions} onChange={handleDevChange} isMulti isClearable instanceId="appDevs" />
-                </label>
-                <div className="mb-4">
-                <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="appImage">
-                    App Image
-                </label>
-                <input
-                    className="w-full"
-                    type="file"
-                    id="appImage"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                />
-                </div>
-                <input type="submit" value="Submit" className={styles.submitButton}/>
-            </form>
+    <div className="bg-gray-100 min-h-screen">
+        <Navbar />
+        <div className="flex-grow mx-auto pt-20 px-4 py-8 max-w-xl">
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
+            <label className="block mb-2 font-medium" htmlFor="appName">
+            App Name *
+            </label>
+            <input
+            className="border border-gray-300 rounded-md p-2 w-full mb-4"
+            type="text"
+            value={appData.appName}
+            onChange={handleChange}
+            name="appName"
+            id="appName"
+            />
+            <label className="block mb-2 font-medium" htmlFor="description">
+            Description *
+            </label>
+            <textarea
+            className="border border-gray-300 rounded-md p-2 w-full mb-4"
+            value={appData.description}
+            onChange={handleChange}
+            name="description"
+            id="description"
+            ></textarea>
+            <label className="block mb-2 font-medium" htmlFor="github">
+            Github Link
+            </label>
+            <input
+            className="border border-gray-300 rounded-md p-2 w-full mb-4"
+            type="text"
+            value={appData.github}
+            onChange={handleChange}
+            name="github"
+            id="github"
+            />
+            <label className="block mb-2 font-medium" htmlFor="appLink">
+            App Link
+            </label>
+            <input
+            className="border border-gray-300 rounded-md p-2 w-full mb-4"
+            type="text"
+            value={appData.appLink}
+            onChange={handleChange}
+            name="appLink"
+            id="appLink"
+            />
+            <label className="block mb-2 font-medium" htmlFor="videoLink">
+            Video Demo Link
+            </label>
+            <input
+            className="border border-gray-300 rounded-md p-2 w-full mb-4"
+            type="text"
+            value={appData.videoLink}
+            onChange={handleChange}
+            name="videoLink"
+            id="videoLink"
+            />
+            <label className="block mb-2 font-medium" htmlFor="type">
+            Category *
+            </label>
+            <Select options={typeOptions} onChange={handleChange} instanceId="appType" className="mb-4" />
+            <label className="block mb-2 font-medium" htmlFor="technologies">
+            Technologies *
+            </label>
+            <CreatableSelect
+            options={techOptions}
+            onChange={handleTechnologiesChange}
+            isMulti
+            isClearable
+            instanceId="appTechnologies"
+            className="mb-4"
+            />
+            <label className="block mb-2 font-medium" htmlFor="developers">
+            Developers *
+            </label>
+            <Select options={nameOptions} onChange={handleDevChange} isMulti isClearable instanceId="appDevs" className="mb-4" />
+            <input type="submit" value="Submit" className="bg-blue-500 text-white px-4 py-2 rounded-md" />
+        </form>
         </div>
-    )     
-};
+    </div>
+    );
+}

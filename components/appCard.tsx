@@ -7,26 +7,12 @@ import styles from '@/styles/AppCard.module.css';
 import { AppWithDevelopersProps } from './types';
 
 type AppCardProps = {
+
   app: AppWithDevelopersProps;
 };
 
 const AppCard: React.FC<AppCardProps> = ({ app }) => {
   const [ showPopup, setShowPopup ] = useState(false);
-  const [ picture , setPicture ] = useState("")
-
-  const webPicture = "../images/webapp.jpg"
-  const mobilePicture = "../images/mobileapp.jpg"
-  const nativePicture = "../images/nativeapp.jpg"
-
-  if ( app.type === "Web") {
-    setPicture(webPicture)
-  } else if (app.type === "Mobile") {
-    setPicture(mobilePicture)
-  } else if (app.type === "Native") {
-    setPicture(nativePicture)
-  } else {
-    setPicture("")
-  }
 
   const handleOpenPopup = () => {
     setShowPopup(true);
@@ -43,7 +29,7 @@ const AppCard: React.FC<AppCardProps> = ({ app }) => {
   return (
     <div className={styles.card}>
       <div className={styles.appMiniScreen} style={{ backgroundImage: picture }} onClick={handleOpenPopup}>
-        <div></div>
+        <div ></div>
       </div>
       <div className={styles.content}>
         <div className={styles.appCardHeader}>
