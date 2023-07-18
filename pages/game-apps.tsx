@@ -3,25 +3,26 @@ import styles from "@/styles/AppPage.module.css";
 import { db } from "@/lib/db";
 import { App } from "@prisma/client";
 import AppList from '@/components/AppExtentionPage';
+import { AppWithIdProps } from '../components/types';
 
 export async function getStaticProps() {
-  const gameApps: App[] = await db.app.findMany({
+  const nativeApps: App[] = await db.app.findMany({
     where: {
-      type: "Game",
+      type: "Native",
     },
   });
   return {
     props: {
-      gameApps: gameApps,
+      nativeApps: nativeApps,
     },
   };
 }
 
-const Games = ({ gameApps }: { gameApps: App[] }) => {
+const Games = ({ nativeApps }: { nativeApps: AppWithIdProps[] }) => {
   return (
     <div className={styles.pageWrapper}>
       <Navbar />
-      <AppList apps={gameApps} page="Game apps" />
+      <AppList apps={nativeApps} page="Native apps" />
     </div>
   );
 };
