@@ -24,7 +24,6 @@ const FormSchema = z.object({
     github: z.string().url({ message: 'Invalid Github Link URL' }),
     type: z.string().nonempty({ message: "Category is required." }),
     technologies: z.array(z.string()).min(1, { message: 'Technologies are required' }),
-    picture: z.string().optional(),
 });
 
 type FormSchemaType = z.infer<typeof FormSchema>;
@@ -59,7 +58,6 @@ const defaultApp: FormSchemaType = {
     github: "",
     type: "",
     technologies: [],
-    picture: "",
 };
 
 export default function Capstone ({ allDevs, signedInUser }: {
@@ -106,14 +104,6 @@ export default function Capstone ({ allDevs, signedInUser }: {
         ({ fullName: option.label }));
         newAppData.developers = currDevs
         setAppData(newAppData);
-    };
-
-    const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        console.log(file)
-        if (file) {
-        setAppImage(file);
-        }
     };
 
     const validateFormData = () => {
