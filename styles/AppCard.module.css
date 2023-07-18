@@ -5,18 +5,35 @@
 
 .appMiniScreen {
     /* background: url(${picture}); */
-    background-size: cover;
-    background-position: center;
+    position: relative;
     width: 221px;
     height: 175px;
     border-radius: 20px;
     background-color: white;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 25px;
+    overflow: hidden;
 }
 
 .appMiniScreen:hover {
     box-shadow: 1px 6px 6px rgba(3, 3, 3, 0.5);
+}
+
+.appMiniScreenInner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    /* Add padding */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.appMiniScreenInner img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
 
 .appCardHeader {
