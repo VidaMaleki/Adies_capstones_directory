@@ -112,10 +112,97 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
                 required
                 />
             </div>
+            <div className="mb-6">
+                <label htmlFor="developers" className="block text-gray-700 font-bold mb-2">
+                Developers
+                </label>
+                <textarea
+                id="developers"
+                name="developers"
+                value={appData.developers}
+                onChange={handleChange}
+                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
+                required
+                />
+            </div>
+            <div className="mb-6">
+                <label htmlFor="appLink" className="block text-gray-700 font-bold mb-2">
+                App Link
+                </label>
+                <input
+                type = "text"
+                id="appLink"
+                name="appLink"
+                value={appData.appLink}
+                onChange={handleChange}
+                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
+                rows={2}
+                required
+                />
+            </div>
+            <div className="mb-6">
+                <label htmlFor="videoLink" className="block text-gray-700 font-bold mb-2">
+                Video Link
+                </label>
+                <input
+                type = "text"
+                id="videoLink"
+                name="videoLink"
+                value={appData.videoLink}
+                onChange={handleChange}
+                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
+                required
+                />
+            </div>
+            <div className="mb-6">
+                <label htmlFor="github" className="block text-gray-700 font-bold mb-2">
+                GitHub
+                </label>
+                <input
+                type = "text"
+                id="github"
+                name="github"
+                value={appData.github}
+                onChange={handleChange}
+                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
+                required
+                />
+            </div>
+            <div className="mb-6">
+                <label htmlFor="appType" className="block text-gray-700 font-bold mb-2">
+                App Type
+                </label>
+                <input
+                type = "text"
+                id="appType"
+                name="appType"
+                value={appData.type}
+                onChange={handleChange}
+                // TODO change the handle input by selecting from a list.
+                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
+                required
+                />
+            </div>
+            <div className="mb-6">
+                <label htmlFor="technologies" className="block text-gray-700 font-bold mb-2">
+                Technologies
+                </label>
+                <input
+                type = "text"
+                id="technologies"
+                name="technologies"
+                value={appData.technologies}
+                // TODO add handlechange for HandleTechnologiesChange
+                onChange={handleChange}
+                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
+                required
+                />
+            </div> 
             <div className="flex justify-end">
                 <button
                 type="submit"
                 onClick={handleSave}
+                // TODO Fix this, currently is not saving changes because the server is expecting to receive different data.
                 disabled={isSaving}
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors duration-300"
                 >

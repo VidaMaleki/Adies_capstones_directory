@@ -12,6 +12,9 @@ interface Props {
 }
 
 const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
+    const defaultImage = "/Users/andiegarcia/Developer/Adies_capstones/Adies_capstones_directory/public/auth/default-app.png";
+    // There was a conflict with the props from App.image that doesn't exist anymore in the db (line 33). Image replaced for an image in public folder instead
+    // const developersName = app.developers.length === 1 ? app.developers[0] : app.developers.join(', ');
     const developers = app.developers;
     const [picture, setPicture] = useState('')
 

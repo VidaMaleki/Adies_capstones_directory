@@ -68,7 +68,7 @@ export default function Capstone ({ allDevs, signedInUser }: {
     const router = useRouter();
     const { data: session } = useSession();
     const [appData, setAppData] = useState<FormSchemaType>(defaultApp);
-    const [appImage, setAppImage] = useState<File | string>("");
+    // const [appImage, setAppImage] = useState<File | string>("");
     console.log(appData)
     
     const nameOptions = allDevs.map(name => ({ value: String(name.id), label: name.fullName }));

@@ -4,7 +4,7 @@ CREATE TABLE "Developer" (
     "fullName" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "emailVerified" BOOLEAN DEFAULT false,
-    "image" TEXT DEFAULT 'https://res.cloudinary.com/dmhcnhtng/image/upload/v1664642479/992490_sskqn3.png',
+    "image" TEXT DEFAULT '/auth/user-in-gray-circle.png',
     "cohort" TEXT NOT NULL,
     "linkedin" TEXT,
     "password" TEXT NOT NULL,
@@ -18,12 +18,11 @@ CREATE TABLE "App" (
     "id" SERIAL NOT NULL,
     "appName" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "appLink" TEXT,
-    "videoLink" TEXT,
+    "appLink" TEXT NOT NULL,
+    "videoLink" TEXT NOT NULL,
     "github" TEXT,
     "type" TEXT NOT NULL,
     "technologies" TEXT[],
-    "picture" TEXT DEFAULT 'https://res.cloudinary.com/dbrsvtcm0/image/upload/v1684530914/srqzav6cgahfzfqtzoyy.webp',
 
     CONSTRAINT "App_pkey" PRIMARY KEY ("id")
 );
