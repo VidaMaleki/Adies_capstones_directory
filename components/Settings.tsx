@@ -40,8 +40,6 @@ export async function getServerSideProps(ctx: NextPageContext) {
 export default function Settings({ signedInUser, onClose }: EditDeveloperProps) {
     const [developerData, setDeveloperData] = useState<DeveloperWithAppProps>(signedInUser || {} as DeveloperWithAppProps);
 
-    // Add more state variables for other developer fields as needed
-
     const router = useRouter();
 
     const handleUpdate = () => {
@@ -58,6 +56,7 @@ export default function Settings({ signedInUser, onClose }: EditDeveloperProps) 
             toast.success("Your information was successfully updated");
             // Redirect to the profile page or perform any other desired action
             router.push("/profile");
+            onClose()
         })
         .catch(function (error: any) {
             toast.error("Could not update information, try again");
@@ -95,7 +94,7 @@ export default function Settings({ signedInUser, onClose }: EditDeveloperProps) 
 
     return (
     <div className={styles.overlay}>
-    <ToastContainer position="top-right" />
+    <ToastContainer position="top-center" />
     <div className="fixed inset-0 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg shadow-lg p-8">
         <h1 className="text-2xl font-bold mb-4">Edit Developer Information</h1>

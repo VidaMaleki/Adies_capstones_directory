@@ -56,7 +56,7 @@ export default function Profile({ signedInUser}: {signedInUser: DeveloperWithApp
             console.log(response);
             alert("Your app was successfully deleted");
             // Need to trigger a refresh
-            window.location.reload();
+            router.reload();
         })
         .catch(function (error) {
             console.log(error);

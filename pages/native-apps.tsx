@@ -3,7 +3,7 @@ import styles from "@/styles/AppPage.module.css";
 import { db } from "@/lib/db";
 import { App } from "@prisma/client";
 import AppList from '@/components/AppExtentionPage';
-import { AppWithIdProps } from '../components/types';
+import { AppWithIdProps, AppWithDevelopersProps } from '../components/types';
 
 export async function getStaticProps() {
   const nativeApps: App[] = await db.app.findMany({
@@ -18,7 +18,7 @@ export async function getStaticProps() {
   };
 }
 
-const Games = ({ nativeApps }: { nativeApps: AppWithIdProps[] }) => {
+const Native = ({ nativeApps }: { nativeApps: AppWithDevelopersProps[] }) => {
   return (
     <div className={styles.pageWrapper}>
       <Navbar />
@@ -27,4 +27,4 @@ const Games = ({ nativeApps }: { nativeApps: AppWithIdProps[] }) => {
   );
 };
 
-export default Games;
+export default Native;
