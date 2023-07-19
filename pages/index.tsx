@@ -3,31 +3,15 @@ import createAppHandler from '@/pages/api/appRoutes';
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar/Navbar";
 import styles from "@/styles/Home.module.css";
-import Link from "next/link";
-import { db } from "@/lib/db";
-import { App } from "@prisma/client";
 import AppSection from "@/components/AppSection";
-// import { AppWithIdProps } from "@/components/types";
 import { AppWithDevelopersProps } from '../components/types';
 import axios from 'axios';
 
-// export async function getServerSideProps() {
-//   const allApps: App[] = await db.app.findMany();
-//   console.log(allApps)
-//   return {
-//     props: {
-//       allApps,
-//     },
-    
-//   };
-  
-// }
 
 export default function Home() {
   const [webAppsRandom, setWebAppsRandom] = useState<AppWithDevelopersProps[]>([]);
   const [mobileAppsRandom, setMobileAppsRandom] = useState<AppWithDevelopersProps[]>([]);
-  const [gamingAppsRandom, setGamingAppsRandom] = useState<AppWithDevelopersProps[]>([]);
-  const [socialAppsRandom, setSocialAppsRandom] = useState<AppWithDevelopersProps[]>([]);
+  const [nativeAppsRandom, setNativeAppsRandom] = useState<AppWithDevelopersProps[]>([]);
 
   const APP_URL = "/api/appRoutes";
 
@@ -50,13 +34,11 @@ export default function Home() {
       if (allApps.length > 0) {
         const webApps = allApps.filter((app) => app.type === "Web");
         const mobileApps = allApps.filter((app) => app.type === "Mobile");
-        const gamingApps = allApps.filter((app) => app.type === "Game");
-        const socialApps = allApps.filter((app) => app.type === "Social");
-        console.log(webApps)
+        const nativeApps = allApps.filter((app) => app.type === "Native");
+        
         setWebAppsRandom(getRandomApps(webApps));
         setMobileAppsRandom(getRandomApps(mobileApps));
-        setGamingAppsRandom(getRandomApps(gamingApps));
-        setSocialAppsRandom(getRandomApps(socialApps));
+        setNativeAppsRandom(getRandomApps(nativeApps));
 
       
     }
@@ -98,14 +80,9 @@ export default function Home() {
             seeAllLink="/mobile-apps"
           />
           <AppSection
-            sectionTitle="Gaming apps"
-            apps={gamingAppsRandom}
-            seeAllLink="/game-apps"
-          />
-          <AppSection
-            sectionTitle="Social Media apps"
-            apps={socialAppsRandom}
-            seeAllLink="/social-apps"
+            sectionTitle="Native apps"
+            apps={nativeAppsRandom}
+            seeAllLink="/native-apps"
           />
         </section>
       </main>

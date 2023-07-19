@@ -1,8 +1,7 @@
 export const typeOptions: {value: string; label: string}[] = [
     { value: "web", label: "Web" },
     { value: "mobile", label: "Mobile" },
-    { value: "game", label: "Game" },
-    { value: "social", label: "Social" }
+    { value: "native", label: "Native" }
 ];
 
 export const techOptions: {value: string; label: string} [] = [

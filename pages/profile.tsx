@@ -10,10 +10,11 @@ import { useRouter } from "next/router";
 import Navbar from "@/components/Navbar/Navbar";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import styles from "@/styles/About.module.css";
-import { useEffect } from "react";
+import { useEffect, useState } from 'react';
 import Image from "next/image";
 import { Developer } from "@prisma/client";
-import { AppWithDevelopersProps } from '../components/types';
+import { AppWithDevelopersProps, DeveloperWithAppProps } from '../components/types';
+import Settings from "@/components/Settings";
 
 
 export async function getServerSideProps(ctx: NextPageContext) {
@@ -42,8 +43,10 @@ export async function getServerSideProps(ctx: NextPageContext) {
     };
 }
 
-export default function Profile({ signedInUser}: {signedInUser: Developer & { app: AppWithDevelopersProps}}) {
+export default function Profile({ signedInUser}: {signedInUser: DeveloperWithAppProps & { app: AppWithDevelopersProps}}) {
+    
     const { data: session, status } = useSession();
+    const [showSettings, setShowSettings] = useState(false);
     const router = useRouter();
 
     const handleDelete = () => {
@@ -53,12 +56,20 @@ export default function Profile({ signedInUser}: {signedInUser: Developer & { ap
             console.log(response);
             alert("Your app was successfully deleted");
             // Need to trigger a refresh
-            router.reload();
+            window.location.reload();
         })
         .catch(function (error) {
             console.log(error);
             alert("Could not delete app, try again");
         });
+    };
+
+    const handleOpenSetting = () => {
+        setShowSettings(true);
+    };
+
+    const onClose= () => {
+        setShowSettings(false);
     };
 
     useEffect(() => {
@@ -83,19 +94,18 @@ export default function Profile({ signedInUser}: {signedInUser: Developer & { ap
     }
 
     return (
-        <div className={styles.pageWrapper}>
+        <div className="bg-gray-100 min-h-screen">
             <Navbar />
-            <div className="mx-auto w-2/5 mt-40 mb-20">
+            <div className="mx-auto w-2/5 pt-40 mb-20">
                 <div className="border border-gray-300 relative flex flex-col w-full rounded-lg">
                     <div className="flex flex-col justify-center items-center"></div>
                     <div className="w-full text-center p-4 bg-gray-100 rounded-t-lg">
                         <div className="relative">
-                            <Link href="/settings"
-                                className="absolute top-0 left-0 mt-2 mr-2 text-gray-500"
-                                
+                            <button onClick={handleOpenSetting}
+                                className="absolute top-0 left-0 mt-2 mr-2 text-gray-500"  
                             >
                                 <AiFillSetting size={24} />
-                            </Link>
+                            </button>
                             <h2 className="text-2xl font-bold">My Profile</h2>
                             <button
                                 className="absolute top-0 right-0 mt-2 mr-2 text-gray-500"
@@ -151,6 +161,9 @@ export default function Profile({ signedInUser}: {signedInUser: Developer & { ap
                     </div>
                 </div>
             </div>
+            {showSettings && (
+        <Settings signedInUser={signedInUser} onClose={onClose} />
+            )}        
         </div>
     );
 }

@@ -1,9 +1,11 @@
 import styles from '@/styles/appDetailsPopup.module.css';
 import * as FaIcons from "react-icons/fa";
 import Image from 'next/image';
-import { db } from '@/lib/db';
-import { useEffect, useState } from 'react';
 import { AppWithDevelopersProps } from './types';
+import { useEffect, useState } from 'react';
+import {getImageByAppType} from '../utils/helper';
+
+
 interface Props {
     app: AppWithDevelopersProps;
     onClose: () => void;
@@ -14,10 +16,15 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
     // There was a conflict with the props from App.image that doesn't exist anymore in the db (line 33). Image replaced for an image in public folder instead
     // const developersName = app.developers.length === 1 ? app.developers[0] : app.developers.join(', ');
     const developers = app.developers;
+    const [picture, setPicture] = useState('')
 
     const developersElement = developers && developers.length === 1 ? developers[0] : developers?.join(', ') ?? '';
+    const developerNamesString = developers?.map((developer) => developer.fullName).join('\n') ?? '';
 
-
+    useEffect(() => {
+        const imagePath = getImageByAppType(app.type);
+        setPicture(imagePath);
+    }, [app.type]);
     
     return (
         <div className={styles.overlay}>
@@ -30,7 +37,7 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
                 <div className={styles.appContentContainer}>
                     <div className={styles.imageContainer}>
                         {/* change to Image from next/image */}
-                        <Image src= {defaultImage} alt="graphic of computers" width={100} height={300} />
+                        <Image src={picture} alt="graphic of computers" width={700} height={500} />
                     </div>
                     <div className={styles.textContainer}>
                         <div className={styles.appDetailsContainer}>
@@ -42,7 +49,7 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
                             </div>
                             
                             <h3 className={styles.appPopupText}>Created by: 
-                                <p className={styles.appPopupSubText}>{String(developersElement)}</p> 
+                                <p className={styles.appPopupSubText}>{developerNamesString}</p> 
                             </h3>
                             <h3 className={styles.appPopupText}>Description:
                                 <p className={styles.appPopupSubText}>{app.description}</p> 

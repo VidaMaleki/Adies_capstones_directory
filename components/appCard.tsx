@@ -1,17 +1,24 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as FaIcons from 'react-icons/fa';
 import { App } from "@prisma/client";
 import AppDetailsPopup from './AppDetailsPopUp';
 import styles from '@/styles/AppCard.module.css';
 import { AppWithDevelopersProps } from './types';
+import Image from 'next/image';
+import {getImageByAppType} from '../utils/helper';
+
 
 type AppCardProps = {
   app: AppWithDevelopersProps;
 };
 
 const AppCard: React.FC<AppCardProps> = ({ app }) => {
-  const [showPopup, setShowPopup] = useState(false);
+  const [ showPopup, setShowPopup ] = useState(false);
+  const [picture, setPicture] = useState('')
+
+  const { appName, appLink, github, technologies, developers, type } = app;
+  const developerNamesString = developers?.map((developer) => developer.fullName).join(', ') ?? '';
 
   const handleOpenPopup = () => {
     setShowPopup(true);
@@ -20,14 +27,19 @@ const AppCard: React.FC<AppCardProps> = ({ app }) => {
   const handleClosePopup = () => {
     setShowPopup(false);
   };
-
-  const { appName, appLink, github, technologies, picture, developers } = app;
-
-  const developerNamesString = developers?.map((developer) => developer.fullName).join(', ') ?? '';
-
+  
+  useEffect(() => {
+    const imagePath = getImageByAppType(app.type);
+    setPicture(imagePath);
+}, [app.type]);
+  
   return (
     <div className={styles.card}>
-      <div className={styles.appMiniScreen} style={{ backgroundImage: `url(${picture})` }} onClick={handleOpenPopup}></div>
+      <div className={styles.appMiniScreen}  onClick={handleOpenPopup}>
+        <div className={styles.appMiniScreenInner} >
+          <Image src={picture} alt="graphic of computers" width={200} height={200} />
+        </div>
+      </div>
       <div className={styles.content}>
         <div className={styles.appCardHeader}>
           <h3>{appName}</h3>

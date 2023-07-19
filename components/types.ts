@@ -35,7 +35,6 @@ export interface AppDataProps {
   github: string,
   type: string,
   technologies: string[],
-  picture: string,
 }
 
 export interface AppInputProps {

@@ -4,12 +4,12 @@ import axios from "axios";
 import AppCard from "@/components/AppCard";
 import Navbar from "@/components/Navbar/Navbar";
 import styles from "@/styles/Search.module.css";
-import { AppWithIdProps } from "@/components/types";
+import { AppWithDevelopersProps } from '../components/types';
 
 const SearchPage = () => {
   const router = useRouter();
   const { query } = router.query;
-  const [searchResults, setSearchResults] = useState<AppWithIdProps[]>([]);
+  const [searchResults, setSearchResults] = useState<AppWithDevelopersProps[]>([]);
 
   useEffect(() => {
     const fetchSearchResults = async () => {
