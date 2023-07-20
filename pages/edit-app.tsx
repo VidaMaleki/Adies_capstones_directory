@@ -1,15 +1,14 @@
 import { NextPageContext } from "next";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
-import { BiLogOut } from "react-icons/bi";
-import Link from "next/link";
+import Select, { SingleValue } from 'react-select';
+import {typeOptions, techOptions} from '../app-data/selectOptions'
 import { db } from "@/lib/db";
 import axios from "axios";
-import { Developer } from "@prisma/client";
 import { useRouter } from "next/router";
 import Navbar from "@/components/Navbar/Navbar";
-import { FaSave } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { AppWithIdProps, DeveloperWithAppProps } from "@/components/types";
+import CreatableSelect from 'react-select/creatable';
 
 export async function getServerSideProps(ctx: NextPageContext) {
     const session = await getSession(ctx);
@@ -38,6 +37,7 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
     const router = useRouter();
     const [appData, setAppData] = useState<AppWithIdProps>(signedInUser.app || {} as AppWithIdProps);
     const [isSaving, setIsSaving] = useState(false);
+
 
     const handleSave = () => {
         setIsSaving(true);
@@ -73,9 +73,9 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
         return null;
     }
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = event.target;
-        setAppData((prevAppData) => ({ ...prevAppData, [name]: value }));
+    const handleChange = (event: SingleValue<{ value: string; label: string; }>) => {
+        const value = event?.value|| "";
+        setAppData({ ...appData, type: value });
     };
 
     return (
@@ -170,33 +170,15 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
             </div>
             <div className="mb-6">
                 <label htmlFor="appType" className="block text-gray-700 font-bold mb-2">
-                App Type
+                Category
+                <Select options={typeOptions} value={typeOptions.find(c => c.value === appData.type)} onChange={handleChange} instanceId="appType" className="mb-4"  required/>
                 </label>
-                <input
-                type = "text"
-                id="appType"
-                name="appType"
-                value={appData.type}
-                onChange={handleChange}
-                // TODO change the handle input by selecting from a list.
-                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
-                required
-                />
             </div>
             <div className="mb-6">
                 <label htmlFor="technologies" className="block text-gray-700 font-bold mb-2">
                 Technologies
+                <CreatableSelect options={techOptions} value={techOptions.find(c => c.value === appData.technologies)} onChange={handleChange} isMulti isClearable instanceId="technologies" className="mb-4"  required/>
                 </label>
-                <input
-                type = "text"
-                id="technologies"
-                name="technologies"
-                value={appData.technologies}
-                // TODO add handlechange for HandleTechnologiesChange
-                onChange={handleChange}
-                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
-                required
-                />
             </div> 
             <div className="flex justify-end">
                 <button
