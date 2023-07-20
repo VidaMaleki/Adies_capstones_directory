@@ -51,7 +51,7 @@ export default function Profile({ signedInUser}: {signedInUser: DeveloperWithApp
 
     const handleDelete = () => {
         axios
-        .delete(`/api/appRoutes?id=${signedInUser.id}`)
+        .delete(`/api/appRoutes?id=${signedInUser.appId}`)
         .then(function (response) {
             console.log(response);
             alert("Your app was successfully deleted");

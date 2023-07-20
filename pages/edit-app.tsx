@@ -74,7 +74,7 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
     }
 
     const handleChange = (event: SingleValue<{ value: string; label: string; }>) => {
-        const value = event?.value|| "";
+        const value = event?.label|| "";
         setAppData({ ...appData, type: value });
     };
 
@@ -93,7 +93,7 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
                 id="appName"
                 name="appName"
                 value={appData.appName}
-                onChange={handleChange}
+                onChange={handleSave}
                 className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 required
                 />
@@ -116,7 +116,8 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
                 <label htmlFor="developers" className="block text-gray-700 font-bold mb-2">
                 Developers
                 </label>
-                <textarea
+                <input
+                type = "text"
                 id="developers"
                 name="developers"
                 value={appData.developers}
@@ -171,7 +172,7 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
             <div className="mb-6">
                 <label htmlFor="appType" className="block text-gray-700 font-bold mb-2">
                 Category
-                <Select options={typeOptions} value={typeOptions.find(c => c.value === appData.type)} onChange={handleChange} instanceId="appType" className="mb-4"  required/>
+                <Select options={typeOptions} value={typeOptions.find(c => c.label === appData.type)} onChange={handleChange} instanceId="appType" className="mb-4"/>
                 </label>
             </div>
             <div className="mb-6">
@@ -184,7 +185,6 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
                 <button
                 type="submit"
                 onClick={handleSave}
-                // TODO Fix this, currently is not saving changes because the server is expecting to receive different data.
                 disabled={isSaving}
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors duration-300"
                 >

@@ -174,6 +174,7 @@ async function updateApp(req: NextApiRequest, res: NextApiResponse) {
       },
     });
 
+    console.log(updatedApp)
     return res.status(200).json({ app: updatedApp });
   } catch (error) {
     console.error(error);
