@@ -16,8 +16,6 @@ export default async function createAppHandler(
       const searchTerm = req.query.search as string;
       if (!isNaN(appId)) {
         return getOneApp(req, res);
-      } else if (searchTerm) {
-        return searchApps(req, res);
       } else {
         return getAllApps(req, res);
       }
@@ -67,8 +65,7 @@ async function createApp(req: NextApiRequest, res: NextApiResponse) {
         videoLink: input.videoLink,
         github: input.github,
         type: input.type,
-        technologies: input.technologies,
-        picture: input.picture,
+        technologies: input.technologies
       },
     });
 
@@ -167,11 +164,10 @@ async function updateApp(req: NextApiRequest, res: NextApiResponse) {
         github: input.github,
         type: input.type,
         technologies: input.technologies,
-        picture: input.picture,
         developers: {
-          connect: input.developers.map((developer) => ({ id: developer.id })),
-        },
-      },
+          connect: input.developers.map((developer) => ({ id: developer.id }))
+        }
+      }
     });
 
     return res.status(200).json({ app: updatedApp });
@@ -209,22 +205,3 @@ async function getAllApps(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-async function searchApps(req: NextApiRequest, res: NextApiResponse) {
-  try {
-    const searchTerm = req.query.search as string;
-
-    const apps = await db.app.findMany({
-      where: {
-        appName: {
-          contains: searchTerm,
-          mode: 'insensitive',
-        },
-      },
-    });
-
-    return res.status(200).json({ apps });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Internal server error' });
-  }
-}
