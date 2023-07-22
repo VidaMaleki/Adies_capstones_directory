@@ -75,13 +75,13 @@ model Developer {
   id            Int      @id @default(autoincrement())
   fullName      String
   email         String   @unique
-  emailVerified Boolean? @default(false)
-  image         String?  @default("/auth/user-in-gray-circle.png")
+  emailVerified Boolean @default(false)
+  image         String  @default("/auth/user-in-gray-circle.png")
   cohort        String
-  linkedin      String?
+  linkedin      String
   password      String
-  app           App?     @relation(fields: [appId], references: [id]) // relation fields define connections and don't exist in the db
-  appId         Int?
+  app           App     @relation(fields: [appId], references: [id]) // relation fields define connections and don't exist in the db
+  appId         Int
 }
 
 model App {
@@ -90,8 +90,8 @@ model App {
   description  String
   developers   Developer[]    
   appLink      String
-  videoLink    String
-  github       String?
+  videoLink    String?
+  github       String
   type         String
   technologies String[]
 }
