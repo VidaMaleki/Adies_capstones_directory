@@ -9,40 +9,51 @@ import Navbar from "@/components/Navbar/Navbar";
 import { useEffect, useState } from "react";
 import { AppWithIdProps, DeveloperWithAppProps } from "@/components/types";
 import CreatableSelect from 'react-select/creatable';
+import { Developer } from "@prisma/client";
 
 export async function getServerSideProps(ctx: NextPageContext) {
     const session = await getSession(ctx);
     let userEmail = session?.user?.email ? session.user.email : "";
+    const allDevs: Developer[] = await db.developer.findMany();
 
     const signedInUser = await db.developer.findUnique({
         where: {
         email: userEmail,
         },
         include: {
-        // Associated apps for the developer
-        app: true,
+            app : true,
         },
     });
+    const app = await db.app.findUnique({
+        where: {
+            id: signedInUser?.appId
+        },
+        include: {
+            developers : true,
+        },
+    })
+    signedInUser.app = app;
 
     return {
         props: {
         session,
+        allDevs,
         signedInUser: signedInUser || {},
         },
     };
 }
 
-export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithAppProps }) {
+export default function EditApp({ signedInUser, allDevs }: { signedInUser: DeveloperWithAppProps, allDevs: Developer[], }) {
     const { data: session, status } = useSession();
     const router = useRouter();
     const [appData, setAppData] = useState<AppWithIdProps>(signedInUser.app || {} as AppWithIdProps);
     const [isSaving, setIsSaving] = useState(false);
+    const nameOptions = allDevs.map(name => ({ value: String(name.id), label: name.fullName }));
 
 
     const handleSave = (event: any) => {
         event.preventDefault()
         setIsSaving(true);
-        appData.developers = [signedInUser];
         axios
         .put(`/api/appRoutes?id=${appData.id}`, appData)
         .then(function (response) {
@@ -73,6 +84,7 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
     if (!session) {
         return null;
     }
+    console.log("developers", appData)
 
     const handleInputChange = (event: any)=>{
         const newAppData : AppWithIdProps = {...appData};
@@ -80,7 +92,22 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
         const targetValue = event.target.value;
         newAppData[ inputName as keyof AppWithIdProps] = targetValue;
         setAppData( newAppData );
-    }
+    };
+
+    const handleDevChange = (event: any) => {
+        const newAppData = { ...appData };
+        console.log(event);
+        const currDevs: Developer[]= event.map((option: { value: string; label: string }) => 
+        {
+            const devId = option.value;
+            const filteredDev = allDevs.find(devData => devData.id.toString() === devId);
+            return filteredDev;
+        });
+
+        newAppData.developers = currDevs
+        setAppData(newAppData);
+    };
+
 
     const handleChange = (event: SingleValue<{ value: string; label: string; }>) => {
         const value = event?.label|| "";
@@ -94,7 +121,7 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
         newAppData.technologies = currTechs;
         setAppData(newAppData);
     };
-
+    
     return (
         <div className="bg-gray-100 min-h-screen">
         <Navbar />
@@ -128,6 +155,12 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
                 rows={5}
                 required
                 />
+            </div>
+            <div className="mb-6">
+                <label className="block mb-2 font-medium" htmlFor="developers">
+                Developers
+                </label>
+                <CreatableSelect options={nameOptions} value = {appData.developers.map((developer: Developer ) => {return {label: developer.fullName, value: developer.id.toString()}})} onChange={handleDevChange} isMulti isClearable instanceId="appDevs" className="mb-4" />
             </div>
             <div className="mb-6">
                 <label htmlFor="appLink" className="block text-gray-700 font-bold mb-2">

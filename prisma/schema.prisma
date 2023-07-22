@@ -88,7 +88,7 @@ model App {
   id           Int         @id @default(autoincrement())
   appName      String
   description  String
-  developers   Developer[]
+  developers   Developer[]    
   appLink      String
   videoLink    String
   github       String?

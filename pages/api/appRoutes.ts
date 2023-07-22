@@ -153,7 +153,7 @@ async function updateApp(req: NextApiRequest, res: NextApiResponse) {
     if (!existingApp) {
       return res.status(404).json({ message: 'App not found.' });
     }
-
+    console.log("input", input)
     const updatedApp = await db.app.update({
       where: { id: Number(id) },
       data: {
@@ -167,10 +167,13 @@ async function updateApp(req: NextApiRequest, res: NextApiResponse) {
         developers: {
           connect: input.developers.map((developer) => ({ id: developer.id }))
         }
-      }
+      },
+      include: {
+        developers: true,
+      },
     });
 
-    console.log(updatedApp)
+    // console.log(updatedApp)
     return res.status(200).json({ app: updatedApp });
   } catch (error) {
     console.error(error);
