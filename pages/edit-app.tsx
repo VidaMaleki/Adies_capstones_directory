@@ -1,15 +1,14 @@
 import { NextPageContext } from "next";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
-import { BiLogOut } from "react-icons/bi";
-import Link from "next/link";
+import Select, { ActionMeta, MultiValue, SingleValue } from 'react-select';
+import {typeOptions, techOptions} from '../app-data/selectOptions'
 import { db } from "@/lib/db";
 import axios from "axios";
-import { Developer } from "@prisma/client";
 import { useRouter } from "next/router";
 import Navbar from "@/components/Navbar/Navbar";
-import { FaSave } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { AppWithIdProps, DeveloperWithAppProps } from "@/components/types";
+import CreatableSelect from 'react-select/creatable';
 
 export async function getServerSideProps(ctx: NextPageContext) {
     const session = await getSession(ctx);
@@ -39,7 +38,9 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
     const [appData, setAppData] = useState<AppWithIdProps>(signedInUser.app || {} as AppWithIdProps);
     const [isSaving, setIsSaving] = useState(false);
 
-    const handleSave = () => {
+
+    const handleSave = (event: any) => {
+        event.preventDefault()
         setIsSaving(true);
         appData.developers = [signedInUser];
         axios
@@ -64,7 +65,7 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
         }
     }, [session, router]);
 
-    if (status === "loading") {
+    if (status === "loading") { 
         return <div>Loading...</div>;
     }
 
@@ -73,9 +74,25 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
         return null;
     }
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = event.target;
-        setAppData((prevAppData) => ({ ...prevAppData, [name]: value }));
+    const handleInputChange = (event: any)=>{
+        const newAppData : AppWithIdProps = {...appData};
+        const inputName = event.target.name;
+        const targetValue = event.target.value;
+        newAppData[ inputName as keyof AppWithIdProps] = targetValue;
+        setAppData( newAppData );
+    }
+
+    const handleChange = (event: SingleValue<{ value: string; label: string; }>) => {
+        const value = event?.label|| "";
+        setAppData({ ...appData, type: value });
+
+    };
+    
+    const handleTechnologiesleChange = (newValue: MultiValue<{ label: string; value: string; }>, actionMeta: ActionMeta<{ label: string; value: string; }>) => {
+        const currTechs = newValue.map((option: { label: any; }) => option.label);
+        const newAppData = {...appData};
+        newAppData.technologies = currTechs;
+        setAppData(newAppData);
     };
 
     return (
@@ -83,7 +100,7 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
         <Navbar />
         <div className="max-w-3xl mx-auto px-4 py-8 pt-20">
             <h1 className="text-3xl font-bold mb-6">Edit App</h1>
-            <form>
+            <form onSubmit={handleSave}>
             <div className="mb-6">
                 <label htmlFor="appName" className="block text-gray-700 font-bold mb-2">
                 App Name
@@ -93,7 +110,7 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
                 id="appName"
                 name="appName"
                 value={appData.appName}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 required
                 />
@@ -106,22 +123,9 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
                 id="description"
                 name="description"
                 value={appData.description}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
                 rows={5}
-                required
-                />
-            </div>
-            <div className="mb-6">
-                <label htmlFor="developers" className="block text-gray-700 font-bold mb-2">
-                Developers
-                </label>
-                <textarea
-                id="developers"
-                name="developers"
-                value={appData.developers}
-                onChange={handleChange}
-                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
                 required
                 />
             </div>
@@ -134,7 +138,7 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
                 id="appLink"
                 name="appLink"
                 value={appData.appLink}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
                 rows={2}
                 required
@@ -149,7 +153,7 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
                 id="videoLink"
                 name="videoLink"
                 value={appData.videoLink}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
                 required
                 />
@@ -163,46 +167,26 @@ export default function EditApp({ signedInUser }: { signedInUser: DeveloperWithA
                 id="github"
                 name="github"
                 value={appData.github}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
                 required
                 />
             </div>
             <div className="mb-6">
                 <label htmlFor="appType" className="block text-gray-700 font-bold mb-2">
-                App Type
+                Category
+                <Select options={typeOptions} value={typeOptions.find(c => c.label === appData.type)} onChange={handleChange} instanceId="appType" className="mb-4" required/>
                 </label>
-                <input
-                type = "text"
-                id="appType"
-                name="appType"
-                value={appData.type}
-                onChange={handleChange}
-                // TODO change the handle input by selecting from a list.
-                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
-                required
-                />
             </div>
             <div className="mb-6">
                 <label htmlFor="technologies" className="block text-gray-700 font-bold mb-2">
                 Technologies
+                <CreatableSelect options={techOptions} value={appData.technologies.map((option: string ) => {return {label: option, value: option}})} onChange={handleTechnologiesleChange}  isMulti isClearable instanceId="technologies" className="mb-4" required/>
                 </label>
-                <input
-                type = "text"
-                id="technologies"
-                name="technologies"
-                value={appData.technologies}
-                // TODO add handlechange for HandleTechnologiesChange
-                onChange={handleChange}
-                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
-                required
-                />
             </div> 
             <div className="flex justify-end">
                 <button
                 type="submit"
-                onClick={handleSave}
-                // TODO Fix this, currently is not saving changes because the server is expecting to receive different data.
                 disabled={isSaving}
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors duration-300"
                 >
