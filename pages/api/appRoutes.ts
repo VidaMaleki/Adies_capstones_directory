@@ -153,7 +153,15 @@ async function updateApp(req: NextApiRequest, res: NextApiResponse) {
     if (!existingApp) {
       return res.status(404).json({ message: 'App not found.' });
     }
-    console.log("input", input)
+
+    const updatedDevs = await db.developer.updateMany({
+      where: { appId: Number(id) },
+      data: {
+        appId: null,
+      },
+    });
+
+    console.log("input", input, "unpdatedDevs", updatedDevs)
     const updatedApp = await db.app.update({
       where: { id: Number(id) },
       data: {

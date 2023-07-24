@@ -80,8 +80,8 @@ model Developer {
   cohort        String
   linkedin      String
   password      String
-  app           App     @relation(fields: [appId], references: [id]) // relation fields define connections and don't exist in the db
-  appId         Int
+  app           App?     @relation(fields: [appId], references: [id]) // relation fields define connections and don't exist in the db
+  appId         Int?    
 }
 
 model App {
