@@ -10,11 +10,11 @@ import { useEffect, useState } from "react";
 import { AppWithIdProps, DeveloperWithAppProps } from "@/components/types";
 import CreatableSelect from 'react-select/creatable';
 import { Developer } from "@prisma/client";
+import { notEqual } from "assert";
 
 export async function getServerSideProps(ctx: NextPageContext) {
     const session = await getSession(ctx);
     let userEmail = session?.user?.email ? session.user.email : "";
-    const allDevs: Developer[] = await db.developer.findMany();
 
     const signedInUser = await db.developer.findUnique({
         where: {
@@ -34,6 +34,16 @@ export async function getServerSideProps(ctx: NextPageContext) {
     })
     signedInUser.app = app;
 
+    const allDevs: Developer[] = await db.developer.findMany({
+        where: {
+
+            appId: {in: [0, signedInUser?.appId]}
+
+        }
+            
+        });
+    
+
     return {
         props: {
         session,
@@ -41,7 +51,8 @@ export async function getServerSideProps(ctx: NextPageContext) {
         signedInUser: signedInUser || {},
         },
     };
-}
+};
+
 
 export default function EditApp({ signedInUser, allDevs }: { signedInUser: DeveloperWithAppProps, allDevs: Developer[], }) {
     const { data: session, status } = useSession();
@@ -84,7 +95,6 @@ export default function EditApp({ signedInUser, allDevs }: { signedInUser: Devel
     if (!session) {
         return null;
     }
-    console.log("developers", appData)
 
     const handleInputChange = (event: any)=>{
         const newAppData : AppWithIdProps = {...appData};
@@ -95,8 +105,8 @@ export default function EditApp({ signedInUser, allDevs }: { signedInUser: Devel
     };
 
     const handleDevChange = (event: any) => {
+        console.log("event", event);
         const newAppData = { ...appData };
-        console.log(event);
         const currDevs: Developer[]= event.map((option: { value: string; label: string }) => 
         {
             const devId = option.value;
@@ -160,7 +170,14 @@ export default function EditApp({ signedInUser, allDevs }: { signedInUser: Devel
                 <label className="block mb-2 font-medium" htmlFor="developers">
                 Developers
                 </label>
-                <CreatableSelect options={nameOptions} value = {appData.developers.map((developer: Developer ) => {return {label: developer.fullName, value: developer.id.toString()}})} onChange={handleDevChange} isMulti isClearable instanceId="appDevs" className="mb-4" />
+                <CreatableSelect 
+                options={nameOptions} 
+                value = {appData.developers.map((developer: Developer ) => {return {label: developer?.fullName, value: developer?.id.toString()}})} 
+                onChange={handleDevChange} 
+                isMulti 
+                isClearable 
+                instanceId="appDevs" 
+                className="mb-4" />
             </div>
             <div className="mb-6">
                 <label htmlFor="appLink" className="block text-gray-700 font-bold mb-2">
@@ -208,13 +225,27 @@ export default function EditApp({ signedInUser, allDevs }: { signedInUser: Devel
             <div className="mb-6">
                 <label htmlFor="appType" className="block text-gray-700 font-bold mb-2">
                 Category
-                <Select options={typeOptions} value={typeOptions.find(c => c.label === appData.type)} onChange={handleChange} instanceId="appType" className="mb-4" required/>
+                <Select 
+                options={typeOptions} 
+                value={typeOptions.find(c => c.label === appData.type)} 
+                onChange={handleChange} 
+                instanceId="appType" 
+                className="mb-4" 
+                required/>
                 </label>
             </div>
             <div className="mb-6">
                 <label htmlFor="technologies" className="block text-gray-700 font-bold mb-2">
                 Technologies
-                <CreatableSelect options={techOptions} value={appData.technologies.map((option: string ) => {return {label: option, value: option}})} onChange={handleTechnologiesleChange}  isMulti isClearable instanceId="technologies" className="mb-4" required/>
+                <CreatableSelect 
+                options={techOptions} 
+                value={appData.technologies.map((option: string ) => {return {label: option, value: option}})} 
+                onChange={handleTechnologiesleChange} 
+                isMulti 
+                isClearable 
+                instanceId="technologies" 
+                className="mb-4" 
+                required/>
                 </label>
             </div> 
             <div className="flex justify-end">
