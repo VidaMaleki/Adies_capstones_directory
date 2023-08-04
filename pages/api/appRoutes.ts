@@ -1,17 +1,16 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { db } from '@/lib/db';
-import validator from 'validator';
-import { AppDataProps} from '@/components/types';
-
+import type { NextApiRequest, NextApiResponse } from "next";
+import { db } from "@/lib/db";
+import validator from "validator";
+import { AppDataProps } from "@/components/types";
 
 export default async function createAppHandler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse
 ) {
   switch (req.method) {
-    case 'POST':
+    case "POST":
       return createApp(req, res);
-    case 'GET':
+    case "GET":
       const appId = Number(req.query.id);
       const searchTerm = req.query.search as string;
       if (!isNaN(appId)) {
@@ -19,12 +18,12 @@ export default async function createAppHandler(
       } else {
         return getAllApps(req, res);
       }
-    case 'PUT':
+    case "PUT":
       return updateApp(req, res);
-    case 'DELETE':
+    case "DELETE":
       return deleteApp(req, res);
     default:
-      return res.status(405).json({ message: 'Method not allowed' });
+      return res.status(405).json({ message: "Method not allowed" });
   }
 }
 
@@ -34,23 +33,23 @@ async function createApp(req: NextApiRequest, res: NextApiResponse) {
     const errors = [];
 
     if (!input.appName) {
-      errors.push('App name is required.');
+      errors.push("App name is required.");
     }
 
     if (!input.developers || input.developers.length === 0) {
-      errors.push('At least one developer is required.');
+      errors.push("At least one developer is required.");
     }
 
     if (!input.type) {
-      errors.push('App type is required.');
+      errors.push("App type is required.");
     }
 
     if (!input.github || !validator.isURL(input.github)) {
-      errors.push('Please enter a valid GitHub URL.');
+      errors.push("Please enter a valid GitHub URL.");
     }
 
     if (input.technologies && input.technologies.length > 5) {
-      errors.push('Please add a maximum of 5 technologies.');
+      errors.push("Please add a maximum of 5 technologies.");
     }
 
     if (errors.length > 0) {
@@ -65,11 +64,13 @@ async function createApp(req: NextApiRequest, res: NextApiResponse) {
         videoLink: input.videoLink,
         github: input.github,
         type: input.type,
-        technologies: input.technologies
+        technologies: input.technologies,
       },
     });
 
-    const developerNames = input.developers.map((developer: { fullName: string }) => developer.fullName);
+    const developerNames = input.developers.map(
+      (developer: { fullName: string }) => developer.fullName
+    );
     const developers = await db.developer.findMany({
       where: {
         fullName: {
@@ -92,7 +93,7 @@ async function createApp(req: NextApiRequest, res: NextApiResponse) {
     return res.status(201).json({ app });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
@@ -108,13 +109,13 @@ async function getOneApp(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!app) {
-      return res.status(404).json({ message: 'App not found' });
+      return res.status(404).json({ message: "App not found" });
     }
 
     return res.status(200).json({ app });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
@@ -125,23 +126,23 @@ async function updateApp(req: NextApiRequest, res: NextApiResponse) {
     const errors: string[] = [];
 
     if (!input.appName) {
-      errors.push('App name is required.');
+      errors.push("App name is required.");
     }
 
     if (!input.developers || input.developers.length === 0) {
-      errors.push('At least one developer is required.');
+      errors.push("At least one developer is required.");
     }
 
     if (!input.type) {
-      errors.push('App type is required.');
+      errors.push("App type is required.");
     }
 
     if (!input.github || !validator.isURL(input.github)) {
-      errors.push('Please enter a valid GitHub URL.');
+      errors.push("Please enter a valid GitHub URL.");
     }
 
     if (input.technologies && input.technologies.length > 5) {
-      errors.push('Please add a maximum of 5 technologies.');
+      errors.push("Please add a maximum of 5 technologies.");
     }
 
     if (errors.length > 0) {
@@ -151,8 +152,10 @@ async function updateApp(req: NextApiRequest, res: NextApiResponse) {
     const existingApp = await db.app.findUnique({ where: { id: Number(id) } });
 
     if (!existingApp) {
-      return res.status(404).json({ message: 'App not found.' });
+      return res.status(404).json({ message: "App not found." });
     }
+
+    const appLink = input.appLink !== null ? input.appLink : undefined;
 
     const updatedDevs = await db.developer.updateMany({
       where: { appId: Number(id) },
@@ -161,20 +164,19 @@ async function updateApp(req: NextApiRequest, res: NextApiResponse) {
       },
     });
 
-    console.log("input", input, "unpdatedDevs", updatedDevs)
     const updatedApp = await db.app.update({
       where: { id: Number(id) },
       data: {
         appName: input.appName,
         description: input.description,
-        appLink: input.appLink,
+        appLink: appLink,
         videoLink: input.videoLink,
         github: input.github,
         type: input.type,
         technologies: input.technologies,
         developers: {
-          connect: input.developers.map((developer) => ({ id: developer.id }))
-        }
+          connect: input.developers.map((developer) => ({ id: developer.id })),
+        },
       },
       include: {
         developers: true,
@@ -185,7 +187,7 @@ async function updateApp(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).json({ app: updatedApp });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 async function deleteApp(req: NextApiRequest, res: NextApiResponse) {
@@ -199,7 +201,7 @@ async function deleteApp(req: NextApiRequest, res: NextApiResponse) {
     return res.status(204).end();
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
@@ -213,7 +215,6 @@ async function getAllApps(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).json({ apps });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
-
