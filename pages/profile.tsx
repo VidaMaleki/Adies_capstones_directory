@@ -1,6 +1,6 @@
 import { NextPageContext } from "next";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
-import { BiLogOut } from "react-icons/bi";
+import { FaSignOutAlt } from "react-icons/fa";
 import {AiFillSetting} from "react-icons/ai";
 import Link from "next/link";
 import { db } from "@/lib/db";
@@ -9,10 +9,8 @@ import AppCard from "@/components/AppCard";
 import { useRouter } from "next/router";
 import Navbar from "@/components/Navbar/Navbar";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
-import styles from "@/styles/About.module.css";
 import { useEffect, useState } from 'react';
 import Image from "next/image";
-import { Developer } from "@prisma/client";
 import { AppWithDevelopersProps, DeveloperWithAppProps } from '../components/types';
 import Settings from "@/components/Settings";
 
@@ -111,7 +109,7 @@ export default function Profile({ signedInUser}: {signedInUser: DeveloperWithApp
                                 className="absolute top-0 right-0 mt-2 mr-2 text-gray-500"
                                 onClick={handleSignOut}
                             >
-                                <BiLogOut size={24} />
+                                <FaSignOutAlt size={24} />
                             </button>
                         </div>
                     <div className="w-full flex justify-center">
