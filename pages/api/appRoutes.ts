@@ -12,7 +12,6 @@ export default async function createAppHandler(
       return createApp(req, res);
     case "GET":
       const appId = Number(req.query.id);
-      const searchTerm = req.query.search as string;
       if (!isNaN(appId)) {
         return getOneApp(req, res);
       } else {
@@ -25,7 +24,7 @@ export default async function createAppHandler(
     default:
       return res.status(405).json({ message: "Method not allowed" });
   }
-}
+};
 
 async function createApp(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -95,7 +94,7 @@ async function createApp(req: NextApiRequest, res: NextApiResponse) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
-}
+};
 
 async function getOneApp(req: NextApiRequest, res: NextApiResponse) {
   const appId = Number(req.query.id);
@@ -117,7 +116,7 @@ async function getOneApp(req: NextApiRequest, res: NextApiResponse) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
-}
+};
 
 async function updateApp(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -189,7 +188,8 @@ async function updateApp(req: NextApiRequest, res: NextApiResponse) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
-}
+};
+
 async function deleteApp(req: NextApiRequest, res: NextApiResponse) {
   const appId = Number(req.query.id);
 
@@ -203,7 +203,7 @@ async function deleteApp(req: NextApiRequest, res: NextApiResponse) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
-}
+};
 
 async function getAllApps(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -217,4 +217,4 @@ async function getAllApps(req: NextApiRequest, res: NextApiResponse) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
-}
+};
