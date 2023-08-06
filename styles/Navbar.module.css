@@ -13,7 +13,7 @@
     min-height: 0;
     width: 100%;
     box-sizing: border-box;
-    z-index: 671;
+    z-index: 2;
     padding-bottom: 4px;
     padding-top: 4px;
 }
@@ -32,7 +32,7 @@
     min-height: 0;
     width: 100%;
     box-sizing: border-box;
-    z-index: 671;
+    z-index: 2;
     padding-bottom: 4px;
     padding-top: 4px;
     background: rgba(255, 255, 255, 0.5);
@@ -50,6 +50,7 @@
 .appLogo {
     width: 80px;
     height: 80px;
+    cursor: pointer;
 }
 
 .buttonWrapper {
@@ -62,14 +63,39 @@
     left: 10px;
 }
 
+.search {
+    width: 56%;
+}
+
 .profileContainer {
     position: absolute;
     right: 0;
     height: 80px;
     display: flex;
-    width: 20%;
+    width: 100px;
     justify-content: flex-end;
     align-items: center;
     box-sizing: border-box;
     margin-right: 20px;
+    z-index: 0;
+}
+
+@media (max-width: 767px) {
+    .navbarContainer {}
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .navbarContainer {}
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+    .navbarContainer {}
+}
+
+@media (min-width: 1280px) and (max-width: 1439px) {
+    .navbarContainer {}
+}
+
+@media (min-width: 1440px) {
+    .navbarContainer {}
 }

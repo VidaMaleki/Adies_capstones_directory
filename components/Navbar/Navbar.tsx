@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 
 interface Props {}
 
+const searchVisiblePages = ["/", "/search", "/web-apps", "/mobile-apps", "native-apps"]
+
 const Navbar: React.FunctionComponent<Props> = () => {
   const router = useRouter();
   const handleClick = () => {
@@ -60,7 +62,7 @@ const Navbar: React.FunctionComponent<Props> = () => {
         <NavButton href={"/about"} name={"About"} />
         <NavButton href={"/auth"} name={"Sign in"} isSpecial={true} />
       </div>
-      <div>{router.pathname === "/" && <Search />}</div>
+      <div className={styles.search}>{searchVisiblePages.includes(router.pathname) && < Search />}</div>
       <div className={styles.profileContainer}>
         <ProfileIcon />
       </div>
