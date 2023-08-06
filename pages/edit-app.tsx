@@ -11,6 +11,13 @@ import { AppWithIdProps, DeveloperWithAppProps } from "@/components/types";
 import CreatableSelect from 'react-select/creatable';
 import { Developer } from "@prisma/client";
 import { notEqual } from "assert";
+import { Toast } from "react-toastify/dist/components";
+import { toast } from "react-toastify";
+
+interface EditAppProps {
+    signedInUser: Developer;
+    allDevs : Developer[];
+}
 
 export async function getServerSideProps(ctx: NextPageContext) {
     const session = await getSession(ctx);
@@ -24,9 +31,10 @@ export async function getServerSideProps(ctx: NextPageContext) {
             app : true,
         },
     });
+    
     const app = await db.app.findUnique({
         where: {
-            id: signedInUser?.appId
+            id: signedInUser?.appId || 0
         },
         include: {
             developers : true,
@@ -36,14 +44,9 @@ export async function getServerSideProps(ctx: NextPageContext) {
 
     const allDevs: Developer[] = await db.developer.findMany({
         where: {
-
             appId: {in: [0, signedInUser?.appId]}
-
-        }
-            
+        }    
         });
-    
-
     return {
         props: {
         session,
@@ -54,13 +57,17 @@ export async function getServerSideProps(ctx: NextPageContext) {
 };
 
 
-export default function EditApp({ signedInUser, allDevs }: { signedInUser: DeveloperWithAppProps, allDevs: Developer[], }) {
+export default function EditApp({ signedInUser, allDevs }: EditAppProps ) {
     const { data: session, status } = useSession();
     const router = useRouter();
     const [appData, setAppData] = useState<AppWithIdProps>(signedInUser.app || {} as AppWithIdProps);
     const [isSaving, setIsSaving] = useState(false);
     const nameOptions = allDevs.map(name => ({ value: String(name.id), label: name.fullName }));
 
+    const handleCancel = (event : any ) => {
+        event.preventDefault()
+        router.push("/profile")
+    };
 
     const handleSave = (event: any) => {
         event.preventDefault()
@@ -69,9 +76,9 @@ export default function EditApp({ signedInUser, allDevs }: { signedInUser: Devel
         .put(`/api/appRoutes?id=${appData.id}`, appData)
         .then(function (response) {
             console.log(response);
-            alert("Your app was successfully updated");
+            toast.success("Your app information was successfully updated");
             // Need to trigger a refresh
-            router.reload();
+            router.push("/profile");
         })
         .catch(function (error) {
             console.log(error);
@@ -97,8 +104,8 @@ export default function EditApp({ signedInUser, allDevs }: { signedInUser: Devel
     }
 
     const handleInputChange = (event: any)=>{
-        const newAppData : AppWithIdProps = {...appData};
-        const inputName = event.target.name;
+        let newAppData : AppWithIdProps = {...appData};
+        const inputName : string = event.target.name;
         const targetValue = event.target.value;
         newAppData[ inputName as keyof AppWithIdProps] = targetValue;
         setAppData( newAppData );
@@ -131,6 +138,24 @@ export default function EditApp({ signedInUser, allDevs }: { signedInUser: Devel
         newAppData.technologies = currTechs;
         setAppData(newAppData);
     };
+
+    
+    // options={techOptions} 
+    // value={appData.technologies.map((option: string ) => {return {label: option, value: option}})} 
+    
+
+    const findSelectedTechnologies = (techOptions: {value: string; label: string} [], selectedTechnologies: string []) =>{
+        const selectedTechOptions = [];
+        const setSelectedTechnologies = new Set(selectedTechnologies);
+        for (let option of techOptions){
+            if (setSelectedTechnologies.has(option.label)){
+                selectedTechOptions.push(option);
+            }
+        }
+        console.log(selectedTechnologies, "options", selectedTechOptions)
+        return selectedTechOptions;
+    }
+
     
     return (
         <div className="bg-gray-100 min-h-screen">
@@ -239,7 +264,7 @@ export default function EditApp({ signedInUser, allDevs }: { signedInUser: Devel
                 Technologies
                 <CreatableSelect 
                 options={techOptions} 
-                value={appData.technologies.map((option: string ) => {return {label: option, value: option}})} 
+                value={findSelectedTechnologies(techOptions, appData.technologies)}
                 onChange={handleTechnologiesleChange} 
                 isMulti 
                 isClearable 
@@ -249,6 +274,12 @@ export default function EditApp({ signedInUser, allDevs }: { signedInUser: Devel
                 </label>
             </div> 
             <div className="flex justify-end">
+                <button
+                onClick={handleCancel}
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md mr-2"
+                >
+                Cancel
+                </button>  
                 <button
                 type="submit"
                 disabled={isSaving}
