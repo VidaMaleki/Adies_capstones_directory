@@ -2,8 +2,10 @@ import Navbar from "@/components/Navbar/Navbar";
 import styles from "@/styles/AppPage.module.css";
 import { db } from "@/lib/db";
 import { App } from "@prisma/client";
-import AppList from '@/components/AppExtentionPage';
-import { AppWithIdProps } from '../components/types';
+import AppExtentionPage from '@/components/AppExtentionPage';
+import { AppWithDevelopersProps } from '../components/types';
+
+const PAGE_SIZE = 10;
 
 export async function getStaticProps() {
   const mobileApps: App[] = await db.app.findMany({
@@ -18,11 +20,11 @@ export async function getStaticProps() {
   };
 }
 
-const MobileApps = ({ mobileApps }: { mobileApps: AppWithIdProps[] }) => {
+const MobileApps = ({ mobileApps }: { mobileApps: AppWithDevelopersProps[] }) => {
   return (
-    <div className={styles.pageWrapper}>
+    <div className={styles.pageContainer}>
       <Navbar />
-      <AppList apps={mobileApps} page="Mobile apps" />
+      <AppExtentionPage apps={mobileApps} page="Mobile apps" pageSize={PAGE_SIZE}/>
     </div>
   );
 };
