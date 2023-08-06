@@ -30,7 +30,7 @@ export default function Home() {
     try {
       const res = await axios.get(APP_URL);
       const allApps: AppWithDevelopersProps[] = res.data.apps;
-      console.log(allApps);
+      
       if (allApps.length > 0) {
         const webApps = allApps.filter((app) => app.type === "Web");
         const mobileApps = allApps.filter((app) => app.type === "Mobile");
