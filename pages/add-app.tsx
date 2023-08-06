@@ -15,7 +15,7 @@ import { z } from 'zod';
 import Navbar from "@/components/Navbar/Navbar";
 
 
-const FormSchema = z.object({
+export const FormSchema = z.object({
     appName: z.string().nonempty({ message: 'App Name is required' }),
     description: z.string().nonempty({ message: 'Description is required' }),
     developers: z.array(z.object({ fullName: z.string() })).min(1, { message: 'Developers are required' }),
@@ -26,7 +26,7 @@ const FormSchema = z.object({
     technologies: z.array(z.string()).min(1, { message: 'Technologies are required' }),
 });
 
-type FormSchemaType = z.infer<typeof FormSchema>;
+export type FormSchemaType = z.infer<typeof FormSchema>;
 
 export async function getServerSideProps(ctx: NextPageContext) {
     const session = await getSession(ctx);
