@@ -6,218 +6,245 @@ import bcrypt from "bcryptjs";
 import { createActivationToken } from "@/utils/tokens";
 import sendMail from "@/utils/sendMail";
 import { activateTemplateEmail } from "@/components/SignIn/components/emailTemplates/activate";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 // npm i bcryptjs
 
-dotenv.config({ path: '.env.emails' });
+dotenv.config({ path: ".env.emails" });
 
 interface DeveloperInput {
-    id: number,
-    fullName: string;
-    email: string;
-    cohort: string;
-    linkedin: string;
-    image: string;
-    password: string;
+  id: number;
+  fullName: string;
+  email: string;
+  cohort: string;
+  linkedin: string;
+  image: string;
+  password: string;
 }
 
 interface AuthorizedEmail {
-    email: string;
+  email: string;
 }
 
 export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse
+  req: NextApiRequest,
+  res: NextApiResponse
 ) {
-    switch (req.method) {
-        case "POST":
-            await registerDeveloper(req, res);
-            break;
-        case 'GET':
-            const developerId = Number(req.query.id);
-            if (!isNaN(developerId)) {
-                return getOneDeveloper(req, res);
-            }
-            return getAllDevelopers(req, res);
-        case "DELETE":
-            await deleteDeveloper(req, res);
-            break;
-        case "PUT":
-            await updateDeveloper(req, res);
-            break;
-        default:
-            res.status(405).json({ message: "Method not allowed" });
-    }
+  switch (req.method) {
+    case "POST":
+      await registerDeveloper(req, res);
+      break;
+    case "GET":
+      const developerId = Number(req.query.id);
+      if (!isNaN(developerId)) {
+        return getOneDeveloper(req, res);
+      }
+      return getAllDevelopers(req, res);
+    case "DELETE":
+      await deleteDeveloper(req, res);
+      break;
+    case "PUT":
+      await updateDeveloper(req, res);
+      break;
+    default:
+      res.status(405).json({ message: "Method not allowed" });
+  }
 }
 
 // http://localhost:3000/api/auth/signup
 async function registerDeveloper(
-    req: NextApiRequest, res: NextApiResponse<{message: string}>
+  req: NextApiRequest,
+  res: NextApiResponse<{ message: string }>
 ) {
-    try {
-        const input: DeveloperInput = req.body;
+  try {
+    const input: DeveloperInput = req.body;
 
-        if (!input.fullName || !input.email || !input.password) {
-            return res.status(400).json({ message: "Please fill in all necessary fields." });
-        }
+    if (!input.fullName || !input.email || !input.password) {
+      return res
+        .status(400)
+        .json({ message: "Please fill in all necessary fields." });
+    }
 
-        if (!validator.isEmail(input.email)) {
-            return res.status(400).json({ message: "Please add a valid email address." });
-        }
+    if (!validator.isEmail(input.email)) {
+      return res
+        .status(400)
+        .json({ message: "Please add a valid email address." });
+    }
 
-        if (!/^\d+$/.test(input.cohort)) {
-            return res.status(400).json({ message: "Cohort must contain only digits." });
-        }
+    if (!/^\d+$/.test(input.cohort)) {
+      return res
+        .status(400)
+        .json({ message: "Cohort must contain only digits." });
+    }
 
-        if (!validator.isURL(input.linkedin)) {
-            return res.status(400).json({ message: "Please enter a valid LinkedIn URL." });
-        }
+    if (!validator.isURL(input.linkedin)) {
+      return res
+        .status(400)
+        .json({ message: "Please enter a valid LinkedIn URL." });
+    }
 
-        const developer = await db.developer.findUnique({
-            where: { email: input.email }
-        });
+    const developer = await db.developer.findUnique({
+      where: { email: input.email },
+    });
 
-        if (developer) {
-            return res.status(400).json({ message: "This email address already exists." });
-        }
+    if (developer) {
+      return res
+        .status(400)
+        .json({ message: "This email address already exists." });
+    }
 
-        if (input.password.length < 6) {
-            return res.status(400).json({ message: "Password must be at least 6 characters." });
-        }
+    if (input.password.length < 6) {
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 6 characters." });
+    }
 
-        // Check if the user's email is in the list of authorized emails
-        // const authorizedEmails: AuthorizedEmail[] = JSON.parse(process.env.AUTHORIZED_EMAILS || '[]');
-        // const isAuthorizedEmail = authorizedEmails.some(authorizedEmail => authorizedEmail.email === input.email);
-        
-        // if (!isAuthorizedEmail) {
-        //     return res.status(403).json({ message: "Your email is not authorized to create account." });
-        // }
+    // Check if the user's email is in the list of authorized emails
+    const authorizedEmails: AuthorizedEmail[] = JSON.parse(
+      process.env.AUTHORIZED_EMAILS || "[]"
+    );
+    const isAuthorizedEmail = authorizedEmails.some(
+      (authorizedEmail) => authorizedEmail.email === input.email
+    );
 
-        const cryptedPassword = await bcrypt.hash(input.password, 12);
+    if (!isAuthorizedEmail) {
+      return res
+        .status(403)
+        .json({ message: "Your email is not authorized to create account." });
+    }
 
-        const newdeveloper = await db.developer.create({
-            data: {
-                fullName: input.fullName,
-                email: input.email,
-                cohort: input.cohort,
-                linkedin: input.linkedin,
-                image: input.image,
-                password: cryptedPassword
-            }
-        });
+    const cryptedPassword = await bcrypt.hash(input.password, 12);
 
-        const activation_token = createActivationToken({
-            id: newdeveloper.id.toString()
-        });
+    const newdeveloper = await db.developer.create({
+      data: {
+        fullName: input.fullName,
+        email: input.email,
+        cohort: input.cohort,
+        linkedin: input.linkedin,
+        image: input.image,
+        password: cryptedPassword,
+      },
+    });
 
-        const url = `${process.env.NEXTAUTH_URL}/activate/${activation_token}`;
-        
-        await sendMail(newdeveloper.email, newdeveloper.fullName, "", url, "Activate your account - Adie", activateTemplateEmail);
+    const activation_token = createActivationToken({
+      id: newdeveloper.id.toString(),
+    });
 
-        res.json({ message: "Register success! Please create your app to start." });
-    } catch (error) {
-        res.status(500).json({ message: (error as Error).message });
-    } 
+    const url = `${process.env.NEXTAUTH_URL}/activate/${activation_token}`;
+
+    await sendMail(
+      newdeveloper.email,
+      newdeveloper.fullName,
+      "",
+      url,
+      "Activate your account - Adie",
+      activateTemplateEmail
+    );
+
+    res.json({
+      message: "Register success! Please create your app to get start.",
+    });
+  } catch (error) {
+    res.status(500).json({ message: (error as Error).message });
+  }
 }
 
 // Get all developers http://localhost:3000/api/auth/signup?id=1
 async function getOneDeveloper(req: NextApiRequest, res: NextApiResponse) {
-    const devId = Number(req.query.id);
-    try {
-        const developer = await db.developer.findUnique({
-            where: { id: devId },
-            include: {
-            app: true, // Include the associated app
-            },
+  const devId = Number(req.query.id);
+  try {
+    const developer = await db.developer.findUnique({
+      where: { id: devId },
+      include: {
+        app: true, // Include the associated app
+      },
     });
     return res.status(200).json({ developer });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: 'Internal server error' });
-    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 }
 
 // Remove one user http://localhost:3000/api/auth/signup?id=1
 async function getAllDevelopers(
-    req: NextApiRequest,
-    res: NextApiResponse<Developer[]>
+  req: NextApiRequest,
+  res: NextApiResponse<Developer[]>
 ) {
-    if (req.method !== "GET") {
-        return res.status(405).json(Array<Developer>(0));
-    }
+  if (req.method !== "GET") {
+    return res.status(405).json(Array<Developer>(0));
+  }
 
-    try {
-        const developers = await db.developer.findMany();
-        return res.status(200).json(developers);
-    } catch (error) {
-        return res.status(500).json([]);
-    }
+  try {
+    const developers = await db.developer.findMany();
+    return res.status(200).json(developers);
+  } catch (error) {
+    return res.status(500).json([]);
+  }
 }
 
-
 async function deleteDeveloper(
-    req: NextApiRequest,
-    res: NextApiResponse<{ message: string }>
+  req: NextApiRequest,
+  res: NextApiResponse<{ message: string }>
 ) {
-    try {
-        const id = req.query.id as string;
+  try {
+    const id = req.query.id as string;
 
-        if (!id) {
-            return res.status(400).json({ message: "User ID is required." });
-        }
-
-        const user = await db.developer.delete({
-            where: { id: parseInt(id) },
-        });
-
-        res.json({ message: `User with ID ${id} has been deleted.` });
-    } catch (error) {
-        res.status(500).json({ message: (error as Error).message });
+    if (!id) {
+      return res.status(400).json({ message: "User ID is required." });
     }
+
+    const user = await db.developer.delete({
+      where: { id: parseInt(id) },
+    });
+
+    res.json({ message: `User with ID ${id} has been deleted.` });
+  } catch (error) {
+    res.status(500).json({ message: (error as Error).message });
+  }
 }
 
 async function updateDeveloper(
-    req: NextApiRequest,
-    res: NextApiResponse<{ message: string }>
+  req: NextApiRequest,
+  res: NextApiResponse<{ message: string }>
 ) {
-    try {
-        const input: DeveloperInput = req.body;
+  try {
+    const input: DeveloperInput = req.body;
 
-        const developer = await db.developer.findUnique({
-            where: { id: input.id },
-        });
+    const developer = await db.developer.findUnique({
+      where: { id: input.id },
+    });
 
-        if (!developer) {
-            return res.status(404).json({ message: "Developer not found" });
-        }
-
-        if (input.email !== developer.email) {
-            const existingDeveloper = await db.developer.findUnique({
-                where: { email: input.email },
-            });
-            if (existingDeveloper) {
-                return res
-                    .status(400)
-                    .json({ message: "This email address already exists." });
-            }
-        }
-
-        const updatedDeveloper = await db.developer.update({
-            where: { id: input.id },
-            data: {
-                fullName: input.fullName,
-                email: input.email,
-                cohort: input.cohort,
-                linkedin: input.linkedin,
-                image: input.image,
-                password: input.password
-                    ? await bcrypt.hash(input.password, 12)
-                    : undefined,
-            },
-        });
-
-        res.json({ message: "Developer updated successfully" });
-    } catch (error) {
-        res.status(500).json({ message: (error as Error).message });
+    if (!developer) {
+      return res.status(404).json({ message: "Developer not found" });
     }
+
+    if (input.email !== developer.email) {
+      const existingDeveloper = await db.developer.findUnique({
+        where: { email: input.email },
+      });
+      if (existingDeveloper) {
+        return res
+          .status(400)
+          .json({ message: "This email address already exists." });
+      }
+    }
+
+    const updatedDeveloper = await db.developer.update({
+      where: { id: input.id },
+      data: {
+        fullName: input.fullName,
+        email: input.email,
+        cohort: input.cohort,
+        linkedin: input.linkedin,
+        image: input.image,
+        password: input.password
+          ? await bcrypt.hash(input.password, 12)
+          : undefined,
+      },
+    });
+
+    res.json({ message: "Developer updated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: (error as Error).message });
+  }
 }
