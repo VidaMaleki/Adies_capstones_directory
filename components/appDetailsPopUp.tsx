@@ -37,7 +37,7 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
                 <div className={styles.appContentContainer}>
                     <div className={styles.imageContainer}>
                         {/* change to Image from next/image */}
-                        <Image src={picture} alt="graphic of computers" width={700} height={500} />
+                        <Image src={picture} alt="app picture" width={700} height={500} />
                     </div>
                     <div className={styles.textContainer}>
                         <div className={styles.appDetailsContainer}>
@@ -78,8 +78,6 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
                     </div>
                     
                 </div>
-                {/* Need to pull linked in from Developer table */}
-                {/* <a href={app.linkedin}>View LinkedIn</a> */}
             </div>
         </div>
     );

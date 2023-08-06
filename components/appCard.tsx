@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import * as FaIcons from 'react-icons/fa';
-import { App } from "@prisma/client";
-import AppDetailsPopup from './AppDetailsPopUp';
 import styles from '@/styles/AppCard.module.css';
 import { AppWithDevelopersProps } from './types';
 import Image from 'next/image';
 import {getImageByAppType} from '../utils/helper';
+import AppDetailsPopup from './appDetailsPopUp';
 
 
 type AppCardProps = {
@@ -37,12 +36,12 @@ const AppCard: React.FC<AppCardProps> = ({ app }) => {
     <div className={styles.card}>
       <div className={styles.appMiniScreen}  onClick={handleOpenPopup}>
         <div className={styles.appMiniScreenInner} >
-          <Image src={picture} alt="graphic of computers" width={200} height={200} />
+          <Image src={picture} alt="app picture" width={200} height={200} />
         </div>
       </div>
       <div className={styles.content}>
         <div className={styles.appCardHeader}>
-          <h3>{appName}</h3>
+          <h3 className="font-bold">{appName}</h3>
           <a className={styles.cardGitHub} href={github} target="_blank">
             <div className={styles.iconContainer}>
               <FaIcons.FaGithub />
