@@ -24,7 +24,9 @@ const Native = ({ nativeApps }: { nativeApps: AppWithDevelopersProps[] }) => {
   return (
     <div className={styles.pageContainer}>
       <Navbar />
-      <AppExtentionPage apps={nativeApps} page="Native apps" pageSize={PAGE_SIZE}/>
+      <div className={styles.pageWrapper}>
+        <AppExtentionPage apps={nativeApps} page="Native apps" pageSize={PAGE_SIZE}/>
+      </div>
     </div>
   );
 };

@@ -24,7 +24,9 @@ const MobileApps = ({ mobileApps }: { mobileApps: AppWithDevelopersProps[] }) =>
   return (
     <div className={styles.pageContainer}>
       <Navbar />
-      <AppExtentionPage apps={mobileApps} page="Mobile apps" pageSize={PAGE_SIZE}/>
+      <div className={styles.pageWrapper}>
+        <AppExtentionPage apps={mobileApps} page="Mobile apps" pageSize={PAGE_SIZE}/>
+      </div>
     </div>
   );
 };
