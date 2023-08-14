@@ -1,6 +1,6 @@
 import { NextPageContext } from "next";
-import { useSession, signIn, signOut, getSession } from "next-auth/react";
-import Select, { ActionMeta, MultiValue, SingleValue } from 'react-select';
+import { useSession, getSession } from "next-auth/react";
+import Select, { ActionMeta, MultiValue } from 'react-select';
 import {typeOptions, techOptions} from '../app-data/selectOptions'
 import { db } from "@/lib/db";
 import axios from "axios";
@@ -9,14 +9,31 @@ import Navbar from "@/components/Navbar/Navbar";
 import { useEffect, useState } from "react";
 import { AppWithIdProps, DeveloperWithAppProps } from "@/components/types";
 import CreatableSelect from 'react-select/creatable';
-import { Developer } from "@prisma/client";
-import { notEqual } from "assert";
-import { Toast } from "react-toastify/dist/components";
+import { Developer} from "@prisma/client";
+import { z } from 'zod';
 import { toast } from "react-toastify";
 
+
+
+const FormSchema = z.object({
+    appName: z.string().nonempty({ message: 'App Name is required' }),
+    id: z.string(),
+    description: z.string().nonempty({ message: 'Description is required' }),
+    developers: z.array(z.object({
+        fullName: z.string(),
+        id: z.number()})).min(1, { message: 'Developers are required' }),
+    appLink: z.string().url({ message: 'Invalid App Link URL' }).optional(),
+    videoLink: z.string().url({ message: 'Invalid Video Link URL' }).optional(),
+    github: z.string().url({ message: 'Invalid Github Link URL' }),
+    type: z.string().nonempty({ message: "Category is required." }),
+    technologies: z.array(z.string()).min(1, { message: 'Technologies are required' }),
+});
+
+export type FormSchemaType = z.infer<typeof FormSchema>;
 interface EditAppProps {
     signedInUser: Developer;
     allDevs : Developer[];
+    app: AppWithIdProps; 
 }
 
 export async function getServerSideProps(ctx: NextPageContext) {
@@ -40,11 +57,10 @@ export async function getServerSideProps(ctx: NextPageContext) {
             developers : true,
         },
     })
-    signedInUser.app = app;
 
     const allDevs: Developer[] = await db.developer.findMany({
         where: {
-            appId: {in: [0, signedInUser?.appId]}
+            appId: {in: [0, signedInUser?.appId || 0]}
         }    
         });
     return {
@@ -52,15 +68,29 @@ export async function getServerSideProps(ctx: NextPageContext) {
         session,
         allDevs,
         signedInUser: signedInUser || {},
+        app,
         },
     };
 };
+const convertAppToFormSchema  = (app: AppWithIdProps): FormSchemaType => {
+    return {
+        appName: app.appName,
+        id: app.id.toString(),
+        description: app.description,
+        developers: app.developers,
+        appLink:app.appLink || "",
+        videoLink: app.videoLink || "",
+        github: app.github,
+        type: app.type,
+        technologies: app.technologies,
+    };
 
+}
 
-export default function EditApp({ signedInUser, allDevs }: EditAppProps ) {
+export default function EditApp({ signedInUser, allDevs, app }: EditAppProps ) {
     const { data: session, status } = useSession();
     const router = useRouter();
-    const [appData, setAppData] = useState<AppWithIdProps>(signedInUser.app || {} as AppWithIdProps);
+    const [appData, setAppData] = useState<FormSchemaType>(convertAppToFormSchema(app) );
     const [isSaving, setIsSaving] = useState(false);
     const nameOptions = allDevs.map(name => ({ value: String(name.id), label: name.fullName }));
 
@@ -103,11 +133,16 @@ export default function EditApp({ signedInUser, allDevs }: EditAppProps ) {
         return null;
     }
 
-    const handleInputChange = (event: any)=>{
-        let newAppData : AppWithIdProps = {...appData};
-        const inputName : string = event.target.name;
-        const targetValue = event.target.value;
-        newAppData[ inputName as keyof AppWithIdProps] = targetValue;
+    const handleChange = (event: any)=>{
+        let newAppData : FormSchemaType = {...appData};
+        if (event.label) {
+            newAppData.type = event.label; 
+        }
+        else {
+            const inputName : string = event.target.name;
+            const targetValue = event.target.value;
+            newAppData[ inputName as keyof FormSchemaType] = targetValue;
+        }
         setAppData( newAppData );
     };
 
@@ -126,12 +161,6 @@ export default function EditApp({ signedInUser, allDevs }: EditAppProps ) {
     };
 
 
-    const handleChange = (event: SingleValue<{ value: string; label: string; }>) => {
-        const value = event?.label|| "";
-        setAppData({ ...appData, type: value });
-
-    };
-    
     const handleTechnologiesleChange = (newValue: MultiValue<{ label: string; value: string; }>, actionMeta: ActionMeta<{ label: string; value: string; }>) => {
         const currTechs = newValue.map((option: { label: any; }) => option.label);
         const newAppData = {...appData};
@@ -139,9 +168,6 @@ export default function EditApp({ signedInUser, allDevs }: EditAppProps ) {
         setAppData(newAppData);
     };
 
-    
-    // options={techOptions} 
-    // value={appData.technologies.map((option: string ) => {return {label: option, value: option}})} 
     
 
     const findSelectedTechnologies = (techOptions: {value: string; label: string} [], selectedTechnologies: string []) =>{
@@ -156,7 +182,6 @@ export default function EditApp({ signedInUser, allDevs }: EditAppProps ) {
         return selectedTechOptions;
     }
 
-    
     return (
         <div className="bg-gray-100 min-h-screen">
         <Navbar />
@@ -172,7 +197,7 @@ export default function EditApp({ signedInUser, allDevs }: EditAppProps ) {
                 id="appName"
                 name="appName"
                 value={appData.appName}
-                onChange={handleInputChange}
+                onChange={handleChange}
                 className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 required
                 />
@@ -185,51 +210,9 @@ export default function EditApp({ signedInUser, allDevs }: EditAppProps ) {
                 id="description"
                 name="description"
                 value={appData.description}
-                onChange={handleInputChange}
+                onChange={handleChange}
                 className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
                 rows={5}
-                required
-                />
-            </div>
-            <div className="mb-6">
-                <label className="block mb-2 font-medium" htmlFor="developers">
-                Developers
-                </label>
-                <CreatableSelect 
-                options={nameOptions} 
-                value = {appData.developers.map((developer: Developer ) => {return {label: developer?.fullName, value: developer?.id.toString()}})} 
-                onChange={handleDevChange} 
-                isMulti 
-                isClearable 
-                instanceId="appDevs" 
-                className="mb-4" />
-            </div>
-            <div className="mb-6">
-                <label htmlFor="appLink" className="block text-gray-700 font-bold mb-2">
-                App Link
-                </label>
-                <input
-                type = "text"
-                id="appLink"
-                name="appLink"
-                value={appData.appLink}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
-                rows={2}
-                required
-                />
-            </div>
-            <div className="mb-6">
-                <label htmlFor="videoLink" className="block text-gray-700 font-bold mb-2">
-                Video Link
-                </label>
-                <input
-                type = "text"
-                id="videoLink"
-                name="videoLink"
-                value={appData.videoLink}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
                 required
                 />
             </div>
@@ -242,7 +225,35 @@ export default function EditApp({ signedInUser, allDevs }: EditAppProps ) {
                 id="github"
                 name="github"
                 value={appData.github}
-                onChange={handleInputChange}
+                onChange={handleChange}
+                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
+                required
+                />
+            </div>
+            <div className="mb-6">
+                <label htmlFor="appLink" className="block text-gray-700 font-bold mb-2">
+                App Link
+                </label>
+                <input
+                type = "text"
+                id="appLink"
+                name="appLink"
+                value={appData.appLink} 
+                onChange={handleChange}
+                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
+                required
+                />
+            </div>
+            <div className="mb-6">
+                <label htmlFor="videoLink" className="block text-gray-700 font-bold mb-2">
+                Video Link
+                </label>
+                <input
+                type = "text"
+                id="videoLink"
+                name="videoLink"
+                value={appData.videoLink}
+                onChange={handleChange}
                 className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
                 required
                 />
@@ -272,7 +283,20 @@ export default function EditApp({ signedInUser, allDevs }: EditAppProps ) {
                 className="mb-4" 
                 required/>
                 </label>
-            </div> 
+            </div>
+            <div className="mb-6">
+                <label className="block mb-2 font-medium" htmlFor="developers">
+                Developers
+                </label>
+                <CreatableSelect 
+                options={nameOptions} 
+                value = {appData.developers.map((developer:{fullName: string, id: number} ) => {return {label: developer?.fullName, value: developer?.id.toString()}})} 
+                onChange={handleDevChange} 
+                isMulti 
+                isClearable 
+                instanceId="appDevs" 
+                className="mb-4" />
+            </div>
             <div className="flex justify-end">
                 <button
                 onClick={handleCancel}
