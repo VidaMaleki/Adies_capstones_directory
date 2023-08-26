@@ -23,7 +23,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             "",
             url, 
             "Reset your password - Adie ",
-            resetPasswordEmail
+            resetPasswordEmail,
+            "",
+            "",
         )
         res.json({
             message:"An email has been sent to you, use it to reset your password."

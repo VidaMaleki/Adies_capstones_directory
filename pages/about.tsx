@@ -20,7 +20,7 @@ const About = () => {
     e.preventDefault();
     setStatus("sending");
     try {
-      await axios.post("/api/auth/send-feedback", { name, email, message });
+      await axios.post("/api/send-feedback", { name, email, message });
       console.log(name, email, message )
       setStatus("sent");
       setName("");

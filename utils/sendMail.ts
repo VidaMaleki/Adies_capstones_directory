@@ -10,7 +10,9 @@ export default async function sendMail(
     image: string,
     url: string,
     subject: string,
-    template: string
+    template: string,
+    message: string,
+    feedbackEmail: string,
 ){
     const {MAILING_EMAIL, MAILING_PASSWORD, SMTP_EMAIL, SMTP_HOST, SMTP_PASSWORD, SMTP_PORT} = process.env;
 
@@ -34,6 +36,8 @@ export default async function sendMail(
         fullName: name,
         email_link : url,
         image: image,
+        message: message,
+        feedbackEmail: feedbackEmail,
     };
     const html = data(replacements);
     // -------verify connection config

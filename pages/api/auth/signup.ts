@@ -137,7 +137,9 @@ async function registerDeveloper(
       "",
       url,
       "Activate your account - Adie",
-      activateTemplateEmail
+      activateTemplateEmail,
+      "",
+      "",
     );
 
     res.json({
