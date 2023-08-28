@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import dotenv from "dotenv";
 import sendMail from "@/utils/sendMail";
-import { feedbackTemplateEmail } from "@/components/SignIn/components/forms/Feedback";
+import { feedbackTemplateEmail } from "@/components/SignIn/components/emailTemplates/Feedback";
 
 dotenv.config();
 
