@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Link from 'next/link';
-import { App } from "@prisma/client";
 import AppCard from './AppCard';
 import styles from '@/styles/Home.module.css';
 import { AppWithDevelopersProps } from './types';
@@ -13,7 +12,7 @@ type AppSectionProps = {
 
 const AppSection: React.FC<AppSectionProps> = ({ sectionTitle, apps, seeAllLink }) => {
     return (
-        <div>
+        <div className={styles.appSectionContainer}>
         <div className={styles.appsHeader}>
             <h2>{sectionTitle}</h2>
             <div className={styles.seeMoreButton}>
