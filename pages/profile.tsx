@@ -112,7 +112,10 @@ export default function Profile({ signedInUser}: {signedInUser: DeveloperWithApp
                                 <FaSignOutAlt size={24} />
                             </button>
                         </div>
+                        <br></br>
+                        <br></br>
                     <div className="w-full flex justify-center">
+                    
                         <Image
                             src={session?.user?.image!}
                             alt={`${session?.user?.name} image`}
@@ -122,6 +125,8 @@ export default function Profile({ signedInUser}: {signedInUser: DeveloperWithApp
                         />
                     </div>
                     <p className="text-gray-600">
+                        <br></br>
+                        <br></br>
                         Welcome, {signedInUser.fullName}! Here are your app details:
                     </p>
                     </div>
