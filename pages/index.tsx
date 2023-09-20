@@ -1,25 +1,29 @@
 import Head from "next/head";
-import createAppHandler from '@/pages/api/appRoutes';
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar/Navbar";
 import styles from "@/styles/Home.module.css";
 import AppSection from "@/components/AppSection";
-import { AppWithDevelopersProps } from '../components/types';
-import axios from 'axios';
-
+import { AppWithDevelopersProps } from "../components/types";
+import axios from "axios";
 
 export default function Home() {
-  const [webAppsRandom, setWebAppsRandom] = useState<AppWithDevelopersProps[]>([]);
-  const [mobileAppsRandom, setMobileAppsRandom] = useState<AppWithDevelopersProps[]>([]);
-  const [nativeAppsRandom, setNativeAppsRandom] = useState<AppWithDevelopersProps[]>([]);
+  const [webAppsRandom, setWebAppsRandom] = useState<AppWithDevelopersProps[]>(
+    []
+  );
+  const [mobileAppsRandom, setMobileAppsRandom] = useState<
+    AppWithDevelopersProps[]
+  >([]);
+  const [nativeAppsRandom, setNativeAppsRandom] = useState<
+    AppWithDevelopersProps[]
+  >([]);
 
   const APP_URL = "/api/appRoutes";
 
-  const getRandomApps = (appsList: any) => {
-    if (appsList.length <= 5) return appsList;
+  const getRandomApps = (appsList: any, maxApps: number) => {
+    if (appsList.length <= maxApps) return appsList;
 
     const shuffled = appsList.sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, 5);
+    return shuffled.slice(0, maxApps);
   };
 
   useEffect(() => {
@@ -30,23 +34,56 @@ export default function Home() {
     try {
       const res = await axios.get(APP_URL);
       const allApps: AppWithDevelopersProps[] = res.data.apps;
-      
+
       if (allApps.length > 0) {
         const webApps = allApps.filter((app) => app.type === "Web");
         const mobileApps = allApps.filter((app) => app.type === "Mobile");
         const nativeApps = allApps.filter((app) => app.type === "Native");
-        
-        setWebAppsRandom(getRandomApps(webApps));
-        setMobileAppsRandom(getRandomApps(mobileApps));
-        setNativeAppsRandom(getRandomApps(nativeApps));
 
-      
-    }
+        let webAppsList;
+        let mobileAppsList;
+        let nativeAppsList;
+
+        // Checking the screen size based on window.innerWidth
+        if (window.innerWidth <= 500) {
+          webAppsList = getRandomApps(webApps, 1);
+          mobileAppsList = getRandomApps(mobileApps, 1);
+          nativeAppsList = getRandomApps(nativeApps, 1);
+        } else if (window.innerWidth <= 900) {
+          webAppsList = getRandomApps(webApps, 3);
+          mobileAppsList = getRandomApps(mobileApps, 3);
+          nativeAppsList = getRandomApps(nativeApps, 3);
+        } else if (window.innerWidth <= 1200) {
+          webAppsList = getRandomApps(webApps, 4);
+          mobileAppsList = getRandomApps(mobileApps, 4);
+          nativeAppsList = getRandomApps(nativeApps, 4);
+        } else {
+          webAppsList = getRandomApps(webApps, 5);
+          mobileAppsList = getRandomApps(mobileApps, 5);
+          nativeAppsList = getRandomApps(nativeApps, 5);
+        }
+
+        setWebAppsRandom(webAppsList);
+        setMobileAppsRandom(mobileAppsList);
+        setNativeAppsRandom(nativeAppsList);
+      }
     } catch (error) {
       console.error(error);
-      // Handle error state if needed
     }
   }
+
+  // An event listener to recheck screen size when the window is resized
+  useEffect(() => {
+    fetchData();
+
+    // Add an event listener to recheck screen size when the window is resized
+    window.addEventListener("resize", fetchData);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", fetchData);
+    };
+  }, []);
 
   return (
     <>

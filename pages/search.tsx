@@ -4,17 +4,26 @@ import axios from "axios";
 import AppCard from "@/components/AppCard";
 import styles from "@/styles/Search.module.css";
 import { AppWithDevelopersProps } from "../components/types";
-import Search from "@/components/Navbar/Search";
-import Link from "next/link";
 import Navbar from "@/components/Navbar/Navbar";
+import { FaSearch } from "react-icons/fa";
 
 const SearchPage = () => {
   const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState("");
   const { query } = router.query;
   const [searchResults, setSearchResults] = useState<AppWithDevelopersProps[]>(
     []
   );
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Redirect to the search results page with the search query as a query parameter
+    router.push(`/search?query=${encodeURIComponent(searchTerm)}`);
+
+    // Clear the search input field
+    setSearchTerm("");
+  };
 
   useEffect(() => {
     const fetchSearchResults = async () => {
@@ -41,6 +50,25 @@ const SearchPage = () => {
     <div className={styles.searchResultsContainer}>
       <Navbar />
       <div className={styles.searchResultsWrapper}>
+
+      <div className={styles.searchBarContainer}>
+      <div
+        className={styles.searchBarForm }
+      >
+        <form onSubmit={handleSearch} className={styles.searchBarForm}>
+          <input
+            className={styles.searchBarInput}
+            type="text"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button type="submit" className={styles.searchBarIcon}>
+            <FaSearch />
+          </button>
+        </form>
+      </div>
+    </div>
         <div className="flex items-center mb-4">
           <h2 className="text-2xl">Search Results for &quot;{query}&quot;</h2>
         </div>

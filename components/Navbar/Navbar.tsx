@@ -55,33 +55,35 @@ const Navbar: React.FunctionComponent<Props> = () => {
         scrolling || router.pathname !== "/" ? styles.navbarContainerScroll : ""
       }`}
     >
-      <div className={styles.logoContainer}>
-        <Image
-          className={styles.appLogo}
-          src={LOGO}
-          alt="Image"
-          priority
-          onClick={handleClick}
-        />
-      </div>
-      <div className={styles.buttonWrapper}>
-        <NavButton href={"/"} name={"Home"} />
-        <NavButton href={"/about"} name={"About"} />
-        <NavButton href={"/auth"} name={"Sign in"} isSpecial={true} />
-      </div>
-      <div className={styles.dropdown}>
-        <button className={styles.dropbtn}>
-          <h2>Menu</h2>
-          <i className="fas fa-caret-down"></i>
-        </button>
-        <div className={styles.dropdownContent}>
-          <a href={"/"}>Home</a>
-          <a href={"/about"}>About</a>
-          <a href={"/auth"}>Sign in</a>
+      <div className={styles.navbarWrapper}>
+        <div className={styles.logoContainer}>
+          <Image
+            className={styles.appLogo}
+            src={LOGO}
+            alt="Image"
+            priority
+            onClick={handleClick}
+          />
         </div>
-      </div>
-      <div className={styles.search}>
-        {searchVisiblePages.includes(router.pathname) && <Search />}
+        <div className={styles.buttonWrapper}>
+          <NavButton href={"/"} name={"Home"} />
+          <NavButton href={"/about"} name={"About"} />
+          <NavButton href={"/auth"} name={"Sign in"} isSpecial={true} />
+        </div>
+        <div className={styles.dropdown}>
+          <button className={styles.dropbtn}>
+            <h2>Menu</h2>
+            <i className="fas fa-caret-down"></i>
+          </button>
+          <div className={styles.dropdownContent}>
+            <a href={"/"}>Home</a>
+            <a href={"/about"}>About</a>
+            <a href={"/auth"}>Sign in</a>
+          </div>
+        </div>
+        <div className={styles.search}>
+          {searchVisiblePages.includes(router.pathname) && <Search />}
+        </div>
       </div>
       <div className={styles.profileContainer}>
         <ProfileIcon />
