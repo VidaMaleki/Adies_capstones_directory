@@ -145,7 +145,12 @@ export default function Capstone ({ allDevs, signedInUser }: {
     return (
     <div className="bg-gray-100 min-h-screen">
         <Navbar />
+        <br/>
         <div className="flex-grow mx-auto pt-20 px-4 py-8 max-w-xl">
+        <div>
+            <h2 className="text-2xl font-bold">Add App</h2>
+        </div>
+        <br/>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
             <label className="block mb-2 font-medium" htmlFor="appName">
             App Name *
