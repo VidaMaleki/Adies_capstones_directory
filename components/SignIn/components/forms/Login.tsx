@@ -97,7 +97,7 @@ const LoginForm: React.FunctionComponent<ILoginFormProps> = (props) => {
         <Input
           name="password"
           label="Password"
-          type="text"
+          type="password"
           icon={<AiFillLock />}
           placeholder="******"
           register={register}
