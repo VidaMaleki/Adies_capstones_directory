@@ -5,6 +5,7 @@ import styles from "@/styles/Home.module.css";
 import AppSection from "@/components/AppSection";
 import { AppWithDevelopersProps } from "../components/types";
 import axios from "axios";
+import debounce from "lodash/debounce";
 
 export default function Home() {
   const [webAppsRandom, setWebAppsRandom] = useState<AppWithDevelopersProps[]>(
@@ -25,10 +26,6 @@ export default function Home() {
     const shuffled = appsList.sort(() => 0.5 - Math.random());
     return shuffled.slice(0, maxApps);
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   async function fetchData() {
     try {
@@ -71,17 +68,18 @@ export default function Home() {
       console.error(error);
     }
   }
+  // Define a debounced version of the fetchData function
+  const debouncedFetchData = debounce(fetchData, 300);
 
-  // An event listener to recheck screen size when the window is resized
   useEffect(() => {
-    fetchData();
-
+    debouncedFetchData(); // Use the debounced version of fetchData
+  
     // Add an event listener to recheck screen size when the window is resized
-    window.addEventListener("resize", fetchData);
-
+    window.addEventListener("resize", debouncedFetchData);
+  
     // Cleanup the event listener when the component unmounts
     return () => {
-      window.removeEventListener("resize", fetchData);
+      window.removeEventListener("resize", debouncedFetchData);
     };
   }, []);
 
