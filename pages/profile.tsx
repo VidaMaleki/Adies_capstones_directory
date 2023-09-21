@@ -1,7 +1,7 @@
 import { NextPageContext } from "next";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { FaSignOutAlt } from "react-icons/fa";
-import { AiFillSetting } from "react-icons/ai";
+import { AiFillSetting, AiOutlineEdit } from "react-icons/ai";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import axios from "axios";
@@ -17,6 +17,8 @@ import {
 } from "../components/types";
 import Settings from "@/components/Settings";
 import pageWrapperStyle from "@/styles/PageWrapper.module.css";
+import ProfilePictureSelection from "../components/ProfilePictureSelection";
+import { toast } from "react-toastify";
 
 export async function getServerSideProps(ctx: NextPageContext) {
   const session = await getSession(ctx);
@@ -52,7 +54,11 @@ export default function Profile({
   const { data: session, status } = useSession();
   const [showSettings, setShowSettings] = useState(false);
   const router = useRouter();
-
+  const [developerData, setDeveloperData] = useState<DeveloperWithAppProps>(
+    signedInUser || ({} as DeveloperWithAppProps)
+  );
+  const [selectedPicture, setSelectedPicture] = useState(signedInUser.image);
+  const [isSelectingPicture, setIsSelectingPicture] = useState(false);
   const handleDelete = () => {
     axios
       .delete(`/api/appRoutes?id=${signedInUser.appId}`)
@@ -74,6 +80,32 @@ export default function Profile({
 
   const onClose = () => {
     setShowSettings(false);
+  };
+
+  const handleOpenPictureSelection = () => {
+    setIsSelectingPicture(true);
+  };
+
+  const handleClosePictureSelection = () => {
+    setIsSelectingPicture(false);
+  };
+
+  const handlePictureSelection = (image: string) => {
+    axios
+      .put(`/api/auth/signup?id=${signedInUser.id}`, {
+        id: developerData.id,
+        email: developerData.email,
+        image: developerData.image,
+      })
+      .then(function (response) {
+        toast.success("Profile picture updated successfully");
+        // Update the state to reflect the selected picture
+        setSelectedPicture(image);
+        handleClosePictureSelection();
+      })
+      .catch(function (error: any) {
+        toast.error("Could not update profile picture, please try again");
+      });
   };
 
   useEffect(() => {
@@ -133,11 +165,33 @@ export default function Profile({
               <Image
                 src={session?.user?.image!}
                 alt={`${session?.user?.name} image`}
-                width={40}
-                height={40}
-                className="rounded-full w-40 h-40 "
+                width={100}
+                height={100}
+                className="rounded-full w-40 h-40"
               />
             </div>
+            <div className="w-full mt-4">
+              <button
+                className="text-teal-500 hover:text-teal-600 flex items-center"
+                onClick={handleOpenPictureSelection}
+              >
+                <AiOutlineEdit className="mr-2" /> Change Profile Picture
+              </button>
+            </div>
+            {isSelectingPicture && ( // Conditionally render the picture selection component
+              <div>
+                <ProfilePictureSelection
+                  selectedPicture={selectedPicture}
+                  onSelectPicture={handlePictureSelection}
+                />
+                <button
+                  className="text-teal-500 hover:text-teal-600 flex items-center"
+                  onClick={handleClosePictureSelection}
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
             <br></br>
             <p className="text-gray-600 drop-shadow text-center">
               Welcome, {signedInUser.fullName}! Here are your app details:

@@ -139,7 +139,7 @@ async function registerDeveloper(
       "Activate your account - Adie",
       activateTemplateEmail,
       "",
-      "",
+      ""
     );
 
     res.json({
@@ -231,18 +231,23 @@ async function updateDeveloper(
       }
     }
 
+    const updatedData: any = {
+      fullName: input.fullName,
+      email: input.email,
+      cohort: input.cohort,
+      linkedin: input.linkedin,
+      password: input.password
+        ? await bcrypt.hash(input.password, 12)
+        : undefined,
+    };
+
+    if (input.image) {
+      updatedData.image = input.image;
+    }
+
     const updatedDeveloper = await db.developer.update({
       where: { id: input.id },
-      data: {
-        fullName: input.fullName,
-        email: input.email,
-        cohort: input.cohort,
-        linkedin: input.linkedin,
-        image: input.image,
-        password: input.password
-          ? await bcrypt.hash(input.password, 12)
-          : undefined,
-      },
+      data: updatedData,
     });
 
     res.json({ message: "Developer updated successfully" });
