@@ -144,7 +144,7 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
         <Input
           name="password"
           label="Password"
-          type="text"
+          type="password"
           icon={<AiFillLock />}
           placeholder="******"
           register={register}
@@ -174,7 +174,7 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
         <Input
           name="confirmPassword"
           label="Confirm password"
-          type="text"
+          type="password"
           icon={<AiFillLock />}
           placeholder="******"
           register={register}
