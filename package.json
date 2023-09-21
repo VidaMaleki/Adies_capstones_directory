@@ -34,6 +34,7 @@
     "eslint-config-next": "13.2.3",
     "handlebars": "^4.7.7",
     "jsonwebtoken": "^9.0.0",
+    "lodash.debounce": "^4.0.8",
     "multer": "^1.4.5-lts.1",
     "next": "^13.2.3",
     "next-auth": "^4.22.1",
@@ -57,6 +58,7 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/lodash": "^4.14.198",
     "@types/node": "^18.16.19",
     "@types/nodemailer": "^6.4.7",
     "autoprefixer": "^10.4.14",

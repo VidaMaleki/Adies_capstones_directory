@@ -14,14 +14,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import zxcvbn from "zxcvbn";
 import { toast } from "react-toastify";
-// import { Link } from 'react-router-dom';
 import Link from "next/link";
-// import authorizedEmails from '../../data/developers.json'
-// npm install zod
-// npm install @hookform/resolvers
-// npm install @types/zxcvbn
-// npm i axios
-// npm install react-router-dom@latest
 
 interface IRegisterFormProps {}
 
@@ -34,7 +27,7 @@ const FormSchema = z
       .regex(new RegExp("^[a-zA-Z\\s]+$"), "No special characters allowed."),
     email: z.string().email("Please enter valid email address."),
     cohort: z
-      .string() // change to z.number()
+      .string()
       .min(1, "Cohort must have at least one digit.")
       .max(3, "cohort must not be less than 3 digits.")
       .refine((value) => /^[0-9]+$/.test(value), {
@@ -71,7 +64,6 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (values) => {
     console.log(values);
-    // const { email } = values;
 
     try {
       const { data } = await axios.post("/api/auth/signup", {

@@ -257,7 +257,7 @@ export default function Capstone({
             />
             <input
               type="submit"
-              value="Submit"
+              value="Add"
               className="bg-teal-200 drop-shadow text-gray-700 px-4 py-2 rounded-md"
             />
           </form>

@@ -5,7 +5,7 @@ import styles from "@/styles/About.module.css";
 import Image from "next/image";
 import vida from "../images/vida.png";
 import megan from "../images/megan.png";
-import andrea from "../images/andrea.jpg"
+import andrea from "../images/andrea.jpg";
 import { toast } from "react-toastify";
 
 const About = () => {
@@ -99,33 +99,34 @@ const About = () => {
             <p>Software Engineer</p>
           </div>
         </div>
-        <div className={styles.aboutFeedbackWrapper}>
-          <h2>Give us your feedback</h2>
-          <p>
+        <div className="mt-10 mb-10 w-[100%] flex flex-col px-12 py-4 sm:w-5/6 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/3 h-full bg-white flex items-center justify-center">
+          <h2 className="text-gray-700">Give us your feedback</h2>
+          <p className="text-gray-700">
             Found a bug? Have a suggestion? Please send us your feedback to
             improve our platform.
           </p>
           <form onSubmit={handleSubmit}>
-            <label htmlFor="name">Name:</label>
+            <label htmlFor="name" className="text-gray-700">Name:</label>
             <input
+              className="border border-gray-300 rounded-md p-2 w-full mb-4"
               type="text"
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
             />
-
-            <label htmlFor="email">Email:</label>
+            <label htmlFor="email" className="text-gray-700">Email:</label>
             <input
+              className="border border-gray-300 rounded-md p-2 w-full mb-4"
               type="email"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-
-            <label htmlFor="message">Message:</label>
+            <label htmlFor="message" className="text-gray-700">Message:</label>
             <textarea
+              className="border border-gray-300 rounded-md p-2 w-full mb-4"
               id="message"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
@@ -134,9 +135,7 @@ const About = () => {
             <div className="flex justify-end">
               <button
                 type="submit"
-                className={`${styles.feedbackButton} ${
-                  clicked ? styles.clicked : ""
-                }`}
+                className="bg-teal-200 drop-shadow text-gray-700 px-4 py-2 rounded-md"
                 onClick={handleButtonClick}
                 onMouseUp={handleButtonRelease}
               >
