@@ -7,11 +7,13 @@ interface ProfilePictureSelectionProps {
 }
 
 const ProfilePictureSelection: React.FC<ProfilePictureSelectionProps>  = ({ selectedPicture, onSelectPicture }) => {
-  const pictureOptions = [...Array(45).keys()];
+  const pictureOptions = Array.from({ length: 45 }, (_, index) => index + 1);
 
   return (
-    <div>
+    <div className="bg-white">
+      <br></br>
       <h3>Select Your Profile Picture</h3>
+      <br></br>
       <div className="profile-picture-options">
         {pictureOptions.map((option) => (
           <button
@@ -24,7 +26,7 @@ const ProfilePictureSelection: React.FC<ProfilePictureSelectionProps>  = ({ sele
             <Image
               src={`/profile-pictures/${option}.png`}
               alt={`Option ${option}`}
-              width={100} // Adjust width and height as needed
+              width={100}
               height={100}
             />
           </button>

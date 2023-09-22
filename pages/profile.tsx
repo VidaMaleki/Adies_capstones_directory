@@ -110,10 +110,10 @@ export default function Profile({
 
   useEffect(() => {
     // Redirect to home page if user is not authenticated
-    if (!session) {
+    if (!signedInUser) {
       router.push("/");
     }
-  }, [session, router]);
+  }, [signedInUser, router]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -163,27 +163,28 @@ export default function Profile({
             <br></br>
             <div className="w-full flex justify-center">
               <Image
-                src={session?.user?.image!}
-                alt={`${session?.user?.name} image`}
+                src={signedInUser?.image}
+                alt={`${signedInUser?.fullName} image`}
                 width={100}
                 height={100}
                 className="rounded-full w-40 h-40"
               />
             </div>
-            <div className="w-full mt-4">
+            <div className="w-full mt-4 flex justify-center items-center">
               <button
-                className="text-teal-500 hover:text-teal-600 flex items-center"
+                className="text-teal-500 hover:text-teal-600 flex items-center justify-center"
                 onClick={handleOpenPictureSelection}
               >
                 <AiOutlineEdit className="mr-2" /> Change Profile Picture
               </button>
             </div>
             {isSelectingPicture && ( // Conditionally render the picture selection component
-              <div>
+              <div className="w-full mt-4 flex  flex-col justify-center items-center">
                 <ProfilePictureSelection
                   selectedPicture={selectedPicture}
                   onSelectPicture={handlePictureSelection}
                 />
+                <br></br>
                 <button
                   className="text-teal-500 hover:text-teal-600 flex items-center"
                   onClick={handleClosePictureSelection}
