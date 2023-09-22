@@ -90,18 +90,21 @@ export default function Profile({
     setIsSelectingPicture(false);
   };
 
-  const handlePictureSelection = (image: string) => {
+  const handlePictureSelection = (picture: string) => {
+    console.log("Selected image:", picture);
     axios
       .put(`/api/auth/signup?id=${signedInUser.id}`, {
         id: developerData.id,
         email: developerData.email,
-        image: developerData.image,
+        image: picture,
       })
       .then(function (response) {
+        console.log("Response from server:", response);
         toast.success("Profile picture updated successfully");
         // Update the state to reflect the selected picture
-        setSelectedPicture(image);
+        setSelectedPicture(picture);
         handleClosePictureSelection();
+        router.reload();
       })
       .catch(function (error: any) {
         toast.error("Could not update profile picture, please try again");
@@ -163,11 +166,11 @@ export default function Profile({
             <br></br>
             <div className="w-full flex justify-center">
               <Image
-                src={signedInUser?.image}
+                src={`/profile-pictures/${signedInUser?.image}.png`}
                 alt={`${signedInUser?.fullName} image`}
                 width={100}
                 height={100}
-                className="rounded-full w-40 h-40"
+                className="rounded-full w-40 h-40 border border-gray-300"
               />
             </div>
             <div className="w-full mt-4 flex justify-center items-center">

@@ -76,7 +76,7 @@ model Developer {
   fullName      String
   email         String   @unique
   emailVerified Boolean @default(false)
-  image         String  @default("/auth/user-in-gray-circle.png")
+  image         String  @default("45")
   cohort        String
   linkedin      String
   password      String
