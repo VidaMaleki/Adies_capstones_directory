@@ -36,7 +36,7 @@ const ProfileIcon = (): JSX.Element | null => {
     <Link href="/profile">
       <div className={styles.imageWrapper}>
         <Image
-          src={session.user?.image!}
+          src={`/profile-pictures/${session?.user?.image!}.png`}
           alt="Developer profile image"
           width={40}
           height={40}

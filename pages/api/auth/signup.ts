@@ -136,7 +136,7 @@ async function registerDeveloper(
       newdeveloper.fullName,
       "",
       url,
-      "Activate your account - Adie",
+      "Please activate your account",
       activateTemplateEmail,
       "",
       ""

@@ -7,6 +7,7 @@ import NavButton from "./NavButton";
 import Search from "./Search";
 import { useEffect, useState } from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import Donation from "./Donation";
 
 interface Props {}
 
@@ -79,6 +80,7 @@ const Navbar: React.FunctionComponent<Props> = () => {
             <a href={"/"}>Home</a>
             <a href={"/about"}>About</a>
             <a href={"/auth"}>Sign in</a>
+            <Donation />
           </div>
         </div>
         <div className={styles.search}>
@@ -86,7 +88,12 @@ const Navbar: React.FunctionComponent<Props> = () => {
         </div>
       </div>
       <div className={styles.profileContainer}>
-        <ProfileIcon />
+        <div className={styles.donationWrapper}>
+          <Donation />
+        </div>
+        <div>
+          <ProfileIcon />
+        </div>
       </div>
     </div>
   );

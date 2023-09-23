@@ -188,7 +188,7 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
           icon={<FiLock />}
           disabled={isSubmitting}
         />
-      </form>
+      </form>      
     </div>
   );
 };
