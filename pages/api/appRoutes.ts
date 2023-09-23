@@ -194,6 +194,25 @@ async function deleteApp(req: NextApiRequest, res: NextApiResponse) {
   const appId = Number(req.query.id);
 
   try {
+    // Find the app to be deleted
+    const app = await db.app.findUnique({
+      where: { id: appId },
+      include: {
+        developers: true,
+      },
+    });
+
+    if (!app) {
+      return res.status(404).json({ message: "App not found." });
+    }
+
+    if (app.developers.length > 1) {
+      return res.status(400).json({
+        message: "You cannot delete this app because it has multiple developers.",
+      });
+    }
+
+    // Delete the app
     await db.app.delete({
       where: { id: appId },
     });

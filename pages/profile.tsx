@@ -64,13 +64,17 @@ export default function Profile({
       .delete(`/api/appRoutes?id=${signedInUser.appId}`)
       .then(function (response) {
         console.log(response);
-        alert("Your app was successfully deleted");
+        toast.success("Your app was successfully deleted");
         // Need to trigger a refresh
         router.reload();
       })
       .catch(function (error) {
         console.log(error);
-        alert("Could not delete app, try again");
+        if (error.response && error.response.status === 400) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error("Could not delete app, try again");
+        }
       });
   };
 
