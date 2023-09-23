@@ -123,7 +123,7 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
       })
       .catch(function (error) {
         console.log(error);
-        alert("Could not update app, try again");
+        alert(error.response?.data?.errors || error.response?.data?.message);
         setIsSaving(false);
       });
   };
