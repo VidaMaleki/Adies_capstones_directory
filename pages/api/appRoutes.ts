@@ -197,8 +197,8 @@ async function deleteApp(req: NextApiRequest, res: NextApiResponse) {
     await db.app.delete({
       where: { id: appId },
     });
-
-    return res.status(204).end();
+    
+    return res.json({ message: `App with ID ${appId} has been deleted.` });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });

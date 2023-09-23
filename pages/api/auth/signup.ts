@@ -50,7 +50,7 @@ export default async function handler(
   }
 }
 
-// http://localhost:3000/api/auth/signup
+
 async function registerDeveloper(
   req: NextApiRequest,
   res: NextApiResponse<{ message: string }>
@@ -97,11 +97,13 @@ async function registerDeveloper(
         .status(400)
         .json({ message: "Password must be at least 6 characters." });
     }
-
+    console.log("authorizedEmails", 
+      process.env.AUTHORIZED_EMAILS || "[]")
     // Check if the user's email is in the list of authorized emails
     const authorizedEmails: AuthorizedEmail[] = JSON.parse(
       process.env.AUTHORIZED_EMAILS || "[]"
     );
+    console.log("authorizedEmails2",authorizedEmails)
     const isAuthorizedEmail = authorizedEmails.some(
       (authorizedEmail) => authorizedEmail.email === input.email
     );
@@ -113,7 +115,7 @@ async function registerDeveloper(
     }
 
     const cryptedPassword = await bcrypt.hash(input.password, 12);
-
+    console.log(cryptedPassword)
     const newdeveloper = await db.developer.create({
       data: {
         fullName: input.fullName,
@@ -124,11 +126,14 @@ async function registerDeveloper(
         password: cryptedPassword,
       },
     });
-
+    console.log(newdeveloper)
+    console.log(createActivationToken({
+      id: newdeveloper.id.toString(),
+    }))
     const activation_token = createActivationToken({
       id: newdeveloper.id.toString(),
     });
-
+    console.log("activation_token", activation_token)
     const url = `${process.env.NEXTAUTH_URL}/activate/${activation_token}`;
 
     await sendMail(
@@ -150,7 +155,7 @@ async function registerDeveloper(
   }
 }
 
-// Get all developers http://localhost:3000/api/auth/signup?id=1
+// Get all developers 
 async function getOneDeveloper(req: NextApiRequest, res: NextApiResponse) {
   const devId = Number(req.query.id);
   try {
@@ -167,7 +172,7 @@ async function getOneDeveloper(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-// Remove one user http://localhost:3000/api/auth/signup?id=1
+// Remove one user 
 async function getAllDevelopers(
   req: NextApiRequest,
   res: NextApiResponse<Developer[]>
@@ -184,6 +189,7 @@ async function getAllDevelopers(
   }
 }
 
+// Delete the developer
 async function deleteDeveloper(
   req: NextApiRequest,
   res: NextApiResponse<{ message: string }>
@@ -195,7 +201,46 @@ async function deleteDeveloper(
       return res.status(400).json({ message: "User ID is required." });
     }
 
-    const user = await db.developer.delete({
+    const developer = await db.developer.findUnique({
+      where: { id: parseInt(id) },
+    });
+
+    if (!developer) {
+      return res.status(404).json({ message: "Developer not found." });
+    }
+
+    // Check if the developer is associated with any apps
+    const apps = await db.app.findMany({
+      where: {
+        developers: {
+          some: {
+            id: developer.id,
+          },
+        },
+      },
+    });
+
+    for (const app of apps) {
+      const developerCount = await db.developer.count({
+        where: {
+          app: {
+            id: app.id,
+          },
+        },
+      });
+
+      if (developerCount === 1) {
+        // If there is only one developer associated with the app, delete the app
+        await db.app.delete({
+          where: {
+            id: app.id,
+          },
+        });
+      }
+    }
+
+    // Delete the developer
+    await db.developer.delete({
       where: { id: parseInt(id) },
     });
 
@@ -205,6 +250,7 @@ async function deleteDeveloper(
   }
 }
 
+// Update developer info
 async function updateDeveloper(
   req: NextApiRequest,
   res: NextApiResponse<{ message: string }>
