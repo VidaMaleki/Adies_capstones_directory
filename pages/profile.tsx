@@ -57,7 +57,7 @@ export default function Profile({
   const [developerData, setDeveloperData] = useState<DeveloperWithAppProps>(
     signedInUser || ({} as DeveloperWithAppProps)
   );
-  const [selectedPicture, setSelectedPicture] = useState(signedInUser.image);
+  const [selectedPicture, setSelectedPicture] = useState(signedInUser?.image);
   const [isSelectingPicture, setIsSelectingPicture] = useState(false);
   const handleDelete = () => {
     axios
