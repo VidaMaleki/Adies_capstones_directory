@@ -41,13 +41,13 @@ export interface AppInputProps {
   name: string;
   label: string;
   type: string;
-  icon?: JSX.Element;
-  placeholder?: string;
+  placeholder: string;
   register: any;
-  error?: string;
-  disabled?: boolean;
-  }
-
+  error: any;
+  disabled: boolean;
+  onChange?: (name: string, value: string) => void;
+  value?: string;
+}
 export interface SignupInputProps{
   name: string;
   label: string;

@@ -13,7 +13,9 @@ import { AppDataProps } from "@/components/types";
 import { typeOptions, techOptions } from "../app-data/selectOptions";
 import { z } from "zod";
 import Navbar from "@/components/Navbar/Navbar";
-
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import AppInput from "@/components/AppInput";
 
 export const FormSchema = z.object({
   appName: z.string().nonempty({ message: "App Name is required" }),
@@ -21,13 +23,19 @@ export const FormSchema = z.object({
   developers: z
     .array(z.object({ fullName: z.string() }))
     .min(1, { message: "Developers are required" }),
-  appLink: z.string().url({ message: "Invalid App Link URL" }).optional(),
-  videoLink: z.string().url({ message: "Invalid Video Link URL" }).optional(),
-  github: z.string().url({ message: "Invalid Github Link URL" }),
+  appLink: z.string().url().optional(),
+  videoLink: z.string().url().optional(),
+  github: z.string().url({ message: "Please enter valid Github Link URL" }),
   type: z.string().nonempty({ message: "Category is required." }),
   technologies: z
-    .array(z.string())
-    .min(1, { message: "Technologies are required" }),
+  .array(
+    z.object({
+      label: z.string(),
+      value: z.string(),
+    })
+  )
+  .min(1, { message: "Technologies are required" })
+  .max(5, { message: "You can select up to 5 technologies" }),
 });
 
 export type FormSchemaType = z.infer<typeof FormSchema>;
@@ -71,10 +79,17 @@ export default function Capstone({
   allDevs: Developer[];
   signedInUser: Developer;
 }) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormSchemaType>({
+    resolver: zodResolver(FormSchema),
+  });
+  
   const router = useRouter();
   const { data: session } = useSession();
   const [appData, setAppData] = useState<FormSchemaType>(defaultApp);
-  // const [appImage, setAppImage] = useState<File | string>("");
   console.log(appData);
 
   const nameOptions = allDevs.map((name) => ({
@@ -117,6 +132,7 @@ export default function Capstone({
 
   const validateFormData = () => {
     const validationResult = FormSchema.safeParse(appData);
+    console.log("validationResult", validationResult);
 
     if (!validationResult.success) {
       const errorMessages = validationResult.error.errors.map(
@@ -129,9 +145,9 @@ export default function Capstone({
     return true;
   };
 
-  const handleSubmit = async (event: any) => {
+  const onSubmit = async (event: any) => {
     event.preventDefault();
-
+    
     if (validateFormData()) {
       console.log(appData);
       axios
@@ -146,7 +162,7 @@ export default function Capstone({
         })
         .catch(function (error) {
           console.log(error);
-          alert("Error adding capstone project, please try again");
+          error.toast(error.message)
         });
     } else {
       alert("Please fill in all required fields properly");
@@ -165,20 +181,19 @@ export default function Capstone({
           </div>
           <br />
           <form
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
             encType="multipart/form-data"
             className={styles.addAppFormWrapper}
           >
-            <label className="text-gray-700" htmlFor="appName">
-              App Name *
-            </label>
-            <input
-              className="border border-gray-300 rounded-md p-2 w-full mb-4"
-              type="text"
-              value={appData.appName}
-              onChange={handleChange}
+            <AppInput
               name="appName"
-              id="appName"
+              label="App Name *"
+              type="text"
+              placeholder="Enter app name"
+              register={register}
+              error={errors.appName?.message}
+              disabled={isSubmitting}
+              onChange={handleChange}
             />
             <label className="text-gray-700" htmlFor="description">
               Description *
@@ -190,38 +205,38 @@ export default function Capstone({
               name="description"
               id="description"
             ></textarea>
-            <label className="text-gray-700" htmlFor="github">
-              Github Link
-            </label>
-            <input
-              className="border border-gray-300 rounded-md p-2 w-full mb-4"
-              type="text"
+            <AppInput
+              name="github"
+              label="GitHub Link"
+              type="url"
+              placeholder="https://github.com/"
+              register={register}
+              error={errors.github?.message}
+              disabled={isSubmitting}
               value={appData.github}
               onChange={handleChange}
-              name="github"
-              id="github"
             />
-            <label className="text-gray-700" htmlFor="appLink">
-              App Link
-            </label>
-            <input
-              className="border border-gray-300 rounded-md p-2 w-full mb-4"
-              type="text"
+            <AppInput
+              name="appLink"
+              label="App Link"
+              type="url"
+              placeholder="https://appLink.com/"
+              register={register}
+              error={errors.appLink?.message}
+              disabled={isSubmitting}
               value={appData.appLink}
               onChange={handleChange}
-              name="appLink"
-              id="appLink"
             />
-            <label className="text-gray-700" htmlFor="videoLink">
-              Video Demo Link
-            </label>
-            <input
-              className="border border-gray-300 rounded-md p-2 w-full mb-4"
-              type="text"
+            <AppInput
+              name="videoLink"
+              label="Video Link"
+              type="url"
+              placeholder="https://videoLink.com/"
+              register={register}
+              error={errors.appLink?.message}
+              disabled={isSubmitting}
               value={appData.videoLink}
               onChange={handleChange}
-              name="videoLink"
-              id="videoLink"
             />
             <label className="text-gray-700" htmlFor="type">
               Category *
@@ -242,8 +257,13 @@ export default function Capstone({
               isClearable
               instanceId="appTechnologies"
               className="mb-4"
-
+              ref={ref}
             />
+            {errors.technologies && (
+              <div className="text-red-500 text-sm mt-1">
+                {errors.technologies?.message}
+              </div>
+            )}
             <label className="text-gray-700" htmlFor="developers">
               Developers *
             </label>
