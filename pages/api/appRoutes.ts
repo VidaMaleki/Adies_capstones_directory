@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import validator from "validator";
 import { AppDataProps } from "@/components/types";
 import { getSession } from "next-auth/react";
+import { set } from "lodash";
 
 export default async function createAppHandler(
   req: NextApiRequest,
@@ -31,6 +32,7 @@ async function createApp(req: NextApiRequest, res: NextApiResponse) {
   try {
     const input = req.body;
     const errors = [];
+    const messages: string[] = [];
 
     if (!input.signedInUser) {
       errors.push("Please login to continue.");
@@ -84,6 +86,7 @@ async function createApp(req: NextApiRequest, res: NextApiResponse) {
         technologies: input.technologies,
       },
     });
+
     
     const developerNames = input.developers.map(
       (developer: { fullName: string }) => developer.fullName
@@ -97,6 +100,21 @@ async function createApp(req: NextApiRequest, res: NextApiResponse) {
       },
     });
 
+    if (developerNames.length > developers.length){
+      const developersSet = new Set(developerNames)
+      for (let developer of developers){
+        if ( developersSet.has(developer.fullName)){
+          developersSet.delete(developer.fullName)
+        }
+      }
+      console.log("App will be created for all users except: ", developersSet);
+      messages.push("App will be created for all users except:")
+      for (const invalidDev in developersSet){
+        messages.push(invalidDev);
+      }
+    };
+
+
 
     await Promise.all(
       developers.map(async (developer) => {
@@ -109,7 +127,7 @@ async function createApp(req: NextApiRequest, res: NextApiResponse) {
       })
     );
 
-    return res.status(201).json({ app });
+    return res.status(201).json({ app, messages });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
