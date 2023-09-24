@@ -114,7 +114,7 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
     event.preventDefault();
     setIsSaving(true);
     axios
-      .put(`/api/appRoutes?id=${appData.id}`, appData)
+      .put(`/api/appRoutes?id=${appData.id}`, {...appData, signedInUser: session?.user?.email})
       .then(function (response) {
         console.log(response);
         toast.success("Your app information was successfully updated");

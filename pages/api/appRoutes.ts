@@ -2,11 +2,12 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { db } from "@/lib/db";
 import validator from "validator";
 import { AppDataProps } from "@/components/types";
+import { getSession } from "next-auth/react";
 
 export default async function createAppHandler(
   req: NextApiRequest,
   res: NextApiResponse
-) {
+){
   switch (req.method) {
     case "POST":
       return createApp(req, res);
@@ -27,10 +28,29 @@ export default async function createAppHandler(
 };
 
 async function createApp(req: NextApiRequest, res: NextApiResponse) {
+
   try {
     const input = req.body;
     const errors = [];
 
+    if (!input.signedInUser) {
+        errors.push("Please login to continue.");
+    }
+    else {
+      const signedInUser = await db.developer.findUnique({
+          where: {
+          email: input.signedInUser,
+          },
+      });
+
+      if (!signedInUser) {
+        errors.push("User not found.");
+      }
+
+      if (signedInUser?.appId) {
+        errors.push("User already has an app.");
+      }
+    }
     if (!input.appName) {
       errors.push("App name is required.");
     }
@@ -72,8 +92,10 @@ async function createApp(req: NextApiRequest, res: NextApiResponse) {
     );
     const developers = await db.developer.findMany({
       where: {
+        appId: null,
         fullName: {
           in: developerNames,
+
         },
       },
     });
@@ -123,6 +145,28 @@ async function updateApp(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query as { id: string };
     const input: AppDataProps = req.body as AppDataProps;
     const errors: string[] = [];
+
+    if (!input.signedInUser) {
+      errors.push("Please login to continue.");
+    }
+    else {
+      const signedInUser = await db.developer.findUnique({
+          where: {
+          email: input.signedInUser,
+          },
+      });
+
+      if (!signedInUser) {
+        errors.push("User not found.");
+      }
+
+      if (signedInUser?.appId != input.id) {
+        errors.push("User doesn't have permissions to submit changes on this app.");
+      }
+    }
+    if (!input.appName) {
+      errors.push("App name is required.");
+    }
 
     if (!input.appName) {
       errors.push("App name is required.");

@@ -28,6 +28,7 @@ export interface AppWithIdProps extends AppDataProps{
 
 export interface AppDataProps {
   appName: string,
+  id: number,
   description: string,
   developers: Developer[],
   appLink: string | null,
@@ -35,6 +36,7 @@ export interface AppDataProps {
   github: string,
   type: string,
   technologies: string[],
+  signedInUser: string | undefined,
 }
 
 export interface AppInputProps {

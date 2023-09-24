@@ -135,7 +135,7 @@ export default function Capstone({
     if (validateFormData()) {
       console.log(appData);
       axios
-        .post("/api/appRoutes/", appData, {
+        .post("/api/appRoutes/", {...appData, signedInUser: session?.user?.email }, {
           // headers: {
           // "Content-Type": "multipart/form-data",
           // },
@@ -146,7 +146,7 @@ export default function Capstone({
         })
         .catch(function (error) {
           console.log(error);
-          alert("Error adding capstone project, please try again");
+          alert(error.response.data.errors);
         });
     } else {
       alert("Please fill in all required fields properly");
