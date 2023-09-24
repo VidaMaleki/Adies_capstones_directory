@@ -7,7 +7,7 @@ import { getSession } from "next-auth/react";
 export default async function createAppHandler(
   req: NextApiRequest,
   res: NextApiResponse
-){
+) {
   switch (req.method) {
     case "POST":
       return createApp(req, res);
@@ -25,22 +25,20 @@ export default async function createAppHandler(
     default:
       return res.status(405).json({ message: "Method not allowed" });
   }
-};
+}
 
 async function createApp(req: NextApiRequest, res: NextApiResponse) {
-
   try {
     const input = req.body;
     const errors = [];
 
     if (!input.signedInUser) {
-        errors.push("Please login to continue.");
-    }
-    else {
+      errors.push("Please login to continue.");
+    } else {
       const signedInUser = await db.developer.findUnique({
-          where: {
+        where: {
           email: input.signedInUser,
-          },
+        }
       });
 
       if (!signedInUser) {
@@ -86,7 +84,7 @@ async function createApp(req: NextApiRequest, res: NextApiResponse) {
         technologies: input.technologies,
       },
     });
-
+    
     const developerNames = input.developers.map(
       (developer: { fullName: string }) => developer.fullName
     );
@@ -95,10 +93,10 @@ async function createApp(req: NextApiRequest, res: NextApiResponse) {
         appId: null,
         fullName: {
           in: developerNames,
-
         },
       },
     });
+
 
     await Promise.all(
       developers.map(async (developer) => {
@@ -116,7 +114,7 @@ async function createApp(req: NextApiRequest, res: NextApiResponse) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
-};
+}
 
 async function getOneApp(req: NextApiRequest, res: NextApiResponse) {
   const appId = Number(req.query.id);
@@ -138,7 +136,7 @@ async function getOneApp(req: NextApiRequest, res: NextApiResponse) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
-};
+}
 
 async function updateApp(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -148,12 +146,11 @@ async function updateApp(req: NextApiRequest, res: NextApiResponse) {
 
     if (!input.signedInUser) {
       errors.push("Please login to continue.");
-    }
-    else {
+    } else {
       const signedInUser = await db.developer.findUnique({
-          where: {
+        where: {
           email: input.signedInUser,
-          },
+        },
       });
 
       if (!signedInUser) {
@@ -161,7 +158,9 @@ async function updateApp(req: NextApiRequest, res: NextApiResponse) {
       }
 
       if (signedInUser?.appId != input.id) {
-        errors.push("User doesn't have permissions to submit changes on this app.");
+        errors.push(
+          "User doesn't have permissions to submit changes on this app."
+        );
       }
     }
     if (!input.appName) {
@@ -232,7 +231,7 @@ async function updateApp(req: NextApiRequest, res: NextApiResponse) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
-};
+}
 
 async function deleteApp(req: NextApiRequest, res: NextApiResponse) {
   const appId = Number(req.query.id);
@@ -252,7 +251,8 @@ async function deleteApp(req: NextApiRequest, res: NextApiResponse) {
 
     if (app.developers.length > 1) {
       return res.status(400).json({
-        message: "You cannot delete this app because it has multiple developers.",
+        message:
+          "You cannot delete this app because it has multiple developers.",
       });
     }
 
@@ -260,13 +260,13 @@ async function deleteApp(req: NextApiRequest, res: NextApiResponse) {
     await db.app.delete({
       where: { id: appId },
     });
-    
+
     return res.json({ message: `App with ID ${appId} has been deleted.` });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
-};
+}
 
 async function getAllApps(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -280,4 +280,4 @@ async function getAllApps(req: NextApiRequest, res: NextApiResponse) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
-};
+}

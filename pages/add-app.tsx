@@ -13,9 +13,6 @@ import { AppDataProps } from "@/components/types";
 import { typeOptions, techOptions } from "../app-data/selectOptions";
 import { z } from "zod";
 import Navbar from "@/components/Navbar/Navbar";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import AppInput from "@/components/AppInput";
 
 export const FormSchema = z.object({
   appName: z.string().nonempty({ message: "App Name is required" }),
@@ -23,9 +20,9 @@ export const FormSchema = z.object({
   developers: z
     .array(z.object({ fullName: z.string() }))
     .min(1, { message: "Developers are required" }),
-  appLink: z.string().url().optional(),
-  videoLink: z.string().url().optional(),
-  github: z.string().url({ message: "Please enter valid Github Link URL" }),
+  appLink: z.string().url({ message: "Invalid App Link URL" }).optional(),
+  videoLink: z.string().url({ message: "Invalid Video Link URL" }).optional(),
+  github: z.string().url({ message: "Invalid Github Link URL" }),
   type: z.string().nonempty({ message: "Category is required." }),
   technologies: z
     .array(z.string())
@@ -34,7 +31,6 @@ export const FormSchema = z.object({
 });
 
 export type FormSchemaType = z.infer<typeof FormSchema>;
-
 export async function getServerSideProps(ctx: NextPageContext) {
   const session = await getSession(ctx);
   const allDevs: Developer[] = await db.developer.findMany();
@@ -46,7 +42,6 @@ export async function getServerSideProps(ctx: NextPageContext) {
       email: userEmail,
     },
   });
-
   return {
     props: {
       session,
@@ -55,7 +50,6 @@ export async function getServerSideProps(ctx: NextPageContext) {
     },
   };
 }
-
 const defaultApp: FormSchemaType = {
   appName: "",
   description: "",
@@ -66,7 +60,6 @@ const defaultApp: FormSchemaType = {
   type: "",
   technologies: [],
 };
-
 export default function Capstone({
   allDevs,
   signedInUser,
@@ -74,19 +67,11 @@ export default function Capstone({
   allDevs: Developer[];
   signedInUser: Developer;
 }) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<FormSchemaType>({
-    resolver: zodResolver(FormSchema),
-  });
-
   const router = useRouter();
   const { data: session } = useSession();
   const [appData, setAppData] = useState<FormSchemaType>(defaultApp);
+  // const [appImage, setAppImage] = useState<File | string>("");
   console.log(appData);
-
   const nameOptions = allDevs.map((name) => ({
     value: String(name.id),
     label: name.fullName,
@@ -102,7 +87,7 @@ export default function Capstone({
       // all non-array values for app
       const inputName = event.target.name;
       const targetValue = event.target.value;
-      
+
       // Check if inputName is a valid key in AppDataProps
       if (inputName in newAppData) {
         newAppData[inputName as keyof FormSchemaType] = targetValue;
@@ -131,8 +116,6 @@ export default function Capstone({
 
   const validateFormData = () => {
     const validationResult = FormSchema.safeParse(appData);
-    console.log("validationResult", validationResult);
-
     if (!validationResult.success) {
       const errorMessages = validationResult.error.errors.map(
         (error) => error.message
@@ -144,7 +127,7 @@ export default function Capstone({
     return true;
   };
 
-  const onSubmit = async (event: any) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
 
     if (validateFormData()) {
@@ -171,7 +154,7 @@ export default function Capstone({
       alert("Please fill in all required fields properly");
     }
   };
-
+  
   return (
     <div className={pageWrapperStyle.pageWrapper}>
       <Navbar />
@@ -184,20 +167,20 @@ export default function Capstone({
           </div>
           <br />
           <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit}
             encType="multipart/form-data"
             className={styles.addAppFormWrapper}
           >
-            <AppInput
-              id="appName"
-              name="appName"
-              label="App Name *"
+            <label className="text-gray-700" htmlFor="appName">
+              App Name *
+            </label>
+            <input
+              className="border border-gray-300 rounded-md p-2 w-full mb-4"
               type="text"
-              placeholder="Enter app name"
-              register={register}
-              error={errors.appName?.message}
-              disabled={isSubmitting}
+              value={appData.appName}
               onChange={handleChange}
+              name="appName"
+              id="appName"
             />
             <label className="text-gray-700" htmlFor="description">
               Description *
@@ -209,41 +192,38 @@ export default function Capstone({
               name="description"
               id="description"
             ></textarea>
-            <AppInput
-              id="github"
-              name="github"
-              label="GitHub Link"
-              type="url"
-              placeholder="https://github.com/"
-              register={register}
-              error={errors.github?.message}
-              disabled={isSubmitting}
+            <label className="text-gray-700" htmlFor="github">
+              Github Link
+            </label>
+            <input
+              className="border border-gray-300 rounded-md p-2 w-full mb-4"
+              type="text"
               value={appData.github}
               onChange={handleChange}
+              name="github"
+              id="github"
             />
-            <AppInput
-              id="appLink"
-              name="appLink"
-              label="App Link"
-              type="url"
-              placeholder="https://appLink.com/"
-              register={register}
-              error={errors.appLink?.message}
-              disabled={isSubmitting}
+            <label className="text-gray-700" htmlFor="appLink">
+              App Link
+            </label>
+            <input
+              className="border border-gray-300 rounded-md p-2 w-full mb-4"
+              type="text"
               value={appData.appLink}
               onChange={handleChange}
+              name="appLink"
+              id="appLink"
             />
-            <AppInput
-              id="videoLink"
-              name="videoLink"
-              label="Video Link"
-              type="url"
-              placeholder="https://videoLink.com/"
-              register={register}
-              error={errors.appLink?.message}
-              disabled={isSubmitting}
+            <label className="text-gray-700" htmlFor="videoLink">
+              Video Demo Link
+            </label>
+            <input
+              className="border border-gray-300 rounded-md p-2 w-full mb-4"
+              type="text"
               value={appData.videoLink}
               onChange={handleChange}
+              name="videoLink"
+              id="videoLink"
             />
             <label className="text-gray-700" htmlFor="type">
               Category *
@@ -265,11 +245,6 @@ export default function Capstone({
               instanceId="appTechnologies"
               className="mb-4"
             />
-            {errors.technologies && (
-              <div className="text-red-500 text-sm mt-1">
-                {errors.technologies?.message}
-              </div>
-            )}
             <label className="text-gray-700" htmlFor="developers">
               Developers *
             </label>
