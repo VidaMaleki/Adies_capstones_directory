@@ -51,6 +51,7 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
                             <h3 className={styles.appPopupText}>Created by: 
                                 <p className={styles.appPopupSubText}>{developerNamesString}</p> 
                             </h3>
+                            
                             <h3 className={styles.appPopupText}>Description:
                                 <p className={styles.appPopupSubText}>{app.description}</p> 
                             </h3>

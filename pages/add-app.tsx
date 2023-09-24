@@ -14,7 +14,6 @@ import { typeOptions, techOptions } from "../app-data/selectOptions";
 import { z } from "zod";
 import Navbar from "@/components/Navbar/Navbar";
 
-
 export const FormSchema = z.object({
   appName: z.string().nonempty({ message: "App Name is required" }),
   description: z.string().nonempty({ message: "Description is required" }),
@@ -27,11 +26,11 @@ export const FormSchema = z.object({
   type: z.string().nonempty({ message: "Category is required." }),
   technologies: z
     .array(z.string())
-    .min(1, { message: "Technologies are required" }),
+    .min(1, { message: "Technologies are required" })
+    .max(5, { message: "You can select up to 5 technologies" }),
 });
 
 export type FormSchemaType = z.infer<typeof FormSchema>;
-
 export async function getServerSideProps(ctx: NextPageContext) {
   const session = await getSession(ctx);
   const allDevs: Developer[] = await db.developer.findMany();
@@ -43,7 +42,6 @@ export async function getServerSideProps(ctx: NextPageContext) {
       email: userEmail,
     },
   });
-
   return {
     props: {
       session,
@@ -52,7 +50,6 @@ export async function getServerSideProps(ctx: NextPageContext) {
     },
   };
 }
-
 const defaultApp: FormSchemaType = {
   appName: "",
   description: "",
@@ -63,7 +60,6 @@ const defaultApp: FormSchemaType = {
   type: "",
   technologies: [],
 };
-
 export default function Capstone({
   allDevs,
   signedInUser,
@@ -76,7 +72,6 @@ export default function Capstone({
   const [appData, setAppData] = useState<FormSchemaType>(defaultApp);
   // const [appImage, setAppImage] = useState<File | string>("");
   console.log(appData);
-
   const nameOptions = allDevs.map((name) => ({
     value: String(name.id),
     label: name.fullName,
@@ -92,7 +87,11 @@ export default function Capstone({
       // all non-array values for app
       const inputName = event.target.name;
       const targetValue = event.target.value;
-      newAppData[inputName as keyof AppDataProps] = targetValue;
+
+      // Check if inputName is a valid key in AppDataProps
+      if (inputName in newAppData) {
+        newAppData[inputName as keyof FormSchemaType] = targetValue;
+      }
     }
     console.log(typeof event.label);
     console.log(newAppData);
@@ -117,7 +116,6 @@ export default function Capstone({
 
   const validateFormData = () => {
     const validationResult = FormSchema.safeParse(appData);
-
     if (!validationResult.success) {
       const errorMessages = validationResult.error.errors.map(
         (error) => error.message
@@ -135,11 +133,15 @@ export default function Capstone({
     if (validateFormData()) {
       console.log(appData);
       axios
-        .post("/api/appRoutes/", {...appData, signedInUser: session?.user?.email }, {
-          // headers: {
-          // "Content-Type": "multipart/form-data",
-          // },
-        })
+        .post(
+          "/api/appRoutes/",
+          { ...appData, signedInUser: session?.user?.email },
+          {
+            // headers: {
+            // "Content-Type": "multipart/form-data",
+            // },
+          }
+        )
         .then(function (response) {
           console.log(response);
           router.push("/profile");
@@ -152,7 +154,7 @@ export default function Capstone({
       alert("Please fill in all required fields properly");
     }
   };
-
+  
   return (
     <div className={pageWrapperStyle.pageWrapper}>
       <Navbar />
@@ -242,7 +244,6 @@ export default function Capstone({
               isClearable
               instanceId="appTechnologies"
               className="mb-4"
-
             />
             <label className="text-gray-700" htmlFor="developers">
               Developers *

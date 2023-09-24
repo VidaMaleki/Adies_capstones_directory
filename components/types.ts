@@ -27,8 +27,8 @@ export interface AppWithIdProps extends AppDataProps{
 }
 
 export interface AppDataProps {
-  appName: string,
   id: number,
+  appName: string,
   description: string,
   developers: Developer[],
   appLink: string | null,
@@ -40,16 +40,17 @@ export interface AppDataProps {
 }
 
 export interface AppInputProps {
+  id: string;
   name: string;
   label: string;
   type: string;
-  icon?: JSX.Element;
-  placeholder?: string;
+  placeholder: string;
   register: any;
-  error?: string;
-  disabled?: boolean;
-  }
-
+  error: any;
+  disabled: boolean;
+  onChange?: (name: string, value: string) => void;
+  value?: string;
+}
 export interface SignupInputProps{
   name: string;
   label: string;
