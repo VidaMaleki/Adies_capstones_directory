@@ -4,7 +4,7 @@ import { IoAlertCircle } from "react-icons/io5";
 import { AppInputProps } from "@/components/types";
 
 const AppInput: React.FunctionComponent<AppInputProps> = (props) => {
-  const { name, label, type, register, placeholder, onChange, error, value, disabled } = props;
+  const { id, name, label, type, register, placeholder, onChange, error, value, disabled } = props;
 
   return (
     <div className={`mt-3 w-[100%] ${error ? 'border-red-500' : ''}`}>
@@ -18,6 +18,7 @@ const AppInput: React.FunctionComponent<AppInputProps> = (props) => {
         >
         </div>
         <input
+          id={name}
           name={name}
           type={type}
           className={`w-full py-2 pr-7 pl-8 block rounded-md border border-gray-300 outline-offset-2 outline-transparent focus:border ${error ? 'border-red-500' : ''}`}
