@@ -170,7 +170,7 @@ export default function Profile({
             <br></br>
             <div className="w-full flex justify-center">
               <Image
-                src={`/profile-pictures/${signedInUser?.image}.png`}
+                src={signedInUser?.image ? `/profile-pictures/${signedInUser?.image}.png` : `/profile-pictures/45.png` }
                 alt={`${signedInUser?.fullName} image`}
                 width={100}
                 height={100}
