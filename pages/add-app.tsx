@@ -28,14 +28,9 @@ export const FormSchema = z.object({
   github: z.string().url({ message: "Please enter valid Github Link URL" }),
   type: z.string().nonempty({ message: "Category is required." }),
   technologies: z
-  .array(
-    z.object({
-      label: z.string(),
-      value: z.string(),
-    })
-  )
-  .min(1, { message: "Technologies are required" })
-  .max(5, { message: "You can select up to 5 technologies" }),
+    .array(z.string())
+    .min(1, { message: "Technologies are required" })
+    .max(5, { message: "You can select up to 5 technologies" }),
 });
 
 export type FormSchemaType = z.infer<typeof FormSchema>;
@@ -86,7 +81,7 @@ export default function Capstone({
   } = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
   });
-  
+
   const router = useRouter();
   const { data: session } = useSession();
   const [appData, setAppData] = useState<FormSchemaType>(defaultApp);
@@ -107,7 +102,11 @@ export default function Capstone({
       // all non-array values for app
       const inputName = event.target.name;
       const targetValue = event.target.value;
-      newAppData[inputName as keyof AppDataProps] = targetValue;
+      
+      // Check if inputName is a valid key in AppDataProps
+      if (inputName in newAppData) {
+        newAppData[inputName as keyof FormSchemaType] = targetValue;
+      }
     }
     console.log(typeof event.label);
     console.log(newAppData);
@@ -147,22 +146,26 @@ export default function Capstone({
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
-    
+
     if (validateFormData()) {
       console.log(appData);
       axios
-        .post("/api/appRoutes/", appData, {
-          // headers: {
-          // "Content-Type": "multipart/form-data",
-          // },
-        })
+        .post(
+          "/api/appRoutes/",
+          { ...appData, signedInUser: session?.user?.email },
+          {
+            // headers: {
+            // "Content-Type": "multipart/form-data",
+            // },
+          }
+        )
         .then(function (response) {
           console.log(response);
           router.push("/profile");
         })
         .catch(function (error) {
           console.log(error);
-          error.toast(error.message)
+          alert(error.response.data.errors);
         });
     } else {
       alert("Please fill in all required fields properly");
@@ -186,6 +189,7 @@ export default function Capstone({
             className={styles.addAppFormWrapper}
           >
             <AppInput
+              id="appName"
               name="appName"
               label="App Name *"
               type="text"
@@ -206,6 +210,7 @@ export default function Capstone({
               id="description"
             ></textarea>
             <AppInput
+              id="github"
               name="github"
               label="GitHub Link"
               type="url"
@@ -217,6 +222,7 @@ export default function Capstone({
               onChange={handleChange}
             />
             <AppInput
+              id="appLink"
               name="appLink"
               label="App Link"
               type="url"
@@ -228,6 +234,7 @@ export default function Capstone({
               onChange={handleChange}
             />
             <AppInput
+              id="videoLink"
               name="videoLink"
               label="Video Link"
               type="url"
@@ -257,7 +264,6 @@ export default function Capstone({
               isClearable
               instanceId="appTechnologies"
               className="mb-4"
-              ref={ref}
             />
             {errors.technologies && (
               <div className="text-red-500 text-sm mt-1">

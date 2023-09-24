@@ -114,7 +114,7 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
     event.preventDefault();
     setIsSaving(true);
     axios
-      .put(`/api/appRoutes?id=${appData.id}`, appData)
+      .put(`/api/appRoutes?id=${appData.id}`, {...appData, signedInUser: session?.user?.email})
       .then(function (response) {
         console.log(response);
         toast.success("Your app information was successfully updated");
@@ -123,7 +123,7 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
       })
       .catch(function (error) {
         console.log(error);
-        alert("Could not update app, try again");
+        alert(error.response?.data?.errors || error.response?.data?.message);
         setIsSaving(false);
       });
   };
