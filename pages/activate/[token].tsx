@@ -26,7 +26,7 @@ export default function Activate({ token }: { token: string }) {
             <div>
             <p className="text-red-500 text-xl font-bold">{error}</p>
             <div className="mt-4">
-                <Link href="/" className='mt-4 bg-blue-500 text-white hover:bg-blue-700 text-md uppercase font-bold px-8 py-2 rounded'>Sign in</Link>
+                <Link href="/auth" className='mt-4 bg-blue-500 text-white hover:bg-blue-700 text-md uppercase font-bold px-8 py-2 rounded'>Sign in</Link>
             </div>
             </div>
         )}
@@ -34,7 +34,7 @@ export default function Activate({ token }: { token: string }) {
             <div>
             <p className="text-green-500 text-xl font-bold">{success}</p>
             <div className="mt-4">
-                <Link href="/" className='mt-4 bg-blue-500 text-white hover:bg-blue-700 text-md uppercase font-bold px-8 py-2 rounded'>Sign in</Link>
+                <Link href="/auth" className='mt-4 bg-blue-500 text-white hover:bg-blue-700 text-md uppercase font-bold px-8 py-2 rounded'>Sign in</Link>
             </div>
             </div>
         )}
