@@ -29,7 +29,7 @@ export default NextAuth({
                 if (!isPasswordCorrect) {
                     throw new Error("Password is incorrect.")
                 }
-                return developer;
+                return developer as any;
             }
         }),
     ],

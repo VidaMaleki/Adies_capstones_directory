@@ -19,8 +19,8 @@ async function connect() {
 
         await prisma.$connect();
 
-        return prisma;
     }
+    return prisma;
 }
 
 let db: PrismaClient;
