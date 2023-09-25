@@ -202,12 +202,12 @@ export default function Profile({
             )}
             <br></br>
             <p className="text-gray-600 drop-shadow text-center">
-              Welcome, {signedInUser.fullName}! Here are your app details:
+              Welcome, {signedInUser?.fullName}! Here are your app details:
             </p>
             <br></br>
           </div>
           <div className="p-4">
-            {signedInUser.app ? (
+            {signedInUser?.app ? (
               <div className="flex flex-col justify-center space-y-4">
                 <div className="flex justify-center gap-10">
                   <Link
@@ -226,7 +226,7 @@ export default function Profile({
                   </button>
                 </div>
                 <div className="flex justify-center items-center">
-                  {signedInUser.appId && <AppCard app={signedInUser.app} />}
+                  {signedInUser?.appId && <AppCard app={signedInUser?.app} />}
                 </div>
               </div>
             ) : (
@@ -241,7 +241,7 @@ export default function Profile({
                 </p>
               </div>
             )}
-            {!signedInUser.app && ( // Render the button only if app is not present
+            {!signedInUser?.app && ( // Render the button only if app is not present
               <div className="w-full mb-10 flex justify-center items-center">
                 <Link
                   href={`/add-app`}
