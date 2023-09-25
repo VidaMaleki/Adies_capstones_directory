@@ -59,6 +59,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 // after any changes in modele run npx prisma generate
 // npx prisma migrate dev --skip-seed
+// npx prisma migrate deploy   to deploy every migration
 
 generator client {
   provider = "prisma-client-js"

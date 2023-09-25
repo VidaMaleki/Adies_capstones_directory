@@ -224,6 +224,7 @@ export default function Capstone({
               onChange={handleChange}
               name="videoLink"
               id="videoLink"
+              
             />
             <label className="text-gray-700" htmlFor="type">
               Category *
