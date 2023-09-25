@@ -81,7 +81,7 @@ export default function Home() {
     return () => {
       window.removeEventListener("resize", debouncedFetchData);
     };
-  }, []);
+  }, [debouncedFetchData]);
 
   return (
     <>
