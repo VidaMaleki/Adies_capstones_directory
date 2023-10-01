@@ -155,7 +155,7 @@ async function registerDeveloper(
   }
 }
 
-// Get all developers 
+// Get one developer 
 async function getOneDeveloper(req: NextApiRequest, res: NextApiResponse) {
   const devId = Number(req.query.id);
   try {
@@ -172,7 +172,7 @@ async function getOneDeveloper(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-// Remove one user 
+// Get all developers
 async function getAllDevelopers(
   req: NextApiRequest,
   res: NextApiResponse<Developer[]>

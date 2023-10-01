@@ -1,23 +1,23 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
-import * as FaIcons from 'react-icons/fa';
-import styles from '@/styles/AppCard.module.css';
-import { AppWithDevelopersProps } from './types';
-import Image from 'next/image';
-import {getImageByAppType} from '../utils/helper';
-import AppDetailsPopup from './appDetailsPopUp';
-
+import * as React from "react";
+import { useState, useEffect } from "react";
+import * as FaIcons from "react-icons/fa";
+import styles from "@/styles/AppCard.module.css";
+import { AppWithDevelopersProps } from "../types";
+import Image from "next/image";
+import { getImageByAppType } from "../../utils/helper";
+import AppDetailsPopup from "./appDetailsPopUp";
 
 type AppCardProps = {
   app: AppWithDevelopersProps;
 };
 
 const AppCard: React.FC<AppCardProps> = ({ app }) => {
-  const [ showPopup, setShowPopup ] = useState(false);
-  const [picture, setPicture] = useState('')
+  const [showPopup, setShowPopup] = useState(false);
+  const [picture, setPicture] = useState("");
 
   const { appName, appLink, github, technologies, developers, type } = app;
-  const developerNamesString = developers?.map((developer) => developer.fullName).join(', ') ?? '';
+  const developerNamesString =
+    developers?.map((developer) => developer.fullName).join(", ") ?? "";
 
   const handleOpenPopup = () => {
     setShowPopup(true);
@@ -26,16 +26,16 @@ const AppCard: React.FC<AppCardProps> = ({ app }) => {
   const handleClosePopup = () => {
     setShowPopup(false);
   };
-  
+
   useEffect(() => {
     const imagePath = getImageByAppType(app.type);
     setPicture(imagePath);
-}, [app.type]);
-  
+  }, [app.type]);
+
   return (
     <div className={styles.card}>
-      <div className={styles.appMiniScreen}  onClick={handleOpenPopup}>
-        <div className={styles.appMiniScreenInner} >
+      <div className={styles.appMiniScreen} onClick={handleOpenPopup}>
+        <div className={styles.appMiniScreenInner}>
           <Image src={picture} alt="app picture" width={200} height={200} />
         </div>
       </div>
@@ -49,7 +49,7 @@ const AppCard: React.FC<AppCardProps> = ({ app }) => {
           </a>
         </div>
         <h3>Created by: {developerNamesString}</h3>
-        <h3>Tech Stack: {technologies.join(', ')}</h3>
+        <h3>Tech Stack: {technologies.join(", ")}</h3>
       </div>
       <div className={styles.cardFooterButtons}>
         <a href={appLink ?? ""} className={styles.cardView} target="_blank">

@@ -5,7 +5,7 @@ import { AiFillSetting, AiOutlineEdit } from "react-icons/ai";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import axios from "axios";
-import AppCard from "@/components/AppCard";
+import AppCard from "@/components/App/AppCard";
 import { useRouter } from "next/router";
 import Navbar from "@/components/Navbar/Navbar";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
@@ -15,9 +15,9 @@ import {
   AppWithDevelopersProps,
   DeveloperWithAppProps,
 } from "../components/types";
-import Settings from "@/components/Settings";
+import Settings from "@/components/profile/Settings";
 import pageWrapperStyle from "@/styles/PageWrapper.module.css";
-import ProfilePictureSelection from "../components/ProfilePictureSelection";
+import ProfilePictureSelection from "../components/profile/ProfilePictureSelection";
 import { toast } from "react-toastify";
 
 export async function getServerSideProps(ctx: NextPageContext) {
@@ -170,7 +170,11 @@ export default function Profile({
             <br></br>
             <div className="w-full flex justify-center">
               <Image
-                src={signedInUser?.image ? `/profile-pictures/${signedInUser?.image}.png` : `/profile-pictures/45.png` }
+                src={
+                  signedInUser?.image
+                    ? `/profile-pictures/${signedInUser?.image}.png`
+                    : `/profile-pictures/45.png`
+                }
                 alt={`${signedInUser?.fullName} image`}
                 width={100}
                 height={100}

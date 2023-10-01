@@ -2,13 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['res.cloudinary.com'],
+    domains: ["res.cloudinary.com", "www.paypal.com"],
   },
   webpack: (config) => {
     config.experiments = { ...config.experiments, topLevelAwait: true };
-  return config
-}
-}
+    return config;
+  },
+};
 
-module.exports = nextConfig
-
+module.exports = nextConfig;

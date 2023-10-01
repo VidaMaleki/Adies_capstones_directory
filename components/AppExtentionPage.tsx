@@ -1,7 +1,7 @@
-import AppCard from "./AppCard";
+import AppCard from "./App/AppCard";
 import styles from "@/styles/AppPage.module.css";
 // import { App } from "@prisma/client";
-import { AppWithDevelopersProps } from './types';
+import { AppWithDevelopersProps } from "./types";
 import { useState } from "react";
 
 interface Props {
@@ -49,7 +49,11 @@ const AppExtentionPage = ({ apps, page, pageSize }: Props) => {
           {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index + 1}
-              className={currentPage === index + 1 ? styles.currentPage : styles.pageNumber}
+              className={
+                currentPage === index + 1
+                  ? styles.currentPage
+                  : styles.pageNumber
+              }
               onClick={() => goToPage(index + 1)}
             >
               {index + 1}

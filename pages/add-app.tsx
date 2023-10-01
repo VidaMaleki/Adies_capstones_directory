@@ -171,7 +171,8 @@ export default function Capstone({
             encType="multipart/form-data"
             className={styles.addAppFormWrapper}
           >
-            <label className="text-gray-700" htmlFor="appName">
+            
+            {/* <label className="text-gray-700" htmlFor="appName">
               App Name *
             </label>
             <input
@@ -181,7 +182,7 @@ export default function Capstone({
               onChange={handleChange}
               name="appName"
               id="appName"
-            />
+            /> */}
             <label className="text-gray-700" htmlFor="description">
               Description *
             </label>
