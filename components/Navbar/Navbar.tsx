@@ -1,4 +1,4 @@
-import LOGO from "../../images/appLogo.png";
+import appLogo from "../../images/appLogo.png";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import ProfileIcon from "../profile/ProfileIcon";
@@ -60,7 +60,7 @@ const Navbar: React.FunctionComponent<Props> = () => {
         <div className={styles.logoContainer}>
           <Image
             className={styles.appLogo}
-            src={LOGO}
+            src={appLogo}
             alt="Image"
             priority
             onClick={handleClick}

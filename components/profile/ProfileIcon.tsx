@@ -54,12 +54,11 @@ const ProfileIcon = (): JSX.Element | null => {
   if (!session || isDeleted) {
     return null;
   }
-  console.log("Developer", developer)
   return (
     <Link href="/profile">
       <div className={styles.imageWrapper}>
         <Image
-          src={`/profile-pictures/${developer?.image}.png`}
+          src={developer?.image ? `/profile-pictures/${developer?.image}.png`: `/profile-pictures/45.png`}
           alt="Developer profile image"
           width={40}
           height={40}
