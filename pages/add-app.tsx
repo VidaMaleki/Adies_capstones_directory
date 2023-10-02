@@ -231,7 +231,7 @@ export default function Capstone({
               <div className="text-red-500 mb-2">{inputErrors.description}</div>
             )}
             <label className="text-gray-700" htmlFor="github">
-              Github Link
+              Github Link *
             </label>
             <input
               className="border border-gray-300 rounded-md p-2 w-full mb-4"
