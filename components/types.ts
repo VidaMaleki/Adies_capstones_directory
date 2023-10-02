@@ -75,3 +75,14 @@ export interface NavButtonProps {
   name: string;
   isSpecial?: boolean;
 }
+
+export interface InputErrors {
+  appName?: string;
+  description?: string;
+  developers?: string;
+  appLink?: string;
+  videoLink?: string;
+  github?: string;
+  type?: string;
+  technologies?: string;
+}

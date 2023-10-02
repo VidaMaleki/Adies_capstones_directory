@@ -2,8 +2,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { db } from "@/lib/db";
 import validator from "validator";
 import { AppDataProps } from "@/components/types";
-import { getSession } from "next-auth/react";
-import { set } from "lodash";
 
 export default async function createAppHandler(
   req: NextApiRequest,
@@ -243,7 +241,6 @@ async function updateApp(req: NextApiRequest, res: NextApiResponse) {
       },
     });
 
-    // console.log(updatedApp)
     return res.status(200).json({ app: updatedApp });
   } catch (error) {
     console.error(error);
