@@ -35,13 +35,21 @@ type FormSchemaType = z.infer<typeof FormSchema>;
 
 export async function getServerSideProps(ctx: NextPageContext) {
   const session = await getSession(ctx);
-  const allDevs: Developer[] = await db.developer.findMany();
+  
   // Get the signed in (if signed in) dev here, add as prop
   // Current work around to not get error when querying db by user email
   let userEmail = session?.user?.email ? session.user.email : "";
   const signedInUser = await db.developer.findUnique({
     where: {
       email: userEmail,
+    },
+  });
+  const allDevs: Developer[] = await db.developer.findMany({
+    where: {
+      OR: [
+        { appId: null }, // Include developers with null appId (no app assigned)
+        { appId: signedInUser?.appId || null }, // Include the signed-in user's app
+      ],
     },
   });
   return {
@@ -135,6 +143,7 @@ export default function Capstone({
       developers: formattedDevelopers,
     }));
   };
+
   // Commenting this function for now since I am validating directly in onSubmit
   // const validateFormData = () => {
   //   const validationResult = FormSchema.safeParse(appData);
