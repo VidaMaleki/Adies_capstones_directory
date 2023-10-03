@@ -43,6 +43,8 @@ export async function getServerSideProps(ctx: NextPageContext) {
     ? query.callbackUrl
     : process.env.NEXTAUTH_URL;
   const csrfToken = await getCsrfToken(ctx);
+  // Provide a default value or handle the undefined case here
+  const sanitizedCsrfToken = csrfToken || null;
   return {
     props: { tab: JSON.parse(JSON.stringify(tab)), callbackUrl, csrfToken },
   };

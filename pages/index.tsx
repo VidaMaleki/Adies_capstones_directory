@@ -6,10 +6,8 @@ import AppSection from "@/components/App/AppSection";
 import { AppWithDevelopersProps } from "../components/types";
 import axios from "axios";
 import debounce from "lodash/debounce";
-import dotenv from "dotenv";
 import Footer from "@/components/Footer/Footer";
 
-dotenv.config({ path: ".env" })
 export default function Home() {
   const [webAppsRandom, setWebAppsRandom] = useState<AppWithDevelopersProps[]>(
     []
@@ -21,7 +19,7 @@ export default function Home() {
     AppWithDevelopersProps[]
   >([]);
 
-  const URL = process.env.APP_URL!;
+  const APP_URL = "/api/appRoutes";
 
   const getRandomApps = (appsList: any, maxApps: number) => {
     if (appsList.length <= maxApps) return appsList;
@@ -32,7 +30,7 @@ export default function Home() {
 
   async function fetchData() {
     try {
-      const res = await axios.get(URL);
+      const res = await axios.get(APP_URL);
       const allApps: AppWithDevelopersProps[] = res.data.apps;
 
       if (allApps.length > 0) {

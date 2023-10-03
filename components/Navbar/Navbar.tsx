@@ -8,6 +8,7 @@ import Search from "./Search";
 import { useEffect, useState } from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Donation from "./Donation";
+import {AiOutlineDown} from 'react-icons/ai'
 
 interface Props {}
 
@@ -74,7 +75,7 @@ const Navbar: React.FunctionComponent<Props> = () => {
         <div className={styles.dropdown}>
           <button className={styles.dropbtn}>
             <h2>Menu</h2>
-            <i className="fas fa-caret-down"></i>
+            <AiOutlineDown/>
           </button>
           <div className={styles.dropdownContent}>
             <a href={"/"}>Home</a>
