@@ -13,14 +13,14 @@ import { typeOptions, techOptions } from "../app-data/selectOptions";
 import { z } from "zod";
 import Navbar from "@/components/Navbar/Navbar";
 import { InputErrors } from "@/components/types";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 export const FormSchema = z.object({
   appName: z.string().nonempty({ message: "App Name is required" }),
   description: z.string().nonempty({ message: "Description is required" }),
   developers: z
-    .array(z.object({ fullName: z.string() }))
-    .min(1, { message: "Developers are required" }),
+    .array(z.object({ fullName: z.string().nonempty() }))
+    .nonempty({ message: "Developers are required" }),
   appLink: z.string().url().nullish(),
   videoLink: z.string().url().nullish(),
   github: z.string().url().nonempty({ message: "Github Link is required" }),
@@ -52,16 +52,19 @@ export async function getServerSideProps(ctx: NextPageContext) {
     },
   };
 }
-const defaultApp: FormSchemaType = {
-  appName: "",
-  description: "",
-  developers: [],
-  appLink: "",
-  videoLink: "",
-  github: "",
-  type: "",
-  technologies: [],
+const getDefaultApp = (signedInUser: Developer): FormSchemaType => {
+  return {
+    appName: "",
+    description: "",
+    developers: [{ fullName: signedInUser.fullName }], // Include signed-in user as a default developer
+    appLink: "",
+    videoLink: "",
+    github: "",
+    type: "",
+    technologies: [],
+  };
 };
+
 export default function Capstone({
   allDevs,
   signedInUser,
@@ -69,11 +72,14 @@ export default function Capstone({
   allDevs: Developer[];
   signedInUser: Developer;
 }) {
+  const defaultApp = getDefaultApp(signedInUser);
   const router = useRouter();
   const { data: session } = useSession();
   const [appData, setAppData] = useState<FormSchemaType>(defaultApp);
   const [inputErrors, setInputErrors] = useState<InputErrors>({});
-  const nameOptions = allDevs.map((name) => ({
+  const nameOptions = allDevs
+  .filter((developer) => developer.fullName !== signedInUser.fullName)
+  .map((name) => ({
     value: String(name.id),
     label: name.fullName,
   }));
@@ -107,13 +113,27 @@ export default function Capstone({
     setAppData(newAppData);
   };
 
-  const handleDevChange = (event: any) => {
-    let newAppData: FormSchemaType = { ...appData };
-    const currDevs: { fullName: string }[] = event.map(
-      (option: { value: string; label: string }) => ({ fullName: option.label })
+  const handleDevChange = (selectedOptions: any) => {
+    const formattedDevelopers = selectedOptions.map((option: any) => ({
+      fullName: option.label,
+    }));
+  
+    // Check if the signed-in user is not already in the developers list
+    const signedInUserAlreadyAdded = formattedDevelopers.some(
+      (developer: Developer) => developer.fullName === signedInUser.fullName
     );
-    newAppData.developers = currDevs;
-    setAppData(newAppData);
+  
+    // If signed-in user is not in the list, add them at the beginning
+    if (!signedInUserAlreadyAdded) {
+      formattedDevelopers.unshift({
+        fullName: signedInUser.fullName,
+      });
+    }
+  
+    setAppData((prevAppData) => ({
+      ...prevAppData,
+      developers: formattedDevelopers,
+    }));
   };
   // Commenting this function for now since I am validating directly in onSubmit
   // const validateFormData = () => {
@@ -265,7 +285,7 @@ export default function Capstone({
               <div className="text-red-500 mb-2">{inputErrors.appLink}</div>
             )}
             <label className="text-gray-700" htmlFor="videoLink">
-              Video Demo Link
+              Video Link
             </label>
             <input
               className="border border-gray-300 rounded-md p-2 w-full mb-4"
@@ -322,6 +342,10 @@ export default function Capstone({
               instanceId="appDevs"
               className="mb-4"
               name="developers"
+              value={appData.developers.map((developer) => ({
+                value: developer.fullName,
+                label: developer.fullName,
+              }))}
             />
             {inputErrors.developers && (
               <div className="text-red-500 mb-2">{inputErrors.developers}</div>
