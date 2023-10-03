@@ -14,26 +14,27 @@ import { z } from "zod";
 import { toast } from "react-toastify";
 import pageWrapperStyle from "@/styles/PageWrapper.module.css";
 import styles from "@/styles/addApp.module.css";
+import { InputErrors } from "@/components/types";
 
 const FormSchema = z.object({
-  appName: z.string().nonempty({ message: "App Name is required" }),
   id: z.string(),
+  appName: z.string().nonempty({ message: "App Name is required" }),
   description: z.string().nonempty({ message: "Description is required" }),
   developers: z
-    .array(
-      z.object({
-        fullName: z.string(),
-        id: z.number(),
-      })
-    )
+    .array(z.object({
+      fullName: z.string(),
+      id: z.number(),
+    })
+  )
     .min(1, { message: "Developers are required" }),
-  appLink: z.string().url({ message: "Invalid App Link URL" }).optional(),
-  videoLink: z.string().url({ message: "Invalid Video Link URL" }).optional(),
-  github: z.string().url({ message: "Invalid Github Link URL" }),
+  appLink: z.string().url().nullish(),
+  videoLink: z.string().url().nullish(),
+  github: z.string().url().nonempty({ message: "Github Link is required" }),
   type: z.string().nonempty({ message: "Category is required." }),
   technologies: z
     .array(z.string())
-    .min(1, { message: "Technologies are required" }),
+    .min(1, { message: "Technologies are required" })
+    .max(5, { message: "You can select up to 5 technologies" }),
 });
 
 export type FormSchemaType = z.infer<typeof FormSchema>;
@@ -67,7 +68,10 @@ export async function getServerSideProps(ctx: NextPageContext) {
 
   const allDevs: Developer[] = await db.developer.findMany({
     where: {
-      appId: { in: [0, signedInUser?.appId || 0] },
+      OR: [
+        { appId: null }, // Include developers with null appId (no app assigned)
+        { appId: signedInUser?.appId || null }, // Include the signed-in user's app
+      ],
     },
   });
   return {
@@ -99,6 +103,7 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
   const [appData, setAppData] = useState<FormSchemaType>(
     convertAppToFormSchema(app)
   );
+  const [inputErrors, setInputErrors] = useState<InputErrors>({});
   const [isSaving, setIsSaving] = useState(false);
   const nameOptions = allDevs.map((name) => ({
     value: String(name.id),
@@ -110,22 +115,77 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
     router.push("/profile");
   };
 
+  const schemaPathToInputName: Record<string, keyof InputErrors> = {
+    appName: "appName",
+    description: "description",
+    developers: "developers",
+    appLink: "appLink",
+    videoLink: "videoLink",
+    github: "github",
+    type: "type",
+    technologies: "technologies",
+  };
+
   const handleSave = (event: any) => {
     event.preventDefault();
+    const formData = {
+      ...appData,
+      appLink: appData.appLink || null,
+      videoLink: appData.videoLink || null,
+    };
+  
     setIsSaving(true);
-    axios
-      .put(`/api/appRoutes?id=${appData.id}`, {...appData, signedInUser: session?.user?.email})
-      .then(function (response) {
-        console.log(response);
-        toast.success("Your app information was successfully updated");
-        // Need to trigger a refresh
-        router.push("/profile");
-      })
-      .catch(function (error) {
-        console.log(error);
-        alert(error.response?.data?.errors || error.response?.data?.message);
+  
+    try {
+      FormSchema.parse(formData);
+  
+      axios
+        .put(`/api/appRoutes?id=${appData.id}`, {
+          ...formData,
+          signedInUser: session?.user?.email,
+        })
+        .then(function (response) {
+          console.log(response);
+          toast.success("Your app information was successfully updated");
+          // Need to trigger a refresh
+          router.push("/profile");
+        })
+        .catch(function (error) {
+          if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.error("Server Error:", error.response.data);
+            toast.error("Server Error: Please try again later.");
+          } else if (error.request) {
+            // The request was made but no response was received
+            console.error("Network Error:", error.request);
+            toast.error("Network Error: Please check your internet connection.");
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.error("Error:", error.message);
+            toast.error(`Error: ${error.message}`);
+          }
+        })
+        .finally(() => {
+          setIsSaving(false);
+        });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const inputErrors: InputErrors = {};
+        error.errors.forEach((validationError) => {
+          const fieldName = schemaPathToInputName[validationError.path[0]];
+          if (fieldName) {
+            inputErrors[fieldName] = validationError.message;
+          }
+        });
+        setInputErrors(inputErrors);
         setIsSaving(false);
-      });
+        toast.error("Please address error messages");
+      } else {
+        console.error("Error:", error);
+        toast.error(`Error: Please try again later we are working on this error.`);
+      }
+    }
   };
 
   useEffect(() => {
@@ -156,21 +216,31 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
     setAppData(newAppData);
   };
 
-  const handleDevChange = (event: any) => {
-    console.log("event", event);
-    const newAppData = { ...appData };
-    const currDevs: Developer[] = event.map(
-      (option: { value: string; label: string }) => {
-        const devId = option.value;
-        const filteredDev = allDevs.find(
-          (devData) => devData.id.toString() === devId
-        );
-        return filteredDev;
-      }
+  const handleDevChange = (selectedOptions: any) => {
+    // Map selected options to an array of developer IDs
+    const selectedDeveloperIds: number[] = selectedOptions.map(
+      (option: { value: string; label: string }) => parseInt(option.value, 10)
     );
-
-    newAppData.developers = currDevs;
-    setAppData(newAppData);
+  
+    // Find developers from allDevs based on selected IDs
+    const selectedDevelopers: Developer[] = allDevs.filter(
+      (developer: Developer) => selectedDeveloperIds.includes(developer.id)
+    );
+  
+    // Check if the signed-in user is not already in the developers list
+    const signedInUserAlreadyAdded = selectedDevelopers.some(
+      (developer: Developer) => developer.id === signedInUser.id
+    );
+  
+    // If signed-in user is not in the list, add them to the beginning of the array
+    if (!signedInUserAlreadyAdded) {
+      selectedDevelopers.unshift(signedInUser);
+    }
+  
+    setAppData((prevAppData) => ({
+      ...prevAppData,
+      developers: selectedDevelopers,
+    }));
   };
 
   const handleTechnologiesleChange = (
@@ -210,7 +280,7 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
           </div>
           <form onSubmit={handleSave} className={styles.addAppFormWrapper}>
             <label htmlFor="appName" className="text-gray-700">
-              App Name
+              App Name *
             </label>
             <input
               type="text"
@@ -219,10 +289,15 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
               value={appData.appName}
               onChange={handleChange}
               className="border border-gray-300 rounded-md p-2 w-full mb-4"
-              required
+              style={{
+                borderColor: `${inputErrors.appName ? "#ED4337" : ""}`,
+              }}
             />
+            {inputErrors.appName && (
+              <div className="text-red-500 mb-2">{inputErrors.appName}</div>
+            )}
             <label htmlFor="description" className="text-gray-700">
-              Description
+              Description *
             </label>
             <textarea
               id="description"
@@ -231,10 +306,15 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
               onChange={handleChange}
               className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
               rows={5}
-              required
+              style={{
+                borderColor: `${inputErrors.description ? "#ED4337" : ""}`,
+              }}
             />
+            {inputErrors.description && (
+              <div className="text-red-500 mb-2">{inputErrors.description}</div>
+            )}
             <label htmlFor="github" className="text-gray-700">
-              GitHub
+              GitHub Link *
             </label>
             <input
               type="text"
@@ -243,8 +323,13 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
               value={appData.github}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
-              required
+              style={{
+                borderColor: `${inputErrors.github ? "#ED4337" : ""}`,
+              }}
             />
+            {inputErrors.github && (
+              <div className="text-red-500 mb-2">{inputErrors.github}</div>
+            )}
             <label htmlFor="appLink" className="text-gray-700">
               App Link
             </label>
@@ -252,11 +337,16 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
               type="text"
               id="appLink"
               name="appLink"
-              value={appData.appLink}
+              value={appData.appLink || ""}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
-              required
+              style={{
+                borderColor: `${inputErrors.appLink ? "#ED4337" : ""}`,
+              }}
             />
+            {inputErrors.appLink && (
+              <div className="text-red-500 mb-2">{inputErrors.appLink}</div>
+            )}
             <label htmlFor="videoLink" className="text-gray-700">
               Video Link
             </label>
@@ -264,11 +354,16 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
               type="text"
               id="videoLink"
               name="videoLink"
-              value={appData.videoLink}
+              value={appData.videoLink || ""}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-none"
-              required
+              style={{
+                borderColor: `${inputErrors.videoLink ? "#ED4337" : ""}`,
+              }}
             />
+            {inputErrors.videoLink && (
+              <div className="text-red-500 mb-2">{inputErrors.videoLink}</div>
+            )}
             <label htmlFor="appType" className="text-gray-700">
               Category
               <Select
@@ -280,6 +375,9 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
                 required
               />
             </label>
+            {inputErrors.type && (
+              <div className="text-red-500 mb-2">{inputErrors.type}</div>
+            )}
             <label htmlFor="technologies" className="text-gray-700">
               Technologies
               <CreatableSelect
@@ -296,6 +394,11 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
                 required
               />
             </label>
+            {inputErrors.technologies && (
+              <div className="text-red-500 mb-2">
+                {inputErrors.technologies}
+              </div>
+            )}
             <label className="text-gray-700" htmlFor="developers">
               Developers
             </label>
@@ -315,6 +418,9 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
               instanceId="appDevs"
               className="mb-4"
             />
+            {inputErrors.developers && (
+              <div className="text-red-500 mb-2">{inputErrors.developers}</div>
+            )}
             <div className="flex justify-end">
               <button
                 onClick={handleCancel}
