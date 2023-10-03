@@ -45,7 +45,7 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
               <div className={styles.appPopupTitleWraper}>
                 <h2 className={styles.appPopupTitle}>{app.appName}</h2>
                 {app.github && (
-                  <a href={app.github} target="_blank">
+                  <a className={styles.appPopupTitleicon} href={app.github} target="_blank">
                     <FaIcons.FaGithub />
                   </a>
                 )}

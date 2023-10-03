@@ -40,7 +40,7 @@
 
 .cardGitHub {
     margin-right: 20px;
-    font-size: 14px;
+    font-size: 18px;
 }
 
 .iconContainer {
@@ -59,6 +59,21 @@
     margin-top: 10px;
     font-size: 12px;
     font-weight: 500;
+}
+
+.developersWrapper {
+    height: 40px;
+}
+
+.developersList {
+    height: 20px;
+    overflow: scroll;
+}
+
+.ellipsis {
+    font-weight: bold;
+    margin-top: 5px;
+    text-align: center;
 }
 
 .cardFooterButtons {

@@ -80,7 +80,11 @@
     justify-content: space-between;
     align-items: center;
     font-weight: 800;
-    font-size: 18px;
+    font-size: 24px;
+}
+
+.appPopupTitleicon {
+    font-size: 24px;
 }
 
 .appPopupText {
@@ -94,6 +98,7 @@
     font-weight: 500;
     font-size: 14px;
     overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 .textContainer {
