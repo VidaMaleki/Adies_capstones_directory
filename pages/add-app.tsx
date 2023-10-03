@@ -227,6 +227,7 @@ export default function Capstone({
               onChange={handleChange}
               name="appName"
               id="appName"
+              placeholder="App name"
               style={{
                 borderColor: `${inputErrors.appName ? "#ED4337" : ""}`,
               }}
@@ -243,6 +244,7 @@ export default function Capstone({
               onChange={handleChange}
               name="description"
               id="description"
+              placeholder="This app is for ..."
               style={{
                 borderColor: `${inputErrors.description ? "#ED4337" : ""}`,
               }}
@@ -260,6 +262,7 @@ export default function Capstone({
               onChange={handleChange}
               name="github"
               id="github"
+              placeholder="https://github.com/"
               style={{
                 borderColor: `${inputErrors.github ? "#ED4337" : ""}`,
               }}
@@ -277,6 +280,7 @@ export default function Capstone({
               onChange={handleChange}
               name="appLink"
               id="appLink"
+              placeholder="https://applink.com/"
               style={{
                 borderColor: `${inputErrors.appLink ? "#ED4337" : ""}`,
               }}
@@ -294,6 +298,7 @@ export default function Capstone({
               onChange={handleChange}
               name="videoLink"
               id="videoLink"
+              placeholder="https://videolink.com/"
               style={{
                 borderColor: `${inputErrors.videoLink ? "#ED4337" : ""}`,
               }}
