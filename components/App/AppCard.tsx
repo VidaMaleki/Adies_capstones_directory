@@ -19,9 +19,9 @@ const AppCard: React.FC<AppCardProps> = ({ app }) => {
 
   let developersList: React.ReactNode;
 
-  if (developers.length === 1) {
+  if (developers && developers.length === 1) {
     developersList = <p>{developers[0].fullName}</p>;
-  } else {
+  } else if (developers && developers.length > 1) {
     developersList = (
       <ol className={styles.developersList}>
         {developers.map((developer, index) => (
@@ -29,8 +29,11 @@ const AppCard: React.FC<AppCardProps> = ({ app }) => {
         ))}
       </ol>
     );
+  } else {
+    // Handle the case when developers is undefined or empty
+    developersList = <p>No developers specified</p>;
   }
-  
+
   const handleOpenPopup = () => {
     setShowPopup(true);
   };

@@ -2,7 +2,7 @@ import AppCard from "./App/AppCard";
 import styles from "@/styles/AppPage.module.css";
 // import { App } from "@prisma/client";
 import { AppWithDevelopersProps } from "./types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
   apps: AppWithDevelopersProps[];
@@ -11,10 +11,13 @@ interface Props {
 }
 
 const AppExtentionPage = ({ apps, page, pageSize }: Props) => {
+  
   const [currentPage, setCurrentPage] = useState(1);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [apps]);
   // Calculating page numbers
   const totalPages = Math.ceil(apps.length / pageSize);
-
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, apps.length);
   const currentApps = apps.slice(startIndex, endIndex);
