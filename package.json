@@ -38,6 +38,7 @@
         "next": "^13.2.3",
         "next-auth": "^4.22.1",
         "next-cloudinary": "^4.10.1",
+        "next-images": "^1.8.5",
         "nodemailer": "^6.9.1",
         "pg": "^8.10.0",
         "pg-pool": "^3.6.0",
@@ -51,6 +52,7 @@
         "react-select": "^5.7.3",
         "react-spinners": "^0.13.8",
         "react-toastify": "^9.1.2",
+        "sharp": "^0.32.6",
         "validator": "^13.9.0",
         "zod": "^3.21.4",
         "zxcvbn": "^4.4.2"
@@ -69,7 +71,7 @@
         "tailwindcss": "^3.3.1",
         "ts-node": "^10.9.1",
         "tslint": "^6.1.3",
-        "typescript": "^5.0.4"
+        "typescript": "^4.4.3"
     },
     "prisma": {
         "seed": "ts-node -P tsconfig-seed.json -r tsconfig-paths/register --transpileOnly prisma/seed.ts"

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
-import AppCard from "@/components/AppCard";
+import AppCard from "@/components/App/AppCard";
 import styles from "@/styles/Search.module.css";
 import { AppWithDevelopersProps } from "../components/types";
 import Navbar from "@/components/Navbar/Navbar";
@@ -50,25 +50,22 @@ const SearchPage = () => {
     <div className={styles.searchResultsContainer}>
       <Navbar />
       <div className={styles.searchResultsWrapper}>
-
-      <div className={styles.searchBarContainer}>
-      <div
-        className={styles.searchBarForm }
-      >
-        <form onSubmit={handleSearch} className={styles.searchBarForm}>
-          <input
-            className={styles.searchBarInput}
-            type="text"
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <button type="submit" className={styles.searchBarIcon}>
-            <FaSearch />
-          </button>
-        </form>
-      </div>
-    </div>
+        <div className={styles.searchBarContainer}>
+          <div className={styles.searchBarForm}>
+            <form onSubmit={handleSearch} className={styles.searchBarForm}>
+              <input
+                className={styles.searchBarInput}
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <button type="submit" className={styles.searchBarIcon}>
+                <FaSearch />
+              </button>
+            </form>
+          </div>
+        </div>
         <div className="flex items-center mb-4">
           <h2 className="text-2xl">Search Results for &quot;{query}&quot;</h2>
         </div>

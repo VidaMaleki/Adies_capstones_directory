@@ -2,10 +2,11 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar/Navbar";
 import styles from "@/styles/Home.module.css";
-import AppSection from "@/components/AppSection";
+import AppSection from "@/components/App/AppSection";
 import { AppWithDevelopersProps } from "../components/types";
 import axios from "axios";
 import debounce from "lodash/debounce";
+import Footer from "@/components/Footer/Footer";
 
 export default function Home() {
   const [webAppsRandom, setWebAppsRandom] = useState<AppWithDevelopersProps[]>(
@@ -73,10 +74,10 @@ export default function Home() {
 
   useEffect(() => {
     debouncedFetchData(); // Use the debounced version of fetchData
-  
+
     // Add an event listener to recheck screen size when the window is resized
     window.addEventListener("resize", debouncedFetchData);
-  
+
     // Cleanup the event listener when the component unmounts
     return () => {
       window.removeEventListener("resize", debouncedFetchData);
@@ -121,6 +122,7 @@ export default function Home() {
           />
         </section>
       </main>
+      <Footer/>
     </>
   );
 }

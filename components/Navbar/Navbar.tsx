@@ -1,4 +1,4 @@
-import LOGO from "../../images/appLogo.png";
+import appLogo from "../../images/appLogo.png";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import ProfileIcon from "../profile/ProfileIcon";
@@ -8,6 +8,7 @@ import Search from "./Search";
 import { useEffect, useState } from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Donation from "./Donation";
+import {AiOutlineDown} from 'react-icons/ai'
 
 interface Props {}
 
@@ -60,7 +61,7 @@ const Navbar: React.FunctionComponent<Props> = () => {
         <div className={styles.logoContainer}>
           <Image
             className={styles.appLogo}
-            src={LOGO}
+            src={appLogo}
             alt="Image"
             priority
             onClick={handleClick}
@@ -74,7 +75,7 @@ const Navbar: React.FunctionComponent<Props> = () => {
         <div className={styles.dropdown}>
           <button className={styles.dropbtn}>
             <h2>Menu</h2>
-            <i className="fas fa-caret-down"></i>
+            <AiOutlineDown/>
           </button>
           <div className={styles.dropdownContent}>
             <a href={"/"}>Home</a>

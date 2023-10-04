@@ -9,8 +9,8 @@ export interface DeveloperProps {
   cohort: string;
   linkedin: string;
   password: string;
-  app: App; 
-  appId: number;
+  app?: App; 
+  appId?: number;
 }
 
 export interface DeveloperWithAppProps extends Developer {
@@ -31,8 +31,8 @@ export interface AppDataProps {
   appName: string,
   description: string,
   developers: Developer[],
-  appLink: string | null,
-  videoLink: string | null,
+  appLink?: string | null,
+  videoLink?: string | null,
   github: string,
   type: string,
   technologies: string[],
@@ -74,4 +74,15 @@ export interface NavButtonProps {
   href: string;
   name: string;
   isSpecial?: boolean;
+}
+
+export interface InputErrors {
+  appName?: string;
+  description?: string;
+  developers?: string;
+  appLink?: string;
+  videoLink?: string;
+  github?: string;
+  type?: string;
+  technologies?: string;
 }

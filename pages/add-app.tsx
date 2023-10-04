@@ -9,20 +9,21 @@ import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { AppDataProps } from "@/components/types";
 import { typeOptions, techOptions } from "../app-data/selectOptions";
 import { z } from "zod";
 import Navbar from "@/components/Navbar/Navbar";
+import { InputErrors } from "@/components/types";
+import { toast } from "react-toastify";
 
 export const FormSchema = z.object({
   appName: z.string().nonempty({ message: "App Name is required" }),
   description: z.string().nonempty({ message: "Description is required" }),
   developers: z
-    .array(z.object({ fullName: z.string() }))
-    .min(1, { message: "Developers are required" }),
-  appLink: z.string().url({ message: "Invalid App Link URL" }).optional(),
-  videoLink: z.string().url({ message: "Invalid Video Link URL" }).optional(),
-  github: z.string().url({ message: "Invalid Github Link URL" }),
+    .array(z.object({ fullName: z.string().nonempty() }))
+    .nonempty({ message: "Developers are required" }),
+  appLink: z.string().url().nullish(),
+  videoLink: z.string().url().nullish(),
+  github: z.string().url().nonempty({ message: "Github Link is required" }),
   type: z.string().nonempty({ message: "Category is required." }),
   technologies: z
     .array(z.string())
@@ -30,16 +31,25 @@ export const FormSchema = z.object({
     .max(5, { message: "You can select up to 5 technologies" }),
 });
 
-export type FormSchemaType = z.infer<typeof FormSchema>;
+type FormSchemaType = z.infer<typeof FormSchema>;
+
 export async function getServerSideProps(ctx: NextPageContext) {
   const session = await getSession(ctx);
-  const allDevs: Developer[] = await db.developer.findMany();
-  // get the signed in (if signed in) dev here, add as prop
-  // current work around to not get error when querying db by user email
+  
+  // Get the signed in (if signed in) dev here, add as prop
+  // Current work around to not get error when querying db by user email
   let userEmail = session?.user?.email ? session.user.email : "";
   const signedInUser = await db.developer.findUnique({
     where: {
       email: userEmail,
+    },
+  });
+  const allDevs: Developer[] = await db.developer.findMany({
+    where: {
+      OR: [
+        { appId: null }, // Include developers with null appId (no app assigned)
+        { appId: signedInUser?.appId || null }, // Include the signed-in user's app
+      ],
     },
   });
   return {
@@ -50,16 +60,19 @@ export async function getServerSideProps(ctx: NextPageContext) {
     },
   };
 }
-const defaultApp: FormSchemaType = {
-  appName: "",
-  description: "",
-  developers: [],
-  appLink: "",
-  videoLink: "",
-  github: "",
-  type: "",
-  technologies: [],
+const getDefaultApp = (signedInUser: Developer): FormSchemaType => {
+  return {
+    appName: "",
+    description: "",
+    developers: [{ fullName: signedInUser.fullName }], // Include signed-in user as a default developer
+    appLink: "",
+    videoLink: "",
+    github: "",
+    type: "",
+    technologies: [],
+  };
 };
+
 export default function Capstone({
   allDevs,
   signedInUser,
@@ -67,12 +80,14 @@ export default function Capstone({
   allDevs: Developer[];
   signedInUser: Developer;
 }) {
+  const defaultApp = getDefaultApp(signedInUser);
   const router = useRouter();
   const { data: session } = useSession();
   const [appData, setAppData] = useState<FormSchemaType>(defaultApp);
-  // const [appImage, setAppImage] = useState<File | string>("");
-  console.log(appData);
-  const nameOptions = allDevs.map((name) => ({
+  const [inputErrors, setInputErrors] = useState<InputErrors>({});
+  const nameOptions = allDevs
+  .filter((developer) => developer.fullName !== signedInUser.fullName)
+  .map((name) => ({
     value: String(name.id),
     label: name.fullName,
   }));
@@ -80,21 +95,22 @@ export default function Capstone({
   const handleChange = (event: any) => {
     let newAppData: FormSchemaType = { ...appData };
     if (event.label) {
-      // event for app type has one option, so it returns {value: "", label: ""}
+      // Event for app type has one option, so it returns {value: "", label: ""}
       // https://stackoverflow.com/questions/71934348/react-event-target-is-undefined-when-trying-to-filter-react-select-options
       newAppData.type = event.label;
     } else {
-      // all non-array values for app
+      // All non-array values for app
       const inputName = event.target.name;
-      const targetValue = event.target.value;
-
+      let targetValue = event.target.value;
+      // Handle null or undefined values
+      if (targetValue === null || targetValue === undefined) {
+        targetValue = "";
+      }
       // Check if inputName is a valid key in AppDataProps
       if (inputName in newAppData) {
         newAppData[inputName as keyof FormSchemaType] = targetValue;
       }
     }
-    console.log(typeof event.label);
-    console.log(newAppData);
     setAppData(newAppData);
   };
 
@@ -105,56 +121,95 @@ export default function Capstone({
     setAppData(newAppData);
   };
 
-  const handleDevChange = (event: any) => {
-    let newAppData: FormSchemaType = { ...appData };
-    const currDevs: { fullName: string }[] = event.map(
-      (option: { value: string; label: string }) => ({ fullName: option.label })
+  const handleDevChange = (selectedOptions: any) => {
+    const formattedDevelopers = selectedOptions.map((option: any) => ({
+      fullName: option.label,
+    }));
+  
+    // Check if the signed-in user is not already in the developers list
+    const signedInUserAlreadyAdded = formattedDevelopers.some(
+      (developer: Developer) => developer.fullName === signedInUser.fullName
     );
-    newAppData.developers = currDevs;
-    setAppData(newAppData);
+  
+    // If signed-in user is not in the list, add them at the beginning
+    if (!signedInUserAlreadyAdded) {
+      formattedDevelopers.unshift({
+        fullName: signedInUser.fullName,
+      });
+    }
+  
+    setAppData((prevAppData) => ({
+      ...prevAppData,
+      developers: formattedDevelopers,
+    }));
   };
 
-  const validateFormData = () => {
-    const validationResult = FormSchema.safeParse(appData);
-    if (!validationResult.success) {
-      const errorMessages = validationResult.error.errors.map(
-        (error) => error.message
-      );
-      console.log("Validation Error:", errorMessages);
-      return false;
-    }
-    console.log("Validation Result:", validationResult.data);
-    return true;
+  // Commenting this function for now since I am validating directly in onSubmit
+  // const validateFormData = () => {
+  //   const validationResult = FormSchema.safeParse(appData);
+  //   if (!validationResult.success) {
+  //     const errors: InputErrors = {};
+  //     validationResult.error.errors.forEach((error) => {
+  //       // Use type assertion to inform TypeScript that error.path.join('.') is a valid key
+  //       const fieldName = error.path.join('.') as keyof InputErrors;
+  //       errors[fieldName] = error.message;
+  //     });
+  //     setInputErrors(errors);
+  //     return false;
+  //   }
+  //   setInputErrors({});
+  //   return true;
+  // };
+
+  const schemaPathToInputName: Record<string, keyof InputErrors> = {
+    appName: "appName",
+    description: "description",
+    developers: "developers",
+    appLink: "appLink",
+    videoLink: "videoLink",
+    github: "github",
+    type: "type",
+    technologies: "technologies",
   };
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-
-    if (validateFormData()) {
-      console.log(appData);
+    const formData = {
+      ...appData,
+      appLink: appData.appLink || null,
+      videoLink: appData.videoLink || null,
+    };
+    try {
+      FormSchema.parse(formData);
+      // Form data is valid, proceed with form submission logic...
       axios
-        .post(
-          "/api/appRoutes/",
-          { ...appData, signedInUser: session?.user?.email },
-          {
-            // headers: {
-            // "Content-Type": "multipart/form-data",
-            // },
-          }
-        )
+        .post("/api/appRoutes/", {
+          ...appData,
+          signedInUser: session?.user?.email,
+        })
         .then(function (response) {
           console.log(response);
           router.push("/profile");
-        })
-        .catch(function (error) {
-          console.log(error);
-          alert(error.response.data.errors);
         });
-    } else {
-      alert("Please fill in all required fields properly");
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const inputErrors: InputErrors = {};
+        console.log("error", error);
+        error.errors.forEach((validationError) => {
+          const fieldName = schemaPathToInputName[validationError.path[0]];
+          if (fieldName) {
+            inputErrors[fieldName] = validationError.message;
+          }
+        });
+        // Set inputErrors state to display error messages in the UI
+        setInputErrors(inputErrors);
+
+        // Show error messages.
+        toast.error("Please address error messages");
+      }
     }
   };
-  
+
   return (
     <div className={pageWrapperStyle.pageWrapper}>
       <Navbar />
@@ -181,7 +236,14 @@ export default function Capstone({
               onChange={handleChange}
               name="appName"
               id="appName"
+              placeholder="App name"
+              style={{
+                borderColor: `${inputErrors.appName ? "#ED4337" : ""}`,
+              }}
             />
+            {inputErrors.appName && (
+              <div className="text-red-500 mb-2">{inputErrors.appName}</div>
+            )}
             <label className="text-gray-700" htmlFor="description">
               Description *
             </label>
@@ -191,9 +253,16 @@ export default function Capstone({
               onChange={handleChange}
               name="description"
               id="description"
+              placeholder="This app is for ..."
+              style={{
+                borderColor: `${inputErrors.description ? "#ED4337" : ""}`,
+              }}
             ></textarea>
+            {inputErrors.description && (
+              <div className="text-red-500 mb-2">{inputErrors.description}</div>
+            )}
             <label className="text-gray-700" htmlFor="github">
-              Github Link
+              Github Link *
             </label>
             <input
               className="border border-gray-300 rounded-md p-2 w-full mb-4"
@@ -202,30 +271,50 @@ export default function Capstone({
               onChange={handleChange}
               name="github"
               id="github"
+              placeholder="https://github.com/"
+              style={{
+                borderColor: `${inputErrors.github ? "#ED4337" : ""}`,
+              }}
             />
+            {inputErrors.github && (
+              <div className="text-red-500 mb-2">{inputErrors.github}</div>
+            )}
             <label className="text-gray-700" htmlFor="appLink">
               App Link
             </label>
             <input
               className="border border-gray-300 rounded-md p-2 w-full mb-4"
               type="text"
-              value={appData.appLink}
+              value={appData.appLink || ""}
               onChange={handleChange}
               name="appLink"
               id="appLink"
+              placeholder="https://applink.com/"
+              style={{
+                borderColor: `${inputErrors.appLink ? "#ED4337" : ""}`,
+              }}
             />
+            {inputErrors.appLink && (
+              <div className="text-red-500 mb-2">{inputErrors.appLink}</div>
+            )}
             <label className="text-gray-700" htmlFor="videoLink">
-              Video Demo Link
+              Video Link
             </label>
             <input
               className="border border-gray-300 rounded-md p-2 w-full mb-4"
               type="text"
-              value={appData.videoLink}
+              value={appData.videoLink || ""}
               onChange={handleChange}
               name="videoLink"
               id="videoLink"
-              
+              placeholder="https://videolink.com/"
+              style={{
+                borderColor: `${inputErrors.videoLink ? "#ED4337" : ""}`,
+              }}
             />
+            {inputErrors.videoLink && (
+              <div className="text-red-500 mb-2">{inputErrors.videoLink}</div>
+            )}
             <label className="text-gray-700" htmlFor="type">
               Category *
             </label>
@@ -234,7 +323,11 @@ export default function Capstone({
               onChange={handleChange}
               instanceId="appType"
               className="w-full mb-4"
+              name="type"
             />
+            {inputErrors.type && (
+              <div className="text-red-500 mb-2">{inputErrors.type}</div>
+            )}
             <label className="text-gray-700" htmlFor="technologies">
               Technologies *
             </label>
@@ -245,7 +338,13 @@ export default function Capstone({
               isClearable
               instanceId="appTechnologies"
               className="mb-4"
+              name="technologies"
             />
+            {inputErrors.technologies && (
+              <div className="text-red-500 mb-2">
+                {inputErrors.technologies}
+              </div>
+            )}
             <label className="text-gray-700" htmlFor="developers">
               Developers *
             </label>
@@ -256,7 +355,15 @@ export default function Capstone({
               isClearable
               instanceId="appDevs"
               className="mb-4"
+              name="developers"
+              value={appData.developers.map((developer) => ({
+                value: developer.fullName,
+                label: developer.fullName,
+              }))}
             />
+            {inputErrors.developers && (
+              <div className="text-red-500 mb-2">{inputErrors.developers}</div>
+            )}
             <input
               type="submit"
               value="Add"
