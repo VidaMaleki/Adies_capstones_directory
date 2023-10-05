@@ -27,62 +27,60 @@ export default function Home() {
     const shuffled = appsList.sort(() => 0.5 - Math.random());
     return shuffled.slice(0, maxApps);
   };
-
-  async function fetchData() {
-    try {
-      const res = await axios.get(APP_URL);
-      const allApps: AppWithDevelopersProps[] = res.data.apps;
-
-      if (allApps.length > 0) {
-        const webApps = allApps.filter((app) => app.type === "Web");
-        const mobileApps = allApps.filter((app) => app.type === "Mobile");
-        const nativeApps = allApps.filter((app) => app.type === "Native");
-
-        let webAppsList;
-        let mobileAppsList;
-        let nativeAppsList;
-
-        // Checking the screen size based on window.innerWidth
-        if (window.innerWidth <= 500) {
-          webAppsList = getRandomApps(webApps, 1);
-          mobileAppsList = getRandomApps(mobileApps, 1);
-          nativeAppsList = getRandomApps(nativeApps, 1);
-        } else if (window.innerWidth <= 900) {
-          webAppsList = getRandomApps(webApps, 3);
-          mobileAppsList = getRandomApps(mobileApps, 3);
-          nativeAppsList = getRandomApps(nativeApps, 3);
-        } else if (window.innerWidth <= 1200) {
-          webAppsList = getRandomApps(webApps, 4);
-          mobileAppsList = getRandomApps(mobileApps, 4);
-          nativeAppsList = getRandomApps(nativeApps, 4);
-        } else {
-          webAppsList = getRandomApps(webApps, 5);
-          mobileAppsList = getRandomApps(mobileApps, 5);
-          nativeAppsList = getRandomApps(nativeApps, 5);
-        }
-
-        setWebAppsRandom(webAppsList);
-        setMobileAppsRandom(mobileAppsList);
-        setNativeAppsRandom(nativeAppsList);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  // Define a debounced version of the fetchData function
-  const debouncedFetchData = debounce(fetchData, 300);
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(APP_URL);
+        const allApps: AppWithDevelopersProps[] = res.data.apps;
+
+        if (allApps.length > 0) {
+          const webApps = allApps.filter((app) => app.type === "Web");
+          const mobileApps = allApps.filter((app) => app.type === "Mobile");
+          const nativeApps = allApps.filter((app) => app.type === "Native");
+
+          let webAppsList;
+          let mobileAppsList;
+          let nativeAppsList;
+
+          // Checking the screen size based on window.innerWidth
+          if (window.innerWidth <= 500) {
+            webAppsList = getRandomApps(webApps, 1);
+            mobileAppsList = getRandomApps(mobileApps, 1);
+            nativeAppsList = getRandomApps(nativeApps, 1);
+          } else if (window.innerWidth <= 900) {
+            webAppsList = getRandomApps(webApps, 3);
+            mobileAppsList = getRandomApps(mobileApps, 3);
+            nativeAppsList = getRandomApps(nativeApps, 3);
+          } else if (window.innerWidth <= 1200) {
+            webAppsList = getRandomApps(webApps, 4);
+            mobileAppsList = getRandomApps(mobileApps, 4);
+            nativeAppsList = getRandomApps(nativeApps, 4);
+          } else {
+            webAppsList = getRandomApps(webApps, 5);
+            mobileAppsList = getRandomApps(mobileApps, 5);
+            nativeAppsList = getRandomApps(nativeApps, 5);
+          }
+
+          setWebAppsRandom(webAppsList);
+          setMobileAppsRandom(mobileAppsList);
+          setNativeAppsRandom(nativeAppsList);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    const debouncedFetchData = debounce(fetchData, 300);
+
     debouncedFetchData(); // Use the debounced version of fetchData
 
-    // Add an event listener to recheck screen size when the window is resized
+    // Event listener to recheck screen size when the window is resized
     window.addEventListener("resize", debouncedFetchData);
 
     // Cleanup the event listener when the component unmounts
     return () => {
       window.removeEventListener("resize", debouncedFetchData);
     };
-  }, [debouncedFetchData]);
+  }, []);
 
   return (
     <>
@@ -122,7 +120,7 @@ export default function Home() {
           />
         </section>
       </main>
-      <Footer/>
+      <Footer />
     </>
   );
 }

@@ -64,14 +64,15 @@ const AppCard: React.FC<AppCardProps> = ({ app }) => {
           </a>
         </div>
         <div className={styles.developersWrapper}>
-          <h3>
-            Created by:
-          </h3>
+          <h3>Created by:</h3>
+          <div className={styles.developersList}>{developersList}</div>
+        </div>
+        <div className={styles.developersWrapper}>
+          <h3>Tech Stack: </h3>
           <div className={styles.developersList}>
-            {developersList}
+          {technologies.join(", ")}
           </div>
         </div>
-        <h3>Tech Stack: {technologies.join(", ")}</h3>
       </div>
       <div className={styles.cardFooterButtons}>
         <a href={appLink ?? ""} className={styles.cardView} target="_blank">
