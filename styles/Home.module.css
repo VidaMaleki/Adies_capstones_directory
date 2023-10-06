@@ -30,6 +30,26 @@
     padding-top: 10rem;
 }
 
+.loadingSpinnerWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(247, 243, 243, 0.67);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loadingSpinner {
+    display: flex;
+    justify-content: space-between;
+    width: 200px;
+    color: #0ba88b;
+}
+
 .appsHeader {
     display: flex;
     justify-content: center;
@@ -127,5 +147,14 @@
     }
     to {
         transform: rotate(0deg);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
     }
 }
