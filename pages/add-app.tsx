@@ -50,8 +50,8 @@ export async function getServerSideProps(ctx: NextPageContext) {
   const allDevs: Developer[] = await db.developer.findMany({
     where: {
       OR: [
-        { appId: null }, // Include developers with null appId (no app assigned)
-        { appId: signedInUser?.appId || null }, // Include the signed-in user's app
+        { appId: null },
+        { appId: signedInUser?.appId || null },
       ],
     },
   });
@@ -67,7 +67,7 @@ const getDefaultApp = (signedInUser: Developer): FormSchemaType => {
   return {
     appName: "",
     description: "",
-    developers: [{ fullName: signedInUser.fullName }], // Include signed-in user as a default developer
+    developers: [{ fullName: signedInUser.fullName }],
     appLink: "",
     videoLink: "",
     github: "",
@@ -148,23 +148,6 @@ export default function Capstone({
       developers: formattedDevelopers,
     }));
   };
-
-  // Commenting this function for now since I am validating directly in onSubmit
-  // const validateFormData = () => {
-  //   const validationResult = FormSchema.safeParse(appData);
-  //   if (!validationResult.success) {
-  //     const errors: InputErrors = {};
-  //     validationResult.error.errors.forEach((error) => {
-  //       // Use type assertion to inform TypeScript that error.path.join('.') is a valid key
-  //       const fieldName = error.path.join('.') as keyof InputErrors;
-  //       errors[fieldName] = error.message;
-  //     });
-  //     setInputErrors(errors);
-  //     return false;
-  //   }
-  //   setInputErrors({});
-  //   return true;
-  // };
 
   const schemaPathToInputName: Record<string, keyof InputErrors> = {
     appName: "appName",
