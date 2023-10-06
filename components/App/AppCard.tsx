@@ -16,8 +16,23 @@ const AppCard: React.FC<AppCardProps> = ({ app }) => {
   const [picture, setPicture] = useState("");
 
   const { appName, appLink, github, technologies, developers, type } = app;
-  const developerNamesString =
-    developers?.map((developer) => developer.fullName).join(", ") ?? "";
+
+  let developersList: React.ReactNode;
+
+  if (developers && developers.length === 1) {
+    developersList = <p>{developers[0].fullName}</p>;
+  } else if (developers && developers.length > 1) {
+    developersList = (
+      <ol className={styles.developersList}>
+        {developers.map((developer, index) => (
+          <li key={developer.id}>{`${index + 1}. ${developer.fullName}`}</li>
+        ))}
+      </ol>
+    );
+  } else {
+    // Handle the case when developers is undefined or empty
+    developersList = <p>No developers specified</p>;
+  }
 
   const handleOpenPopup = () => {
     setShowPopup(true);
@@ -48,8 +63,16 @@ const AppCard: React.FC<AppCardProps> = ({ app }) => {
             </div>
           </a>
         </div>
-        <h3>Created by: {developerNamesString}</h3>
-        <h3>Tech Stack: {technologies.join(", ")}</h3>
+        <div className={styles.developersWrapper}>
+          <h3>Created by:</h3>
+          <div className={styles.developersList}>{developersList}</div>
+        </div>
+        <div className={styles.developersWrapper}>
+          <h3>Tech Stack: </h3>
+          <div className={styles.developersList}>
+          {technologies.join(", ")}
+          </div>
+        </div>
       </div>
       <div className={styles.cardFooterButtons}>
         <a href={appLink ?? ""} className={styles.cardView} target="_blank">

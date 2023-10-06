@@ -1,34 +1,45 @@
 import Navbar from "@/components/Navbar/Navbar";
 import styles from "@/styles/AppPage.module.css";
-import { db } from "@/lib/db";
-import { App } from "@prisma/client";
-import AppExtentionPage from '@/components/AppExtentionPage';
-import { AppWithIdProps, AppWithDevelopersProps } from '../components/types';
+import AppExtentionPage from "@/components/AppExtentionPage";
+import { AppWithDevelopersProps } from "../components/types";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const PAGE_SIZE = 10;
 
-export async function getStaticProps() {
-  const nativeApps: App[] = await db.app.findMany({
-    where: {
-      type: "Native",
-    },
-  });
-  return {
-    props: {
-      nativeApps: nativeApps,
-    },
-  };
-}
+const NativeApp = () => {
+  const [nativeApps, setNativeApps] = useState<AppWithDevelopersProps[]>([]);
+  const APP_URL = "/api/appRoutes";
 
-const Native = ({ nativeApps }: { nativeApps: AppWithDevelopersProps[] }) => {
+  async function fetchData() {
+    try {
+      const res = await axios.get(APP_URL);
+      const allApps: AppWithDevelopersProps[] = res.data.apps;
+      if (allApps.length > 0) {
+        const nativeApps = allApps.filter((app) => app.type === "Native");
+        setNativeApps(nativeApps);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <div className={styles.pageContainer}>
       <Navbar />
       <div className={styles.pageWrapper}>
-        <AppExtentionPage apps={nativeApps} page="Native apps" pageSize={PAGE_SIZE}/>
+        <AppExtentionPage
+          apps={nativeApps}
+          page="Native Apps"
+          pageSize={PAGE_SIZE}
+        />
       </div>
     </div>
   );
 };
 
-export default Native;
+export default NativeApp;

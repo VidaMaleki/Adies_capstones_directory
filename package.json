@@ -46,7 +46,7 @@
         "react-dom": "^18.2.0",
         "react-drag-drop-files": "^2.3.10",
         "react-hook-form": "^7.43.9",
-        "react-icons": "^4.8.0",
+        "react-icons": "^4.11.0",
         "react-multi-select-component": "^4.3.4",
         "react-router-dom": "^6.10.0",
         "react-select": "^5.7.3",
@@ -71,11 +71,7 @@
         "tailwindcss": "^3.3.1",
         "ts-node": "^10.9.1",
         "tslint": "^6.1.3",
-        "typescript": "^4.4.3"
-    },
-    "rules": {
-    
-        "specific-rule-name": "off"
+        "typescript": "^5.2.2"
     },
     "prisma": {
         "seed": "ts-node -P tsconfig-seed.json -r tsconfig-paths/register --transpileOnly prisma/seed.ts"

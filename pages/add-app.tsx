@@ -13,14 +13,14 @@ import { typeOptions, techOptions } from "../app-data/selectOptions";
 import { z } from "zod";
 import Navbar from "@/components/Navbar/Navbar";
 import { InputErrors } from "@/components/types";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 export const FormSchema = z.object({
   appName: z.string().nonempty({ message: "App Name is required" }),
   description: z.string().nonempty({ message: "Description is required" }),
   developers: z
-    .array(z.object({ fullName: z.string() }))
-    .min(1, { message: "Developers are required" }),
+    .array(z.object({ fullName: z.string().nonempty() }))
+    .nonempty({ message: "Developers are required" }),
   appLink: z.string().url().nullish(),
   videoLink: z.string().url().nullish(),
   github: z.string().url().nonempty({ message: "Github Link is required" }),
@@ -35,13 +35,21 @@ type FormSchemaType = z.infer<typeof FormSchema>;
 
 export async function getServerSideProps(ctx: NextPageContext) {
   const session = await getSession(ctx);
-  const allDevs: Developer[] = await db.developer.findMany();
+  
   // Get the signed in (if signed in) dev here, add as prop
   // Current work around to not get error when querying db by user email
   let userEmail = session?.user?.email ? session.user.email : "";
   const signedInUser = await db.developer.findUnique({
     where: {
       email: userEmail,
+    },
+  });
+  const allDevs: Developer[] = await db.developer.findMany({
+    where: {
+      OR: [
+        { appId: null }, // Include developers with null appId (no app assigned)
+        { appId: signedInUser?.appId || null }, // Include the signed-in user's app
+      ],
     },
   });
   return {
@@ -52,16 +60,19 @@ export async function getServerSideProps(ctx: NextPageContext) {
     },
   };
 }
-const defaultApp: FormSchemaType = {
-  appName: "",
-  description: "",
-  developers: [],
-  appLink: "",
-  videoLink: "",
-  github: "",
-  type: "",
-  technologies: [],
+const getDefaultApp = (signedInUser: Developer): FormSchemaType => {
+  return {
+    appName: "",
+    description: "",
+    developers: [{ fullName: signedInUser.fullName }], // Include signed-in user as a default developer
+    appLink: "",
+    videoLink: "",
+    github: "",
+    type: "",
+    technologies: [],
+  };
 };
+
 export default function Capstone({
   allDevs,
   signedInUser,
@@ -69,11 +80,14 @@ export default function Capstone({
   allDevs: Developer[];
   signedInUser: Developer;
 }) {
+  const defaultApp = getDefaultApp(signedInUser);
   const router = useRouter();
   const { data: session } = useSession();
   const [appData, setAppData] = useState<FormSchemaType>(defaultApp);
   const [inputErrors, setInputErrors] = useState<InputErrors>({});
-  const nameOptions = allDevs.map((name) => ({
+  const nameOptions = allDevs
+  .filter((developer) => developer.fullName !== signedInUser.fullName)
+  .map((name) => ({
     value: String(name.id),
     label: name.fullName,
   }));
@@ -107,14 +121,29 @@ export default function Capstone({
     setAppData(newAppData);
   };
 
-  const handleDevChange = (event: any) => {
-    let newAppData: FormSchemaType = { ...appData };
-    const currDevs: { fullName: string }[] = event.map(
-      (option: { value: string; label: string }) => ({ fullName: option.label })
+  const handleDevChange = (selectedOptions: any) => {
+    const formattedDevelopers = selectedOptions.map((option: any) => ({
+      fullName: option.label,
+    }));
+  
+    // Check if the signed-in user is not already in the developers list
+    const signedInUserAlreadyAdded = formattedDevelopers.some(
+      (developer: Developer) => developer.fullName === signedInUser.fullName
     );
-    newAppData.developers = currDevs;
-    setAppData(newAppData);
+  
+    // If signed-in user is not in the list, add them at the beginning
+    if (!signedInUserAlreadyAdded) {
+      formattedDevelopers.unshift({
+        fullName: signedInUser.fullName,
+      });
+    }
+  
+    setAppData((prevAppData) => ({
+      ...prevAppData,
+      developers: formattedDevelopers,
+    }));
   };
+
   // Commenting this function for now since I am validating directly in onSubmit
   // const validateFormData = () => {
   //   const validationResult = FormSchema.safeParse(appData);
@@ -207,6 +236,7 @@ export default function Capstone({
               onChange={handleChange}
               name="appName"
               id="appName"
+              placeholder="App name"
               style={{
                 borderColor: `${inputErrors.appName ? "#ED4337" : ""}`,
               }}
@@ -223,6 +253,7 @@ export default function Capstone({
               onChange={handleChange}
               name="description"
               id="description"
+              placeholder="This app is for ..."
               style={{
                 borderColor: `${inputErrors.description ? "#ED4337" : ""}`,
               }}
@@ -240,6 +271,7 @@ export default function Capstone({
               onChange={handleChange}
               name="github"
               id="github"
+              placeholder="https://github.com/"
               style={{
                 borderColor: `${inputErrors.github ? "#ED4337" : ""}`,
               }}
@@ -257,6 +289,7 @@ export default function Capstone({
               onChange={handleChange}
               name="appLink"
               id="appLink"
+              placeholder="https://applink.com/"
               style={{
                 borderColor: `${inputErrors.appLink ? "#ED4337" : ""}`,
               }}
@@ -265,7 +298,7 @@ export default function Capstone({
               <div className="text-red-500 mb-2">{inputErrors.appLink}</div>
             )}
             <label className="text-gray-700" htmlFor="videoLink">
-              Video Demo Link
+              Video Link
             </label>
             <input
               className="border border-gray-300 rounded-md p-2 w-full mb-4"
@@ -274,6 +307,7 @@ export default function Capstone({
               onChange={handleChange}
               name="videoLink"
               id="videoLink"
+              placeholder="https://videolink.com/"
               style={{
                 borderColor: `${inputErrors.videoLink ? "#ED4337" : ""}`,
               }}
@@ -322,6 +356,10 @@ export default function Capstone({
               instanceId="appDevs"
               className="mb-4"
               name="developers"
+              value={appData.developers.map((developer) => ({
+                value: developer.fullName,
+                label: developer.fullName,
+              }))}
             />
             {inputErrors.developers && (
               <div className="text-red-500 mb-2">{inputErrors.developers}</div>

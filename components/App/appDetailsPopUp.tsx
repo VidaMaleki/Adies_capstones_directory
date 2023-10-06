@@ -1,7 +1,7 @@
 import styles from "@/styles/appDetailsPopup.module.css";
 import * as FaIcons from "react-icons/fa";
 import Image from "next/image";
-import { AppWithDevelopersProps } from "../types";
+import { AppWithDevelopersProps, DeveloperProps } from '../types';
 import { useEffect, useState } from "react";
 import { getImageByAppType } from "../../utils/helper";
 
@@ -18,12 +18,9 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
   const developers = app.developers;
   const [picture, setPicture] = useState("");
 
-  const developersElement =
-    developers && developers.length === 1
-      ? developers[0]
-      : developers?.join(", ") ?? "";
-  const developerNamesString =
-    developers?.map((developer) => developer.fullName).join("\n") ?? "";
+  const developersList = developers?.map((developer, index) => (
+    <li key={developer.id}>{`${index + 1}. ${developer.fullName}`}</li>
+  ));
 
   useEffect(() => {
     const imagePath = getImageByAppType(app.type);
@@ -48,7 +45,7 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
               <div className={styles.appPopupTitleWraper}>
                 <h2 className={styles.appPopupTitle}>{app.appName}</h2>
                 {app.github && (
-                  <a href={app.github} target="_blank">
+                  <a className={styles.appPopupTitleicon} href={app.github} target="_blank">
                     <FaIcons.FaGithub />
                   </a>
                 )}
@@ -56,7 +53,8 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
 
               <h3 className={styles.appPopupText}>
                 Created by:
-                <p className={styles.appPopupSubText}>{developerNamesString}</p>
+                <ol className={styles.appPopupSubText}>{developersList}</ol>
+                {/* <p className={styles.appPopupSubText}>{developersElement}</p> */}
               </h3>
 
               <h3 className={styles.appPopupText}>

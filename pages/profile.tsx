@@ -139,7 +139,7 @@ export default function Profile({
   return (
     <div className={pageWrapperStyle.pageWrapper}>
       <Navbar />
-      <div className="mx-auto w-2/5 pt-40 mb-20 xs:w-4/5 sm:w-3/5 md:w-3/5 lg:w-2/5">
+      <div className="mx-auto w-4/5 pt-40 mb-20 xs:w-4/5 sm:w-3/5 md:w-3/5 lg:w-2/5 2xl:w-2/5">
         <div className="border border-gray-400 drop-shadow relative flex flex-col w-full rounded-lg">
           <div className="w-full flex flex-col items-center text-center p-4 bg-gray-100 rounded-t-lg">
             <div className="w-2 flex justify-between px-8 py-8">
