@@ -1,45 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-// after any changes in modele run npx prisma generate
-// npx prisma migrate dev --skip-seed if you run this it will remove data
-// npx prisma migrate deploy   to deploy every migration
-
-generator client {
-  provider = "prisma-client-js"
-}
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-// https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#connect
-// May need to adjust db POST queries to use the syntax in the link above
-model Developer {
-  id            Int      @id @default(autoincrement())
-  fullName      String
-  email         String   @unique
-  emailVerified Boolean @default(false)
-  image         String  @default("45")
-  cohort        String
-  linkedin      String
-  password      String
-  app           App?     @relation(fields: [appId], references: [id]) // relation fields define connections and don't exist in the db
-  appId         Int?    
-}
-
-model App {
-  id           Int         @id @default(autoincrement())
-  appName      String
-  description  String
-  developers   Developer[]    
-  appLink      String?
-  videoLink    String?
-  github       String
-  type         String
-  technologies String[]
-}
-
 // npm i -D prettier-plugin-prisma
 // datasource db {
 //   provider = "postgresql"
@@ -97,3 +55,44 @@ model App {
 //   @@unique([identifier, token])
 // }
 
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// after any changes in modele run npx prisma generate
+// npx prisma migrate dev --skip-seed
+// npx prisma migrate deploy   to deploy every migration
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#connect
+// May need to adjust db POST queries to use the syntax in the link above
+model Developer {
+  id            Int      @id @default(autoincrement())
+  fullName      String
+  email         String   @unique
+  emailVerified Boolean @default(false)
+  image         String  @default("45")
+  cohort        String
+  linkedin      String
+  password      String
+  app           App?     @relation(fields: [appId], references: [id]) // relation fields define connections and don't exist in the db
+  appId         Int?    
+}
+
+model App {
+  id           Int         @id @default(autoincrement())
+  appName      String
+  description  String
+  developers   Developer[]    
+  appLink      String?
+  videoLink    String?
+  github       String
+  type         String
+  technologies String[]
+}
