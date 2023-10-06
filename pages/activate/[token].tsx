@@ -2,9 +2,6 @@ import { NextPageContext } from "next";
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import Link from "next/link";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 export default function Activate({ token }: { token: string }) {
   const activate_account = `${process.env.NEXT_PUBLIC_ACTIVATE}`;

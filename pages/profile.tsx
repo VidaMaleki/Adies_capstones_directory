@@ -19,9 +19,6 @@ import Settings from "@/components/profile/Settings";
 import pageWrapperStyle from "@/styles/PageWrapper.module.css";
 import ProfilePictureSelection from "../components/profile/ProfilePictureSelection";
 import { toast } from "react-toastify";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 export async function getServerSideProps(ctx: NextPageContext) {
   const session = await getSession(ctx);

@@ -7,9 +7,6 @@ import { AppWithDevelopersProps } from "../components/types";
 import axios from "axios";
 import debounce from "lodash/debounce";
 import Footer from "@/components/Footer/Footer";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 export default function Home() {
   const [webAppsRandom, setWebAppsRandom] = useState<AppWithDevelopersProps[]>(

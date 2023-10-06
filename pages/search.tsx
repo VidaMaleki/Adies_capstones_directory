@@ -6,9 +6,6 @@ import styles from "@/styles/Search.module.css";
 import { AppWithDevelopersProps } from "../components/types";
 import Navbar from "@/components/Navbar/Navbar";
 import { FaSearch } from "react-icons/fa";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const SearchPage = () => {
   const router = useRouter();

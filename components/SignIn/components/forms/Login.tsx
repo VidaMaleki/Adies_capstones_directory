@@ -12,9 +12,6 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import dotenv from "dotenv";
-
-dotenv.config();
 // npm install zod
 // npm install @hookform/resolvers
 

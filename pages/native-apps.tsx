@@ -4,9 +4,6 @@ import AppExtentionPage from "@/components/AppExtentionPage";
 import { AppWithDevelopersProps } from "../components/types";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const PAGE_SIZE = 10;
 

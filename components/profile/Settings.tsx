@@ -9,9 +9,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { DeveloperProps } from "../types";
 import styles from "@/styles/appDetailsPopup.module.css";
 import { DeveloperWithAppProps } from "../types";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 interface AccountStatusResponse {
   isDeleted: boolean;

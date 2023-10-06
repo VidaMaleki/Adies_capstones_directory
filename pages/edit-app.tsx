@@ -15,9 +15,6 @@ import { toast } from "react-toastify";
 import pageWrapperStyle from "@/styles/PageWrapper.module.css";
 import styles from "@/styles/addApp.module.css";
 import { InputErrors } from "@/components/types";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const FormSchema = z.object({
   id: z.string(),

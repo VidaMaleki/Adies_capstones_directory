@@ -5,9 +5,7 @@ import { useState, useEffect } from "react";
 import styles from "@/styles/Profile.module.css";
 import axios from "axios";
 import { DeveloperProps } from "../types";
-import dotenv from "dotenv";
 
-dotenv.config();
 interface AccountStatusResponse {
   isDeleted: boolean;
 }

@@ -1,9 +1,6 @@
 import { db } from "@/lib/db";
 import type { NextApiRequest, NextApiResponse } from "next";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const { ACTIVATION_TOKEN_SECRET } = process.env;
 interface UserToken {

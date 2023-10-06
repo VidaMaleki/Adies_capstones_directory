@@ -16,9 +16,6 @@ import zxcvbn from "zxcvbn";
 import { toast } from "react-toastify";
 // import { Link } from 'react-router-dom';
 import Link from "next/link";
-import dotenv from "dotenv";
-
-dotenv.config();
 // import authorizedEmails from '../../data/developers.json'
 // npm install zod
 // npm install @hookform/resolvers

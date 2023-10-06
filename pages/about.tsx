@@ -7,9 +7,6 @@ import vida from "../images/vida.png";
 import megan from "../images/megan.png";
 import andrea from "../images/andrea.jpg";
 import { toast } from "react-toastify";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const About = () => {
   const [name, setName] = useState("");

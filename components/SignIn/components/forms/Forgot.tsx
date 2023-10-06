@@ -10,9 +10,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import Link from "next/link";
-import dotenv from "dotenv";
-
-dotenv.config();
 // npm install zod
 // npm install @hookform/resolvers
 

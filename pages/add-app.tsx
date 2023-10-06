@@ -14,9 +14,6 @@ import { z } from "zod";
 import Navbar from "@/components/Navbar/Navbar";
 import { InputErrors } from "@/components/types";
 import { toast } from "react-toastify";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 export const FormSchema = z.object({
   appName: z.string().nonempty({ message: "App Name is required" }),
