@@ -7,6 +7,9 @@ import { AppWithDevelopersProps } from "../components/types";
 import axios from "axios";
 import debounce from "lodash/debounce";
 import Footer from "@/components/Footer/Footer";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export default function Home() {
   const [webAppsRandom, setWebAppsRandom] = useState<AppWithDevelopersProps[]>(
@@ -18,8 +21,9 @@ export default function Home() {
   const [nativeAppsRandom, setNativeAppsRandom] = useState<
     AppWithDevelopersProps[]
   >([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const APP_URL = "/api/appRoutes";
+  const app_url = `${process.env.NEXT_PUBLIC_APP_URL}`;
 
   const getRandomApps = (appsList: any, maxApps: number) => {
     if (appsList.length <= maxApps) return appsList;
@@ -29,8 +33,9 @@ export default function Home() {
   };
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
-        const res = await axios.get(APP_URL);
+        const res = await axios.get(app_url);
         const allApps: AppWithDevelopersProps[] = res.data.apps;
 
         if (allApps.length > 0) {
@@ -67,6 +72,8 @@ export default function Home() {
         }
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     };
     const debouncedFetchData = debounce(fetchData, 300);
@@ -102,22 +109,31 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <Navbar />
+        {isLoading && (
+          <div className={styles.loadingSpinner}>
+            Loading...
+          </div>
+        )}
         <section className={styles.appsWrapper}>
-          <AppSection
-            sectionTitle="Web apps"
-            apps={webAppsRandom}
-            seeAllLink="/web-apps"
-          />
-          <AppSection
-            sectionTitle="Mobile apps"
-            apps={mobileAppsRandom}
-            seeAllLink="/mobile-apps"
-          />
-          <AppSection
-            sectionTitle="Native apps"
-            apps={nativeAppsRandom}
-            seeAllLink="/native-apps"
-          />
+          {!isLoading && (
+            <>
+              <AppSection
+                sectionTitle="Web apps"
+                apps={webAppsRandom}
+                seeAllLink="/web-apps"
+              />
+              <AppSection
+                sectionTitle="Mobile apps"
+                apps={mobileAppsRandom}
+                seeAllLink="/mobile-apps"
+              />
+              <AppSection
+                sectionTitle="Native apps"
+                apps={nativeAppsRandom}
+                seeAllLink="/native-apps"
+              />
+            </>
+          )}
         </section>
       </main>
       <Footer />

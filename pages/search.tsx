@@ -6,9 +6,13 @@ import styles from "@/styles/Search.module.css";
 import { AppWithDevelopersProps } from "../components/types";
 import Navbar from "@/components/Navbar/Navbar";
 import { FaSearch } from "react-icons/fa";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const SearchPage = () => {
   const router = useRouter();
+  const search_page = `${process.env.NEXT_PUBLIC_SEARCH}`;
   const [searchTerm, setSearchTerm] = useState("");
   const { query } = router.query;
   const [searchResults, setSearchResults] = useState<AppWithDevelopersProps[]>(
@@ -30,7 +34,7 @@ const SearchPage = () => {
       console.log("search fetch");
       setIsLoading(true);
       try {
-        const response = await axios.get(`/api/search?search=${query}`);
+        const response = await axios.get(`${search_page}?search=${query}`);
         console.log("response", response.data);
         setSearchResults(response.data.apps);
 

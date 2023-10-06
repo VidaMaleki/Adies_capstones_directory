@@ -9,6 +9,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { DeveloperProps } from "../types";
 import styles from "@/styles/appDetailsPopup.module.css";
 import { DeveloperWithAppProps } from "../types";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 interface AccountStatusResponse {
   isDeleted: boolean;
@@ -44,13 +47,14 @@ export default function Settings({
   const [developerData, setDeveloperData] = useState<DeveloperWithAppProps>(
     signedInUser || ({} as DeveloperWithAppProps)
   );
-
+  const dev_url = `${process.env.NEXT_PUBLIC_DEV_URL}`;
+  const account_status = `${process.env.NEXT_PUBLIC_STATUS}`;
   const router = useRouter();
 
   const handleUpdate = () => {
     // Make API request to update developer information
     axios
-      .put(`/api/auth/signup?id=${signedInUser.id}`, {
+      .put(`${dev_url}?id=${signedInUser.id}`, {
         id: developerData.id,
         email: developerData.email,
         fullName: developerData.fullName,
@@ -70,7 +74,7 @@ export default function Settings({
 
   const handleDelete = () => {
     axios
-      .delete(`/api/auth/signup?id=${signedInUser.id}`)
+      .delete(`${dev_url}?id=${signedInUser.id}`)
       .then(function (response) {
         toast.success("Your account was successfully deleted");
         // Need to trigger a refresh
@@ -83,7 +87,7 @@ export default function Settings({
 
   const handleAccountStatusCheck = async () => {
     try {
-      const response = await fetch("/api/accountStatus");
+      const response = await fetch(account_status);
       const data: AccountStatusResponse = await response.json();
       if (data.isDeleted) {
         toast.success("Your account has been deleted");

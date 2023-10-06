@@ -14,6 +14,9 @@ import { z } from "zod";
 import Navbar from "@/components/Navbar/Navbar";
 import { InputErrors } from "@/components/types";
 import { toast } from "react-toastify";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const FormSchema = z.object({
   appName: z.string().nonempty({ message: "App Name is required" }),
@@ -35,7 +38,7 @@ type FormSchemaType = z.infer<typeof FormSchema>;
 
 export async function getServerSideProps(ctx: NextPageContext) {
   const session = await getSession(ctx);
-  
+
   // Get the signed in (if signed in) dev here, add as prop
   // Current work around to not get error when querying db by user email
   let userEmail = session?.user?.email ? session.user.email : "";
@@ -80,17 +83,19 @@ export default function Capstone({
   allDevs: Developer[];
   signedInUser: Developer;
 }) {
+  const app_url = `${process.env.NEXT_PUBLIC_APP_URL}`;
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const defaultApp = getDefaultApp(signedInUser);
   const router = useRouter();
   const { data: session } = useSession();
   const [appData, setAppData] = useState<FormSchemaType>(defaultApp);
   const [inputErrors, setInputErrors] = useState<InputErrors>({});
   const nameOptions = allDevs
-  .filter((developer) => developer.fullName !== signedInUser.fullName)
-  .map((name) => ({
-    value: String(name.id),
-    label: name.fullName,
-  }));
+    .filter((developer) => developer.fullName !== signedInUser.fullName)
+    .map((name) => ({
+      value: String(name.id),
+      label: name.fullName,
+    }));
 
   const handleChange = (event: any) => {
     let newAppData: FormSchemaType = { ...appData };
@@ -125,19 +130,19 @@ export default function Capstone({
     const formattedDevelopers = selectedOptions.map((option: any) => ({
       fullName: option.label,
     }));
-  
+
     // Check if the signed-in user is not already in the developers list
     const signedInUserAlreadyAdded = formattedDevelopers.some(
       (developer: Developer) => developer.fullName === signedInUser.fullName
     );
-  
+
     // If signed-in user is not in the list, add them at the beginning
     if (!signedInUserAlreadyAdded) {
       formattedDevelopers.unshift({
         fullName: signedInUser.fullName,
       });
     }
-  
+
     setAppData((prevAppData) => ({
       ...prevAppData,
       developers: formattedDevelopers,
@@ -174,6 +179,10 @@ export default function Capstone({
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
+    if (isSubmitting) {
+      return;
+    }
+    setIsSubmitting(true);
     const formData = {
       ...appData,
       appLink: appData.appLink || null,
@@ -183,7 +192,7 @@ export default function Capstone({
       FormSchema.parse(formData);
       // Form data is valid, proceed with form submission logic...
       axios
-        .post("/api/appRoutes/", {
+        .post(app_url, {
           ...appData,
           signedInUser: session?.user?.email,
         })
@@ -206,7 +215,15 @@ export default function Capstone({
 
         // Show error messages.
         toast.error("Please address error messages");
+      } else {
+        console.error(
+          "Unexpected error occurred during form submission:",
+          error
+        );
+        toast.error("An unexpected error occurred. Please try again later.");
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -368,6 +385,7 @@ export default function Capstone({
               type="submit"
               value="Add"
               className="bg-teal-200 drop-shadow text-gray-700 px-4 py-2 rounded-md"
+              disabled={isSubmitting}
             />
           </form>
         </div>

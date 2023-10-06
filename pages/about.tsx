@@ -7,6 +7,9 @@ import vida from "../images/vida.png";
 import megan from "../images/megan.png";
 import andrea from "../images/andrea.jpg";
 import { toast } from "react-toastify";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const About = () => {
   const [name, setName] = useState("");
@@ -14,7 +17,7 @@ const About = () => {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("");
   const [clicked, setClicked] = useState(false);
-
+  const feedback = `${process.env.NEXT_PUBLIC_FEEDBACK}`;
   const handleButtonClick = () => {
     setClicked(true);
   };
@@ -27,7 +30,7 @@ const About = () => {
     e.preventDefault();
     setStatus("sending");
     try {
-      await axios.post("/api/send-feedback", { name, email, message });
+      await axios.post(feedback, { name, email, message });
       console.log(name, email, message);
       setStatus("sent");
       setName("");
@@ -106,7 +109,9 @@ const About = () => {
             improve our platform.
           </p>
           <form onSubmit={handleSubmit}>
-            <label htmlFor="name" className="text-gray-700">Name:</label>
+            <label htmlFor="name" className="text-gray-700">
+              Name:
+            </label>
             <input
               className="border border-gray-300 rounded-md p-2 w-full mb-4"
               type="text"
@@ -115,7 +120,9 @@ const About = () => {
               onChange={(e) => setName(e.target.value)}
               required
             />
-            <label htmlFor="email" className="text-gray-700">Email:</label>
+            <label htmlFor="email" className="text-gray-700">
+              Email:
+            </label>
             <input
               className="border border-gray-300 rounded-md p-2 w-full mb-4"
               type="email"
@@ -124,7 +131,9 @@ const About = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <label htmlFor="message" className="text-gray-700">Message:</label>
+            <label htmlFor="message" className="text-gray-700">
+              Message:
+            </label>
             <textarea
               className="border border-gray-300 rounded-md p-2 w-full mb-4"
               id="message"

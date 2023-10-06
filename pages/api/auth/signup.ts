@@ -50,7 +50,6 @@ export default async function handler(
   }
 }
 
-
 async function registerDeveloper(
   req: NextApiRequest,
   res: NextApiResponse<{ message: string }>
@@ -97,13 +96,12 @@ async function registerDeveloper(
         .status(400)
         .json({ message: "Password must be at least 6 characters." });
     }
-    console.log("authorizedEmails", 
-      process.env.AUTHORIZED_EMAILS || "[]")
+    console.log("authorizedEmails", process.env.AUTHORIZED_EMAILS || "[]");
     // Check if the user's email is in the list of authorized emails
     const authorizedEmails: AuthorizedEmail[] = JSON.parse(
       process.env.AUTHORIZED_EMAILS || "[]"
     );
-    console.log("authorizedEmails2",authorizedEmails)
+    console.log("authorizedEmails2", authorizedEmails);
     const isAuthorizedEmail = authorizedEmails.some(
       (authorizedEmail) => authorizedEmail.email === input.email
     );
@@ -115,7 +113,7 @@ async function registerDeveloper(
     }
 
     const cryptedPassword = await bcrypt.hash(input.password, 12);
-    console.log(cryptedPassword)
+    console.log(cryptedPassword);
     const newdeveloper = await db.developer.create({
       data: {
         fullName: input.fullName,
@@ -126,14 +124,16 @@ async function registerDeveloper(
         password: cryptedPassword,
       },
     });
-    console.log(newdeveloper)
-    console.log(createActivationToken({
-      id: newdeveloper.id.toString(),
-    }))
+    console.log(newdeveloper);
+    console.log(
+      createActivationToken({
+        id: newdeveloper.id.toString(),
+      })
+    );
     const activation_token = createActivationToken({
       id: newdeveloper.id.toString(),
     });
-    console.log("activation_token", activation_token)
+    console.log("activation_token", activation_token);
     const url = `${process.env.NEXTAUTH_URL}/activate/${activation_token}`;
 
     await sendMail(
@@ -155,7 +155,7 @@ async function registerDeveloper(
   }
 }
 
-// Get one developer 
+// Get one developer
 async function getOneDeveloper(req: NextApiRequest, res: NextApiResponse) {
   const devId = Number(req.query.id);
   try {

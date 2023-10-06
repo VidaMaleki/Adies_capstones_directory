@@ -16,6 +16,9 @@ import zxcvbn from "zxcvbn";
 import { toast } from "react-toastify";
 // import { Link } from 'react-router-dom';
 import Link from "next/link";
+import dotenv from "dotenv";
+
+dotenv.config();
 // import authorizedEmails from '../../data/developers.json'
 // npm install zod
 // npm install @hookform/resolvers
@@ -64,7 +67,7 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
   } = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
   });
-
+  const dev_url = `${process.env.NEXT_PUBLIC_DEV_URL}`;
   const onSubmit: SubmitHandler<FormSchemaType> = async (values) => {
     console.log(values);
     // const { email } = values;
@@ -75,7 +78,7 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
     // );
 
     try {
-      const { data } = await axios.post("/api/auth/signup", {
+      const { data } = await axios.post(dev_url, {
         ...values,
       });
       reset();
@@ -96,7 +99,7 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
       let password = watch().password;
       return zxcvbn(password ? password : "").score;
     };
-    
+
     const password = watch().password;
     setPasswordScore(validatePasswordStrength());
   }, [watch]);

@@ -19,6 +19,9 @@ import Settings from "@/components/profile/Settings";
 import pageWrapperStyle from "@/styles/PageWrapper.module.css";
 import ProfilePictureSelection from "../components/profile/ProfilePictureSelection";
 import { toast } from "react-toastify";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export async function getServerSideProps(ctx: NextPageContext) {
   const session = await getSession(ctx);
@@ -51,6 +54,8 @@ export default function Profile({
 }: {
   signedInUser: DeveloperWithAppProps & { app: AppWithDevelopersProps };
 }) {
+  const app_url = `${process.env.NEXT_PUBLIC_APP_URL}`;
+  const dev_url = `${process.env.NEXT_PUBLIC_DEV_URL}`;
   const { data: session, status } = useSession();
   const [showSettings, setShowSettings] = useState(false);
   const router = useRouter();
@@ -61,7 +66,7 @@ export default function Profile({
   const [isSelectingPicture, setIsSelectingPicture] = useState(false);
   const handleDelete = () => {
     axios
-      .delete(`/api/appRoutes?id=${signedInUser.appId}`)
+      .delete(`${app_url}?id=${signedInUser.appId}`)
       .then(function (response) {
         console.log(response);
         toast.success("Your app was successfully deleted");
@@ -97,7 +102,7 @@ export default function Profile({
   const handlePictureSelection = (picture: string) => {
     console.log("Selected image:", picture);
     axios
-      .put(`/api/auth/signup?id=${signedInUser.id}`, {
+      .put(`${dev_url}?id=${signedInUser.id}`, {
         id: developerData.id,
         email: developerData.email,
         image: picture,

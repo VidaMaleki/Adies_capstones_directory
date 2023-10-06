@@ -12,6 +12,9 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import dotenv from "dotenv";
+
+dotenv.config();
 // npm install zod
 // npm install @hookform/resolvers
 
@@ -31,6 +34,7 @@ type FormSchemaType = z.infer<typeof FormSchema>;
 
 const LoginForm: React.FunctionComponent<ILoginFormProps> = (props) => {
   const { callbackUrl, csrfToken } = props;
+  const login_email = `${process.env.NEXT_PUBLIC_LOG_EMAIL}`;
   const router = useRouter();
   const path = router.pathname;
   const {
@@ -79,7 +83,7 @@ const LoginForm: React.FunctionComponent<ILoginFormProps> = (props) => {
       </p>
       <form
         method="post"
-        action="/api/auth/signin/email"
+        action={login_email}
         className={styles.registerWrapper}
         onSubmit={handleSubmit(onSubmit)}
       >
