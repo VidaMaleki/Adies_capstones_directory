@@ -21,11 +21,12 @@ const FormSchema = z.object({
   appName: z.string().nonempty({ message: "App Name is required" }),
   description: z.string().nonempty({ message: "Description is required" }),
   developers: z
-    .array(z.object({
-      fullName: z.string(),
-      id: z.number(),
-    })
-  )
+    .array(
+      z.object({
+        fullName: z.string(),
+        id: z.number(),
+      })
+    )
     .min(1, { message: "Developers are required" }),
   appLink: z.string().url().nullish(),
   videoLink: z.string().url().nullish(),
@@ -98,6 +99,7 @@ const convertAppToFormSchema = (app: AppWithIdProps): FormSchemaType => {
 };
 
 export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
+  const app_url = `${process.env.NEXT_PUBLIC_APP_URL}`;
   const { data: session, status } = useSession();
   const router = useRouter();
   const [appData, setAppData] = useState<FormSchemaType>(
@@ -133,14 +135,14 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
       appLink: appData.appLink || null,
       videoLink: appData.videoLink || null,
     };
-  
+
     setIsSaving(true);
-  
+
     try {
       FormSchema.parse(formData);
-  
+
       axios
-        .put(`/api/appRoutes?id=${appData.id}`, {
+        .put(`${app_url}?id=${appData.id}`, {
           ...formData,
           signedInUser: session?.user?.email,
         })
@@ -159,7 +161,9 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
           } else if (error.request) {
             // The request was made but no response was received
             console.error("Network Error:", error.request);
-            toast.error("Network Error: Please check your internet connection.");
+            toast.error(
+              "Network Error: Please check your internet connection."
+            );
           } else {
             // Something happened in setting up the request that triggered an Error
             console.error("Error:", error.message);
@@ -183,7 +187,9 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
         toast.error("Please address error messages");
       } else {
         console.error("Error:", error);
-        toast.error(`Error: Please try again later we are working on this error.`);
+        toast.error(
+          `Error: Please try again later we are working on this error.`
+        );
       }
     }
   };
@@ -221,22 +227,22 @@ export default function EditApp({ signedInUser, allDevs, app }: EditAppProps) {
     const selectedDeveloperIds: number[] = selectedOptions.map(
       (option: { value: string; label: string }) => parseInt(option.value, 10)
     );
-  
+
     // Find developers from allDevs based on selected IDs
     const selectedDevelopers: Developer[] = allDevs.filter(
       (developer: Developer) => selectedDeveloperIds.includes(developer.id)
     );
-  
+
     // Check if the signed-in user is not already in the developers list
     const signedInUserAlreadyAdded = selectedDevelopers.some(
       (developer: Developer) => developer.id === signedInUser.id
     );
-  
+
     // If signed-in user is not in the list, add them to the beginning of the array
     if (!signedInUserAlreadyAdded) {
       selectedDevelopers.unshift(signedInUser);
     }
-  
+
     setAppData((prevAppData) => ({
       ...prevAppData,
       developers: selectedDevelopers,

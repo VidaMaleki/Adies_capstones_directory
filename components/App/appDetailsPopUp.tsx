@@ -1,7 +1,7 @@
 import styles from "@/styles/appDetailsPopup.module.css";
 import * as FaIcons from "react-icons/fa";
 import Image from "next/image";
-import { AppWithDevelopersProps, DeveloperProps } from '../types';
+import { AppWithDevelopersProps } from "../types";
 import { useEffect, useState } from "react";
 import { getImageByAppType } from "../../utils/helper";
 
@@ -37,7 +37,6 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
         </div>
         <div className={styles.appContentContainer}>
           <div className={styles.imageContainer}>
-            {/* change to Image from next/image */}
             <Image src={picture} alt="app picture" width={700} height={500} />
           </div>
           <div className={styles.textContainer}>
@@ -45,7 +44,11 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
               <div className={styles.appPopupTitleWraper}>
                 <h2 className={styles.appPopupTitle}>{app.appName}</h2>
                 {app.github && (
-                  <a className={styles.appPopupTitleicon} href={app.github} target="_blank">
+                  <a
+                    className={styles.appPopupTitleicon}
+                    href={app.github}
+                    target="_blank"
+                  >
                     <FaIcons.FaGithub />
                   </a>
                 )}
@@ -54,7 +57,6 @@ const AppDetailsPopup: React.FC<Props> = ({ app, onClose }) => {
               <h3 className={styles.appPopupText}>
                 Created by:
                 <ol className={styles.appPopupSubText}>{developersList}</ol>
-                {/* <p className={styles.appPopupSubText}>{developersElement}</p> */}
               </h3>
 
               <h3 className={styles.appPopupText}>

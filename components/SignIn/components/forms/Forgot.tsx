@@ -28,10 +28,10 @@ const ForgotForm: React.FunctionComponent<IForgotFormProps> = (props) => {
   } = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
   });
-
+  const forgot_password = `${process.env.NEXT_PUBLIC_FORGOT}`;
   const onSubmit: SubmitHandler<FormSchemaType> = async (values) => {
     try {
-      const { data } = await axios.post("/api/auth/forgot", {
+      const { data } = await axios.post(forgot_password, {
         email: values.email,
       });
       toast.success(data.message);

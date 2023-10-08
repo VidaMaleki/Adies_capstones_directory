@@ -46,7 +46,7 @@ const FormSchema = z
   });
 type FormSchemaType = z.infer<typeof FormSchema>;
 
-const validatePasswordStrength = (password:any) => {
+const validatePasswordStrength = (password: any) => {
   return zxcvbn(password ? password : "").score;
 };
 
@@ -61,12 +61,12 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
   } = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
   });
-
+  const dev_url = `${process.env.NEXT_PUBLIC_DEV_URL}`;
   const onSubmit: SubmitHandler<FormSchemaType> = async (values) => {
     console.log(values);
 
     try {
-      const { data } = await axios.post("/api/auth/signup", {
+      const { data } = await axios.post(dev_url, {
         ...values,
       });
       reset();
@@ -188,7 +188,7 @@ const RegisterForm: React.FunctionComponent<IRegisterFormProps> = (props) => {
           icon={<FiLock />}
           disabled={isSubmitting}
         />
-      </form>      
+      </form>
     </div>
   );
 };

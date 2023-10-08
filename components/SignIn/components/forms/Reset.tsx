@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 // import { Link } from 'react-router-dom';
 import Link from "next/link";
 
+
 // npm install zod
 // npm install @hookform/resolvers
 // npm install @types/zxcvbn
@@ -54,11 +55,11 @@ const ResetForm: React.FunctionComponent<IResetFormProps> = (props) => {
   } = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
   });
-
+  const reset_password = `${process.env.NEXT_PUBLIC_RESET}`;
   const onSubmit: SubmitHandler<FormSchemaType> = async (values) => {
     console.log(values);
     try {
-      const { data } = await axios.post("/api/auth/reset", {
+      const { data } = await axios.post(reset_password, {
         password: values.password,
         token,
       });
@@ -72,7 +73,7 @@ const ResetForm: React.FunctionComponent<IResetFormProps> = (props) => {
   //   let password = watch().password;
   //   return zxcvbn(password ? password : "").score;
   // };
-  
+
   useEffect(() => {
     const password = watch().password;
     setPasswordScore(validatePasswordStrength(password));
@@ -99,7 +100,7 @@ const ResetForm: React.FunctionComponent<IResetFormProps> = (props) => {
         <Input
           name="password"
           label="Password"
-          type="text"
+          type="password"
           icon={<AiFillLock />}
           placeholder="******"
           register={register}
@@ -129,7 +130,7 @@ const ResetForm: React.FunctionComponent<IResetFormProps> = (props) => {
         <Input
           name="confirmPassword"
           label="Confirm password"
-          type="text"
+          type="password"
           icon={<AiFillLock />}
           placeholder="******"
           register={register}
