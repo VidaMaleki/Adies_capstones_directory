@@ -25,7 +25,7 @@ const FormSchema = z
       .min(2, "Full name must have at least 2 characters.")
       .max(32, "Full name must not be more than 32 characters.")
       .regex(new RegExp("^[a-zA-Z\\s]+$"), "No special characters allowed."),
-    email: z.string().email("Please enter valid email address."),
+    email: z.string().toLowerCase().email("Please enter valid email address."),
     cohort: z
       .string()
       .min(1, "Cohort must have at least one digit.")
