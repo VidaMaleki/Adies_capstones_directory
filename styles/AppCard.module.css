@@ -73,7 +73,7 @@
 
 .developersList {
     height: 20px;
-    overflow: scroll;
+    overflow: overlay;
 }
 
 .ellipsis {
