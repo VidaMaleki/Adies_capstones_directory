@@ -1,3 +1,4 @@
+'use client'
 import * as React from "react";
 // import axios from 'axios';
 import styles from "@/styles/register.module.css";
@@ -31,8 +32,8 @@ type FormSchemaType = z.infer<typeof FormSchema>;
 
 const LoginForm: React.FunctionComponent<ILoginFormProps> = (props) => {
   const { callbackUrl, csrfToken } = props;
-  const login_email = `${process.env.NEXT_PUBLIC_LOG_EMAIL}`;
   const router = useRouter();
+  const login_email = `${process.env.NEXT_PUBLIC_LOG_EMAIL}`;
   const path = router.pathname;
   const {
     register,

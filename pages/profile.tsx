@@ -119,10 +119,14 @@ export default function Profile({
 
   useEffect(() => {
     // Redirect to home page if user is not authenticated
+    if (status !== "authenticated") {
+      router.push("/");
+    }
     if (!signedInUser) {
       router.push("/");
     }
-  }, [signedInUser, router]);
+
+  }, [signedInUser, status, router]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -137,7 +141,8 @@ export default function Profile({
   if (!session) {
     return null;
   }
-
+  console.log("session", session)
+  console.log("signed in user ",signedInUser )
   return (
     <div className={pageWrapperStyle.pageWrapper}>
       <Navbar />

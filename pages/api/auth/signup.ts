@@ -7,7 +7,8 @@ import { createActivationToken } from "@/utils/tokens";
 import sendMail from "@/utils/sendMail";
 import { activateTemplateEmail } from "@/components/SignIn/components/emailTemplates/activate";
 import dotenv from "dotenv";
-// npm i bcryptjs
+import { signJwtAccessToken, verifyJwt } from "@/helpers/jwt";
+  // npm i bcryptjs
 
 dotenv.config({ path: ".env.emails" });
 
@@ -117,14 +118,14 @@ async function registerDeveloper(
     const newdeveloper = await db.developer.create({
       data: {
         fullName: input.fullName,
-        email: input.email,
+        email: input.email.toLowerCase(),
         cohort: input.cohort,
         linkedin: input.linkedin,
         image: input.image,
         password: cryptedPassword,
       },
     });
-    console.log(newdeveloper);
+
     console.log(
       createActivationToken({
         id: newdeveloper.id.toString(),
@@ -133,7 +134,6 @@ async function registerDeveloper(
     const activation_token = createActivationToken({
       id: newdeveloper.id.toString(),
     });
-    console.log("activation_token", activation_token);
     const url = `${process.env.NEXTAUTH_URL}/activate/${activation_token}`;
 
     await sendMail(
@@ -158,7 +158,20 @@ async function registerDeveloper(
 // Get one developer
 async function getOneDeveloper(req: NextApiRequest, res: NextApiResponse) {
   const devId = Number(req.query.id);
+  console.log("req.headers", req.headers)
+  console.log("req.headers.authorization", req.headers.authorization)
   try {
+    
+    if (!req.headers || !req.headers.authorization) {
+      return res.status(401).json({ message: "Unauthorized access" });
+    }
+
+    const accessToken: string = req.headers.authorization;
+    const decoded = verifyJwt(accessToken);
+
+    if (!decoded) {
+      return res.status(401).json({ message: "Invalid authorization token" });
+    }
     const developer = await db.developer.findUnique({
       where: { id: devId },
       include: {

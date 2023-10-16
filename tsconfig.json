@@ -21,6 +21,6 @@
       "react-icons/*": ["node_modules/react-icons/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "middleware.ts"],
   "exclude": ["node_modules"]
 }

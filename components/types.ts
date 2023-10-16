@@ -86,3 +86,8 @@ export interface InputErrors {
   type?: string;
   technologies?: string;
 }
+
+export interface ApiResponse<T> {
+  data: T;
+  message?: string;
+}

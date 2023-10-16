@@ -22,13 +22,19 @@ export default NextAuth({
                 if (!developer) {
                     throw new Error("Email is not registered.")
                 }
-                const isPasswordCorrect = await bcrypt.compare(
-                    credentials!.password,
-                    developer.password
-                );
-                if (!isPasswordCorrect) {
+
+                if (developer && credentials?.password) {
+                    const isPasswordCorrect = await bcrypt.compare(credentials.password, developer.password);
+                    if (isPasswordCorrect && developer.emailVerified) {
+                      // If developer and password are correct, and email is verified, return the developer object
+                      return developer;
+                    } else {
+                        throw new Error("Please verify your email.")
+                    }
+                  } else {
                     throw new Error("Password is incorrect.")
-                }
+                  }
+                
                 return developer as any;
             }
         }),
