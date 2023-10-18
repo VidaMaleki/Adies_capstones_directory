@@ -1,4 +1,4 @@
-import { Developer,  App } from "@prisma/client";
+import { Developer, App } from "@prisma/client";
 
 export interface DeveloperProps {
   id: number;
@@ -9,34 +9,33 @@ export interface DeveloperProps {
   cohort: string;
   linkedin: string;
   password: string;
-  app?: App; 
+  app?: App;
   appId?: number;
 }
 
 export interface DeveloperWithAppProps extends Developer {
-  app?: App; 
+  app?: App;
 }
 
 export interface AppWithDevelopersProps extends App {
-  developers: DeveloperProps[]
+  developers: DeveloperProps[];
 }
 
-
-export interface AppWithIdProps extends AppDataProps{
+export interface AppWithIdProps extends AppDataProps {
   id: number;
 }
 
 export interface AppDataProps {
-  id: number,
-  appName: string,
-  description: string,
-  developers: Developer[],
-  appLink?: string | null,
-  videoLink?: string | null,
-  github: string,
-  type: string,
-  technologies: string[],
-  signedInUser: string | undefined,
+  id: number;
+  appName: string;
+  description: string;
+  developers: Developer[];
+  appLink?: string | null;
+  videoLink?: string | null;
+  github: string;
+  type: string;
+  technologies: string[];
+  signedInUser: string | undefined;
 }
 
 export interface AppInputProps {
@@ -51,7 +50,7 @@ export interface AppInputProps {
   onChange?: (name: string, value: string) => void;
   value?: string;
 }
-export interface SignupInputProps{
+export interface SignupInputProps {
   name: string;
   label: string;
   type: string;
@@ -63,11 +62,11 @@ export interface SignupInputProps{
 }
 
 export interface ISlideButtonProps {
-  type:"submit" | "reset" | "button";
+  type: "submit" | "reset" | "button";
   text: string;
   slide_text: string;
   disabled: boolean;
-  icon:JSX.Element;
+  icon: JSX.Element;
 }
 
 export interface NavButtonProps {
@@ -90,4 +89,10 @@ export interface InputErrors {
 export interface ApiResponse<T> {
   data: T;
   message?: string;
+}
+
+export interface AllDev {
+  id: number;
+  fullName: string;
+  appId: number | null;
 }

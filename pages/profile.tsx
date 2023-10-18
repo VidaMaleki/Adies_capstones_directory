@@ -113,6 +113,7 @@ export default function Profile({
         router.reload();
       })
       .catch(function (error: any) {
+        console.error("Error updating profile picture:", error);
         toast.error("Could not update profile picture, please try again");
       });
   };
@@ -196,7 +197,7 @@ export default function Profile({
                 <AiOutlineEdit className="mr-2" /> Change Profile Picture
               </button>
             </div>
-            {isSelectingPicture && ( // Conditionally render the picture selection component
+            {isSelectingPicture && (
               <div className="w-full mt-4 flex  flex-col justify-center items-center">
                 <ProfilePictureSelection
                   selectedPicture={selectedPicture}

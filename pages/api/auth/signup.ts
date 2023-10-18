@@ -8,7 +8,8 @@ import sendMail from "@/utils/sendMail";
 import { activateTemplateEmail } from "@/components/SignIn/components/emailTemplates/activate";
 import dotenv from "dotenv";
 import { signJwtAccessToken, verifyJwt } from "@/helpers/jwt";
-  // npm i bcryptjs
+import { AllDev } from "@/components/types";
+// npm i bcryptjs
 
 dotenv.config({ path: ".env.emails" });
 
@@ -38,6 +39,10 @@ export default async function handler(
       const developerId = Number(req.query.id);
       if (!isNaN(developerId)) {
         return getOneDeveloper(req, res);
+      }
+      const email = req.query.email as string;
+      if (email) {
+        return getDeveloperByEmail(req, res);
       }
       return getAllDevelopers(req, res);
     case "DELETE":
@@ -155,13 +160,11 @@ async function registerDeveloper(
   }
 }
 
-// Get one developer
+// ************************************ Get one developer ************************************
 async function getOneDeveloper(req: NextApiRequest, res: NextApiResponse) {
   const devId = Number(req.query.id);
-  console.log("req.headers", req.headers)
-  console.log("req.headers.authorization", req.headers.authorization)
   try {
-    
+    console.log("headers", req.headers);
     if (!req.headers || !req.headers.authorization) {
       return res.status(401).json({ message: "Unauthorized access" });
     }
@@ -178,6 +181,11 @@ async function getOneDeveloper(req: NextApiRequest, res: NextApiResponse) {
         app: true, // Include the associated app
       },
     });
+
+    if (!developer) {
+      return res.status(404).json({ message: "Developer not found" });
+    }
+
     return res.status(200).json({ developer });
   } catch (error) {
     console.error(error);
@@ -188,28 +196,43 @@ async function getOneDeveloper(req: NextApiRequest, res: NextApiResponse) {
 // Get all developers
 async function getAllDevelopers(
   req: NextApiRequest,
-  res: NextApiResponse<Developer[]>
+  res: NextApiResponse<AllDev[]>
 ) {
   if (req.method !== "GET") {
     return res.status(405).json(Array<Developer>(0));
   }
 
   try {
-    const developers = await db.developer.findMany();
+    const developers: AllDev[] = await db.developer.findMany({
+      select: {
+        id: true,
+        fullName: true,
+        appId: true,
+      },
+    });
     return res.status(200).json(developers);
   } catch (error) {
     return res.status(500).json([]);
   }
 }
 
-// Delete the developer
+// ************************************ Delete the developer ************************************
 async function deleteDeveloper(
   req: NextApiRequest,
   res: NextApiResponse<{ message: string }>
 ) {
   try {
     const id = req.query.id as string;
+    if (!req.headers || !req.headers.authorization) {
+      return res.status(401).json({ message: "Unauthorized access" });
+    }
 
+    const accessToken: string = req.headers.authorization;
+    const decoded = verifyJwt(accessToken);
+
+    if (!decoded) {
+      return res.status(401).json({ message: "Invalid authorization token" });
+    }
     if (!id) {
       return res.status(400).json({ message: "User ID is required." });
     }
@@ -263,14 +286,23 @@ async function deleteDeveloper(
   }
 }
 
-// Update developer info
+// ************************************ Update developer info ************************************
 async function updateDeveloper(
   req: NextApiRequest,
   res: NextApiResponse<{ message: string }>
 ) {
   try {
     const input: DeveloperInput = req.body;
+    if (!req.headers || !req.headers.authorization) {
+      return res.status(401).json({ message: "Unauthorized access" });
+    }
 
+    const accessToken: string = req.headers.authorization;
+    const decoded = verifyJwt(accessToken);
+
+    if (!decoded) {
+      return res.status(401).json({ message: "Invalid authorization token" });
+    }
     const developer = await db.developer.findUnique({
       where: { id: input.id },
     });
@@ -312,5 +344,33 @@ async function updateDeveloper(
     res.json({ message: "Developer updated successfully" });
   } catch (error) {
     res.status(500).json({ message: (error as Error).message });
+  }
+}
+
+async function getDeveloperByEmail(
+  req: NextApiRequest,
+  res: NextApiResponse<any>
+) {
+  try {
+    const { email } = req.query;
+    if (!email || typeof email !== "string") {
+      return res.status(400).json({ message: "Invalid email parameter" });
+    }
+
+    const developer = await db.developer.findUnique({
+      where: {
+        email: email.toLowerCase(),
+      },
+    });
+    if (!developer) {
+      return res.status(404).json({ message: "Developer not found" });
+    }
+    // Extract the image property
+    const { image } = developer;
+
+    return res.status(200).json({ image });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 }

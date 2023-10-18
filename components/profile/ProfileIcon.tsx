@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import styles from "@/styles/Profile.module.css";
 import axios from "axios";
-import { DeveloperProps } from "../types";
+import { DeveloperProps } from '../types';
 
 interface AccountStatusResponse {
   isDeleted: boolean;
@@ -19,14 +19,17 @@ const ProfileIcon = (): JSX.Element | null => {
 
   const getDeveloper = async () => {
     try {
-      const response = await axios.get(dev_url);
-      const developers: DeveloperProps[] = response.data;
-      const matchingDeveloper = developers.find(
-        (developer) => developer.email === session?.user?.email
-      );
+      // Check if session is available
+      if (!session || !session.user?.email) {
+        console.error("User session not found.");
+        return;
+      }
 
-      if (matchingDeveloper) {
-        setDeveloper(matchingDeveloper);
+      const response = await axios.get(`${dev_url}?email=${session.user.email}`);
+
+      const developer: DeveloperProps = response.data;
+      if (developer) {
+        setDeveloper(developer);
       } else {
         console.error("Developer not found for the current user.");
       }
@@ -34,7 +37,7 @@ const ProfileIcon = (): JSX.Element | null => {
       console.error("Error fetching developer data: ", error);
     }
   };
-
+  
   useEffect(() => {
     const fetchAccountStatus = async () => {
       if (session) {
