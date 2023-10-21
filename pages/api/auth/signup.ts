@@ -307,6 +307,8 @@ async function updateDeveloper(
       where: { id: input.id },
     });
 
+    // Not validating that singed user token is same than input id user token 
+
     if (!developer) {
       return res.status(404).json({ message: "Developer not found" });
     }
