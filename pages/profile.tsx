@@ -19,6 +19,7 @@ import Settings from "@/components/profile/Settings";
 import pageWrapperStyle from "@/styles/PageWrapper.module.css";
 import ProfilePictureSelection from "../components/profile/ProfilePictureSelection";
 import { toast } from "react-toastify";
+import styles from "../styles/Profile.module.css";
 
 export async function getServerSideProps(ctx: NextPageContext) {
   const session = await getSession(ctx);
@@ -126,7 +127,6 @@ export default function Profile({
     if (!signedInUser) {
       router.push("/");
     }
-
   }, [signedInUser, status, router]);
 
   const handleSignOut = async () => {
@@ -142,8 +142,8 @@ export default function Profile({
   if (!session) {
     return null;
   }
-  console.log("session", session)
-  console.log("signed in user ",signedInUser )
+  console.log("session", session);
+  console.log("signed in user ", signedInUser);
   return (
     <div className={pageWrapperStyle.pageWrapper}>
       <Navbar />
@@ -176,7 +176,7 @@ export default function Profile({
               </h2>
             </div>
             <br></br>
-            <div className="w-full flex justify-center">
+            <div className={styles.profileImageWrapper}>
               <Image
                 src={
                   signedInUser?.image
@@ -186,7 +186,8 @@ export default function Profile({
                 alt={`${signedInUser?.fullName} image`}
                 width={100}
                 height={100}
-                className="rounded-full w-40 h-40 border border-gray-300"
+                onClick={handleOpenPictureSelection}
+                className={styles.profilePic}
               />
             </div>
             <div className="w-full mt-4 flex justify-center items-center">
@@ -194,22 +195,22 @@ export default function Profile({
                 className="text-teal-500 hover:text-teal-600 flex items-center justify-center"
                 onClick={handleOpenPictureSelection}
               >
-                <AiOutlineEdit className="mr-2" /> Change Profile Picture
+                <AiOutlineEdit className="mr-2" /> Change Profile Avatar
               </button>
             </div>
             {isSelectingPicture && (
               <div className="w-full mt-4 flex  flex-col justify-center items-center">
-                <ProfilePictureSelection
-                  selectedPicture={selectedPicture}
-                  onSelectPicture={handlePictureSelection}
-                />
-                <br></br>
                 <button
                   className="text-teal-500 hover:text-teal-600 flex items-center"
                   onClick={handleClosePictureSelection}
                 >
                   Cancel
                 </button>
+                <br></br>
+                <ProfilePictureSelection
+                  selectedPicture={selectedPicture}
+                  onSelectPicture={handlePictureSelection}
+                />
               </div>
             )}
             <br></br>

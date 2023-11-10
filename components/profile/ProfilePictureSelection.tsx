@@ -11,7 +11,7 @@ const ProfilePictureSelection: React.FC<ProfilePictureSelectionProps>  = ({ sele
   return (
     <div className="bg-white">
       <br></br>
-      <h3>Select Your Profile Picture</h3>
+      <h3>Select Your Profile Avatar</h3>
       <br></br>
       <div className="profile-picture-options">
         {pictureOptions.map((option) => (
