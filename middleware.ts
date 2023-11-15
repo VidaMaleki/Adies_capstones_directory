@@ -11,10 +11,10 @@ export async function middleware(req: NextRequest) {
     secureCookie: process.env.NODE_ENV === "production",
   });
 
-  // const protectedRoutes = ["/profile", "/add-app", "/edit-app"];
-  // if (protectedRoutes.includes(pathname) && !session) {
-  //   return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/auth`);
-  // }
+  const protectedRoutes = ["/profile", "/add-app", "/edit-app"];
+  if (protectedRoutes.includes(pathname) && !session) {
+    return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/auth`);
+  }
 }
 
 export function authenticate(req: NextApiRequest, res: NextApiResponse, next: () => void) {
