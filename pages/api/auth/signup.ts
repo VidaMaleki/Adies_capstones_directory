@@ -7,9 +7,8 @@ import { createActivationToken } from "@/utils/tokens";
 import sendMail from "@/utils/sendMail";
 import { activateTemplateEmail } from "@/components/SignIn/components/emailTemplates/activate";
 import dotenv from "dotenv";
-import { signJwtAccessToken, verifyJwt } from "@/helpers/jwt";
 import { AllDev } from "@/components/types";
-import { getToken } from "next-auth/jwt";
+import { authenticateByToken } from "@/middleware";
 // npm i bcryptjs
 
 dotenv.config({ path: ".env.emails" });
@@ -32,6 +31,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const authenticated = await authenticateByToken(req);
+  if (req.method !== "GET" && !authenticated) {
+    return res.status(401).json({ message: "Unauthorized access" });
+  }
+
   switch (req.method) {
     case "POST":
       await registerDeveloper(req, res);
@@ -165,21 +169,6 @@ async function registerDeveloper(
 async function getOneDeveloper(req: NextApiRequest, res: NextApiResponse) {
   const devId = Number(req.query.id);
   try {
-    const token = await getToken({
-      req,
-      secret: process.env.NEXTAUTH_SECRET,
-      secureCookie: process.env.NODE_ENV === "production",
-    });
-    if (!token) {
-      return res.status(401).json({ message: "Unauthorized access" });
-    }
-
-    // const accessToken: string = req.headers.authorization;
-    // const decoded = verifyJwt(accessToken);
-    // if (!decoded) {
-    //   return res.status(401).json({ message: "Invalid authorization token" });
-    // }
-    
     const developer = await db.developer.findUnique({
       where: { id: devId },
       include: {
@@ -228,21 +217,6 @@ async function deleteDeveloper(
 ) {
   try {
     const id = req.query.id as string;
-    const token = await getToken({
-      req,
-      secret: process.env.NEXTAUTH_SECRET,
-      secureCookie: process.env.NODE_ENV === "production",
-    });
-    if (!token) {
-      return res.status(401).json({ message: "Unauthorized access" });
-    }
-
-    // const accessToken: string = req.headers.authorization;
-    // const decoded = verifyJwt(accessToken);
-    // if (!decoded) {
-    //   return res.status(401).json({ message: "Invalid authorization token" });
-    // }
-
     if (!id) {
       return res.status(400).json({ message: "User ID is required." });
     }
@@ -303,21 +277,6 @@ async function updateDeveloper(
 ) {
   try {
     const input: DeveloperInput = req.body;
-    const token = await getToken({
-      req,
-      secret: process.env.NEXTAUTH_SECRET,
-      secureCookie: process.env.NODE_ENV === "production",
-    });
-    if (!token) {
-      return res.status(401).json({ message: "Unauthorized access" });
-    }
-
-    // const accessToken: string = req.headers.authorization;
-    // const decoded = verifyJwt(accessToken);
-    // if (!decoded) {
-    //   return res.status(401).json({ message: "Invalid authorization token" });
-    // }
-    
     const developer = await db.developer.findUnique({
       where: { id: input.id },
     });
