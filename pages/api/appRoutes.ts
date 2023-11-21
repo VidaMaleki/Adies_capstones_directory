@@ -144,7 +144,14 @@ async function getOneApp(req: NextApiRequest, res: NextApiResponse) {
     const app = await db.app.findUnique({
       where: { id: appId },
       include: {
-        developers: true,
+        developers: {
+          select: {
+            fullName: true,
+            image: true,
+            cohort: true,
+            linkedin: true,
+          }
+        }
       },
     });
 
@@ -293,8 +300,15 @@ async function getAllApps(req: NextApiRequest, res: NextApiResponse) {
   try {
     const apps = await db.app.findMany({
       include: {
-        developers: true,
-      },
+        developers: {
+          select: {
+            fullName: true,
+            image: true,
+            cohort: true,
+            linkedin: true,
+          }
+        }
+      }
     });
     return res.status(200).json({ apps });
   } catch (error) {
