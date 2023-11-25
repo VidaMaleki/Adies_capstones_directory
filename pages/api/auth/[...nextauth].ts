@@ -21,19 +21,15 @@ export default NextAuth({
                 const developer = await db.developer.findUnique({where:{email: credentials!.email}});
                 if (!developer) {
                     throw new Error("Email is not registered.")
-                }
+				}
+				if (!developer.emailVerified) {
+					throw new Error("Please verify your email.")
+				}
 
-                if (developer && credentials?.password) {
-                    const isPasswordCorrect = await bcrypt.compare(credentials.password, developer.password);
-                    if (isPasswordCorrect && developer.emailVerified) {
-                      // If developer and password are correct, and email is verified, return the developer object
-                      return developer;
-                    } else {
-                        throw new Error("Please verify your email.")
-                    }
-                  } else {
-                    throw new Error("Password is incorrect.")
-                  }
+				const isPasswordCorrect = await bcrypt.compare(credentials?.password ?? '', developer.password);
+				if (!isPasswordCorrect) {
+					throw new Error("Password is incorrect.")
+				}
                 
                 return developer as any;
             }
