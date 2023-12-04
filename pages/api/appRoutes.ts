@@ -2,11 +2,16 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { db } from "@/lib/db";
 import validator from "validator";
 import { AppDataProps } from "@/components/types";
+import { authenticateByToken } from "@/middleware";
 
 export default async function createAppHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const authenticated = await authenticateByToken(req);
+  if (req.method !== "GET" && !authenticated) {
+    return res.status(401).json({ message: "Unauthorized access" });
+  }
   switch (req.method) {
     case "POST":
       return createApp(req, res);
@@ -159,7 +164,7 @@ async function updateApp(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query as { id: string };
     const input: AppDataProps = req.body as AppDataProps;
     const errors: string[] = [];
-
+    
     if (!input.signedInUser) {
       errors.push("Please login to continue.");
     } else {
@@ -252,6 +257,7 @@ async function deleteApp(req: NextApiRequest, res: NextApiResponse) {
   const appId = Number(req.query.id);
 
   try {
+
     // Find the app to be deleted
     const app = await db.app.findUnique({
       where: { id: appId },
