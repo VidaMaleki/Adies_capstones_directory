@@ -32,7 +32,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const authenticated = await authenticateByToken(req);
-  if (req.method !== "GET" && req.method !== "POST" && !authenticated) {
+  if (req.method !== "POST" && !authenticated) {
     return res.status(401).json({ message: "Unauthorized access" });
   }
 
