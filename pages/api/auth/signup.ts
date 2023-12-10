@@ -112,7 +112,7 @@ async function registerDeveloper(
     const authorizedEmails: AuthorizedEmail[] = JSON.parse(
       process.env.AUTHORIZED_EMAILS || "[]"
     );
-    console.log("authorizedEmails2", authorizedEmails);
+
     const isAuthorizedEmail = authorizedEmails.some(
       (authorizedEmail) => authorizedEmail.email === input.email
     );
@@ -171,9 +171,13 @@ async function getOneDeveloper(req: NextApiRequest, res: NextApiResponse) {
   try {
     const developer = await db.developer.findUnique({
       where: { id: devId },
-      include: {
+      select: {
         app: true, // Include the associated app
-      },
+        fullName: true,
+        image: true,
+        cohort: true,
+        linkedin: true
+      }
     });
 
     if (!developer) {
