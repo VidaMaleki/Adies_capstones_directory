@@ -249,8 +249,15 @@ async function updateApp(req: NextApiRequest, res: NextApiResponse) {
         },
       },
       include: {
-        developers: true,
-      },
+        developers: {
+          select: {
+            fullName: true,
+            image: true,
+            cohort: true,
+            linkedin: true,
+          }
+        }
+      }
     });
 
     return res.status(200).json({ app: updatedApp });
