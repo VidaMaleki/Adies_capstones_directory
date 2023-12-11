@@ -29,11 +29,25 @@ export async function getServerSideProps(ctx: NextPageContext) {
     where: {
       email: userEmail,
     },
-    include: {
+    select: {
+      id: true,
+      fullName: true,
+      image: true,
+      cohort: true,
+      linkedin: true,
+      email: true,
+      appId: true,
       // Associated apps for the developer
       app: {
         include: {
-          developers: true,
+          developers: {
+            select: {
+              fullName: true,
+              image: true,
+              cohort: true,
+              linkedin: true,
+            }
+          }
         },
       },
     },
