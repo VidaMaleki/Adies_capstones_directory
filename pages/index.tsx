@@ -34,38 +34,38 @@ export default function Home() {
       try {
         const res = await axios.get(app_url);
         const allApps: AppWithDevelopersProps[] = res.data.apps;
-
+  
         if (allApps.length > 0) {
           const webApps = allApps.filter((app) => app.type === "Web");
           const mobileApps = allApps.filter((app) => app.type === "Mobile");
           const nativeApps = allApps.filter((app) => app.type === "Native");
-
+  
           let webAppsList;
           let mobileAppsList;
           let nativeAppsList;
 
           // Checking the screen size based on window.innerWidth
-          if (window.innerWidth <= 500) {
-            webAppsList = getRandomApps(webApps, 1);
-            mobileAppsList = getRandomApps(mobileApps, 1);
-            nativeAppsList = getRandomApps(nativeApps, 1);
-          } else if (window.innerWidth <= 700) {
-            webAppsList = getRandomApps(webApps, 2);
-            mobileAppsList = getRandomApps(mobileApps, 2);
-            nativeAppsList = getRandomApps(nativeApps, 2);
-          } else if (window.innerWidth <= 900) {
-            webAppsList = getRandomApps(webApps, 3);
-            mobileAppsList = getRandomApps(mobileApps, 3);
-            nativeAppsList = getRandomApps(nativeApps, 3);
-          } else if (window.innerWidth <= 1200) {
-            webAppsList = getRandomApps(webApps, 4);
-            mobileAppsList = getRandomApps(mobileApps, 4);
-            nativeAppsList = getRandomApps(nativeApps, 4);
-          } else {
-            webAppsList = getRandomApps(webApps, 5);
-            mobileAppsList = getRandomApps(mobileApps, 5);
-            nativeAppsList = getRandomApps(nativeApps, 5);
-          }
+        if (typeof window !== "undefined" && window.innerWidth <= 500) {
+          webAppsList = getRandomApps(webApps, 1);
+          mobileAppsList = getRandomApps(mobileApps, 1);
+          nativeAppsList = getRandomApps(nativeApps, 1);
+        } else if (typeof window !== "undefined" && window.innerWidth <= 700) {
+          webAppsList = getRandomApps(webApps, 2);
+          mobileAppsList = getRandomApps(mobileApps, 2);
+          nativeAppsList = getRandomApps(nativeApps, 2);
+        } else if (typeof window !== "undefined" && window.innerWidth <= 900) {
+          webAppsList = getRandomApps(webApps, 3);
+          mobileAppsList = getRandomApps(mobileApps, 3);
+          nativeAppsList = getRandomApps(nativeApps, 3);
+        } else if (typeof window !== "undefined" && window.innerWidth <= 1200) {
+          webAppsList = getRandomApps(webApps, 4);
+          mobileAppsList = getRandomApps(mobileApps, 4);
+          nativeAppsList = getRandomApps(nativeApps, 4);
+        } else {
+          webAppsList = getRandomApps(webApps, 5);
+          mobileAppsList = getRandomApps(mobileApps, 5);
+          nativeAppsList = getRandomApps(nativeApps, 5);
+        }
 
           setWebAppsRandom(webAppsList);
           setMobileAppsRandom(mobileAppsList);
