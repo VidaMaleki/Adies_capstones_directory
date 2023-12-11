@@ -138,17 +138,17 @@ export default function Home() {
               <AppSection
                 sectionTitle="Web apps"
                 apps={webAppsRandom}
-                seeAllLink="/web-apps"
+                seeAllLink={`/see-more?type=web`}
               />
               <AppSection
                 sectionTitle="Mobile apps"
                 apps={mobileAppsRandom}
-                seeAllLink="/mobile-apps"
+                seeAllLink={`/see-more?type=mobile`}
               />
               <AppSection
                 sectionTitle="Native apps"
                 apps={nativeAppsRandom}
-                seeAllLink="/native-apps"
+                seeAllLink={`/see-more?type=native`}
               />
             </>
           )}

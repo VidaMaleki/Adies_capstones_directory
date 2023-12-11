@@ -35,7 +35,7 @@
 .popup .closeButton {
     position: relative;
     /* top: 0.5rem;
-    right: 0.5rem; */
+right: 0.5rem; */
     background-color: transparent;
     border: none;
     font-size: 1.5rem;
@@ -144,4 +144,36 @@
 
 .viewApplinks a:hover {
     text-decoration: none;
+}
+
+@media (max-width: 500px) {
+    .popup {
+        max-width: 25rem;
+        min-width: 20rem;
+    }
+    .appContentContainer {
+        display: flex;
+        flex-wrap: wrap;
+        row-gap: 20px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+    .imageContainer img {
+        width: 70%;
+    }
+    .textContainer {
+        border-left: 0;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        width: 90%;
+        height: 100%;
+        margin-left: 5px;
+    }
+}
+
+@media (min-width: 500px) and (max-width: 650px) {
+    .popup {
+        max-width: 30rem;
+        min-width: 30rem;
+    }
 }
