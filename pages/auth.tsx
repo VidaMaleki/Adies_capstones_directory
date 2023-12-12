@@ -46,6 +46,6 @@ export async function getServerSideProps(ctx: NextPageContext) {
   // Provide a default value or handle the undefined case here
   const sanitizedCsrfToken = csrfToken || null;
   return {
-    props: { tab: JSON.parse(JSON.stringify(tab)), callbackUrl, sanitizedCsrfToken },
+    props: { tab: JSON.parse(JSON.stringify(tab)), callbackUrl, csrfToken },
   };
 }
