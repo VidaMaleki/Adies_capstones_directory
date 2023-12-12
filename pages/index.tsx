@@ -79,7 +79,7 @@ export default function Home() {
     };
     const debouncedFetchData = debounce(fetchData, 300);
 
-    debouncedFetchData(); // Use the debounced version of fetchData
+    debouncedFetchData();
 
     // Event listener to recheck screen size when the window is resized
     window.addEventListener("resize", debouncedFetchData);
