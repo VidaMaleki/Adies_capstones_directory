@@ -9,10 +9,10 @@ import { activateTemplateEmail } from "@/components/SignIn/components/emailTempl
 import dotenv from "dotenv";
 import { AllDev } from "@/components/types";
 import { authenticateByToken } from "@/middleware";
-// npm i bcryptjs
 
 dotenv.config({ path: ".env.emails" });
 
+// Developer interface for expected input and output
 interface DeveloperInput {
   id: number;
   fullName: string;
@@ -23,10 +23,12 @@ interface DeveloperInput {
   password: string;
 }
 
+// Authorized email interface for expected input and output
 interface AuthorizedEmail {
   email: string;
 }
 
+// Main API handler function
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -35,7 +37,7 @@ export default async function handler(
   if (req.method !== "POST" && !authenticated) {
     return res.status(401).json({ message: "Unauthorized access" });
   }
-
+  // Route handling based on the request method
   switch (req.method) {
     case "POST":
       await registerDeveloper(req, res);
@@ -61,10 +63,12 @@ export default async function handler(
   }
 }
 
+// **************** Create a developer account ****************
 async function registerDeveloper(
   req: NextApiRequest,
   res: NextApiResponse<{ message: string }>
 ) {
+  // Registration with validation and error handling
   try {
     const input: DeveloperInput = req.body;
 
@@ -165,14 +169,14 @@ async function registerDeveloper(
   }
 }
 
-// ************************************ Get one developer ************************************
+// **************** Get a single developer's information ****************
 async function getOneDeveloper(req: NextApiRequest, res: NextApiResponse) {
   const devId = Number(req.query.id);
   try {
     const developer = await db.developer.findUnique({
       where: { id: devId },
       select: {
-        app: true, // Include the associated app
+        app: true,
         fullName: true,
         image: true,
         cohort: true,
@@ -191,7 +195,7 @@ async function getOneDeveloper(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-// Get all developers
+// **************** Get all developers ****************
 async function getAllDevelopers(
   req: NextApiRequest,
   res: NextApiResponse<AllDev[]>
@@ -214,7 +218,7 @@ async function getAllDevelopers(
   }
 }
 
-// ************************************ Delete the developer ************************************
+// **************** Delete a developer account ****************
 async function deleteDeveloper(
   req: NextApiRequest,
   res: NextApiResponse<{ message: string }>
@@ -273,8 +277,7 @@ async function deleteDeveloper(
     res.status(500).json({ message: (error as Error).message });
   }
 }
-
-// ************************************ Update developer info ************************************
+// **************** Update a developer info ****************
 async function updateDeveloper(
   req: NextApiRequest,
   res: NextApiResponse<{ message: string }>
@@ -327,6 +330,7 @@ async function updateDeveloper(
   }
 }
 
+// Get a developer info by email when using session at frontend
 async function getDeveloperByEmail(
   req: NextApiRequest,
   res: NextApiResponse<any>
